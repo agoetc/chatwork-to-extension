@@ -3,6 +3,7 @@ window.onload = () => setTimeout(listener, 2000);
 
 function listener() {
     const _chatText = document.getElementById("_chatText");
-    console.log(_chatText);
-    _chatText.value = "hoge";
+    _chatText.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 't') document.getElementById("_to").click();
+    })
 }
