@@ -2,7 +2,32 @@
 window.onload = () => setTimeout(listener, 2000);
 
 function listener() {
+
+    // TODO: grouping setting
+    createGroupingSettingButton();
+
     window.addEventListener('keydown', (e) => {
+        // ctrl + t でToを開く
         if (e.ctrlKey && e.key === 't') document.getElementById("_to").click();
-    })
+    });
+
+}
+
+function createGroupingSettingButton() {
+    const toList = document.getElementById("_toListFooter");
+    const groupingButton = document.createElement("a");
+    groupingButton.innerText = "グループの設定";
+    groupingButton.addEventListener("click", () => getAccounts())
+
+    toList.appendChild(groupingButton);
+}
+
+function getAccounts() {
+    // ("_cwLTList tooltipList")[2]がtoの一覧
+    const toList = document.getElementsByClassName("_cwLTList tooltipList")[2].children;
+
+    // 0は toallなので含めない
+    for (let i = 1; i < toList.length; i++) {
+        console.log(toList[i].dataset.cwuiLtValue);
+    }
 }
