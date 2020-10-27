@@ -8,23 +8,23 @@ function listener() {
 
     window.addEventListener('keydown', (e) => {
         // ctrl + t でToを開く
-        if (e.ctrlKey && e.key === 't') document.getElementById("_to").click();
+        if (e.ctrlKey && e.key === 't') document.getElementById('_to').click();
     });
 
 }
 
 function createGroupingSettingButton() {
-    const toList = document.getElementById("_toListFooter");
-    const groupingButton = document.createElement("a");
-    groupingButton.innerText = "グループの設定";
-    groupingButton.addEventListener("click", () => getAccounts())
+    const toList = document.getElementById('_toListFooter');
+    const groupingButton = document.createElement('a')
+    groupingButton.innerText = 'グループの設定';
+    groupingButton.addEventListener('click', () => getAccounts())
 
     toList.appendChild(groupingButton);
 }
 
 function getAccounts() {
-    // ("_cwLTList tooltipList")[2]がtoの一覧
-    const toList = document.getElementsByClassName("_cwLTList tooltipList")[2].children;
+    // ('_cwLTList tooltipList')[2]がtoの一覧
+    const toList = document.getElementsByClassName('_cwLTList tooltipList')[2].children;
 
     // toallの下に突っ込む
     toList[0].parentNode.insertBefore(buildTag(), toList[0].nextSibling);
