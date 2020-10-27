@@ -9,7 +9,8 @@
         "https://www.chatwork.com/"
       ],
       "js": [
-        "content.js"
+        "content.js",
+        "output/content.js"
       ]
     }
   ]
