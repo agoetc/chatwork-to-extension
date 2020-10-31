@@ -3,14 +3,18 @@ window.onload = () => setTimeout(listener, 2000);
 
 function listener() {
 
+    addShortcutEvent()
+
     // TODO: grouping setting
     createGroupingSettingButton();
 
+}
+
+function addShortcutEvent() {
     window.addEventListener('keydown', (e) => {
         // ctrl + t でToを開く
         if (e.ctrlKey && e.key === 't') document.getElementById('_to').click();
     });
-
 }
 
 function createGroupingSettingButton() {
