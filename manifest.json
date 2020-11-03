@@ -3,6 +3,9 @@
   "name": "Chatwork To Extension",
   "short_name": "CTE",
   "version": "1",
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
     {
       "matches": [
