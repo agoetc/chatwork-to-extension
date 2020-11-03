@@ -7,7 +7,6 @@ function listener() {
 
     // TODO: grouping setting
     createGroupingSettingButton();
-
 }
 
 function addShortcutEvent() {
@@ -26,18 +25,6 @@ function createGroupingSettingButton() {
     toList.appendChild(groupingButton);
 }
 
-function openModal() {
-    var dialog = document.createElement("dialog")
-    dialog.textContent = "This is a dialog"
-    var button = document.createElement("button")
-    button.textContent = "Close"
-    dialog.appendChild(button)
-    button.addEventListener("click", function () {
-        dialog.close()
-    })
-    document.body.appendChild(dialog)
-    dialog.showModal()
-}
 
 function getAccounts() {
     // ('_cwLTList tooltipList')[2]がtoの一覧
@@ -62,4 +49,71 @@ function buildTag() {
         console.log('グルーピングしてる人間をtoで突っ込みたい')
     })
     return div;
+}
+
+
+//  modal ----------------------------------------------------------------------------
+function openModal() {
+
+    chrome.storage.sync.get('group', (groupList) => {
+
+
+        const dialog = document.createElement("dialog")
+        dialog.id = 'grouping-modal';
+        dialog.appendChild(addGroupElement(groupList.group));
+
+        const button = document.createElement("button")
+        button.textContent = "Close"
+        dialog.appendChild(button)
+        button.addEventListener("click", () => dialog.close())
+        document.body.appendChild(dialog)
+        dialog.showModal()
+
+    });
+}
+
+// TODO: db？から取得するように
+function addGroupElement(group) {
+    console.log(group);
+
+    const groupListElements =
+        Object.keys(group)
+            .map(groupName => '<option value="' + groupName + '">')
+            .join('');
+
+    const div = document.createElement("div");
+    div.innerHTML =
+        '<input type="text" autocomplete="on" list="aaa" id="add-group-name">' +
+        '<datalist id="aaa">' +
+        groupListElements +
+        '</datalist>'
+
+    // 追加ボタン作成
+    const button = document.createElement("button")
+    button.textContent = "追加"
+    div.appendChild(button)
+
+    // const input = document.getElementById('add-group-name');
+    // button.addEventListener("click", () => saveChanges());
+
+    return div;
+
+}
+
+function saveChanges(groupName) {
+    chrome.storage.sync.get('group', (groupList) => {
+        if (typeof groupList.group === 'undefined') {
+            save({[groupName]: {}})
+        } else if (typeof groupList.group === 'object' && groupList.group[groupName] !== {}) {
+            groupList.group[groupName] = {}
+            save(groupList.group)
+        }
+    });
+}
+
+
+function save(groupList) {
+    chrome.storage.sync.set({'group': groupList}, function () {
+        console.log('Settings saved');
+    });
 }
