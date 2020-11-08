@@ -72,32 +72,42 @@ function openModal() {
     });
 }
 
-// TODO: db？から取得するように
-function addGroupElement(group) {
-    console.log(group);
+function addGroupElement(groupList) {
+    const datalist = document.createElement('datalist');
+    datalist.id = 'group-list'
 
-    const groupListElements =
-        Object.keys(group)
-            .map(groupName => '<option value="' + groupName + '">')
-            .join('');
+    for (let groupName in groupList) {
+        if (groupList.hasOwnProperty(groupName)) {
+            const option = document.createElement('option')
+            option.value = groupName
+            datalist.appendChild(option)
+        }
+    }
 
-    const div = document.createElement("div");
-    div.innerHTML =
-        '<input type="text" autocomplete="on" list="aaa" id="add-group-name">' +
-        '<datalist id="aaa">' +
-        groupListElements +
-        '</datalist>'
+
+    // 入力欄
+    const input = document.createElement('input');
+    input.type = 'text'
+    input.autocomplete = 'on'
+    input.setAttribute('list', 'group-list')
+
 
     // 追加ボタン作成
     const button = document.createElement("button")
     button.textContent = "追加"
+    button.addEventListener('click', () => {
+        saveChanges(input.value)
+        input.value = ''
+    })
+
+    // まとめ役
+    const div = document.createElement('div');
+
+    div.appendChild(input)
+    div.appendChild(datalist)
     div.appendChild(button)
 
-    // const input = document.getElementById('add-group-name');
-    // button.addEventListener("click", () => saveChanges());
-
     return div;
-
 }
 
 function saveChanges(groupName) {
@@ -109,11 +119,10 @@ function saveChanges(groupName) {
             save(groupList.group)
         }
     });
-}
 
-
-function save(groupList) {
-    chrome.storage.sync.set({'group': groupList}, function () {
-        console.log('Settings saved');
-    });
+    function save(groupList) {
+        chrome.storage.sync.set({'group': groupList}, function () {
+            console.log('Settings saved');
+        });
+    }
 }
