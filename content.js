@@ -96,6 +96,8 @@ function addGroupElement(groupList) {
     const button = document.createElement("button")
     button.textContent = "追加"
     button.addEventListener('click', () => {
+        saveChanges(input.value)
+        input.value = ''
     })
 
     // まとめ役
@@ -117,11 +119,10 @@ function saveChanges(groupName) {
             save(groupList.group)
         }
     });
-}
 
-
-function save(groupList) {
-    chrome.storage.sync.set({'group': groupList}, function () {
-        console.log('Settings saved');
-    });
+    function save(groupList) {
+        chrome.storage.sync.set({'group': groupList}, function () {
+            console.log('Settings saved');
+        });
+    }
 }
