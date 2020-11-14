@@ -3,6 +3,8 @@ window.onload = () => setTimeout(listener, 2000);
 
 function listener() {
 
+    // chrome.storage.sync.clear();
+
     addShortcutEvent()
 
     // TODO: grouping setting
@@ -131,6 +133,9 @@ function saveChanges(groupName) {
 }
 
 class Group {
+    /** @type {string} */
+    name;
+
     /** @param {string} name */
     constructor(name) {
         this.name = name;
@@ -139,10 +144,11 @@ class Group {
 
 
 class GroupList {
+    /** @type {[Group]} */
+    value = [];
+
     /** @param {object} savedGroupList */
     constructor(savedGroupList) {
-        /** @type {[Group]} */
-        this.value = [];
         for (let groupName in savedGroupList.group) {
             if (savedGroupList.group.hasOwnProperty(groupName)) {
                 this.value.push(new Group(groupName))
