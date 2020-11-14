@@ -60,7 +60,6 @@ function openModal() {
     chrome.storage.sync.get('group', (savedGroupList) => {
         const groupList = new GroupList(savedGroupList);
 
-
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal';
         dialog.appendChild(addGroupElement(groupList));
@@ -101,7 +100,8 @@ function addGroupElement(groupList) {
     const button = document.createElement("button")
     button.textContent = "追加"
     button.addEventListener('click', () => {
-        saveChanges(input.value)
+        const request = new GroupRequest(input.value)
+        saveChanges(request)
         input.value = ''
     })
 
@@ -115,29 +115,30 @@ function addGroupElement(groupList) {
     return div;
 }
 
-function saveChanges(groupName) {
-    chrome.storage.sync.get('group', (groupList) => {
-        if (typeof groupList.group === 'undefined') {
-            save({[groupName]: {}})
-        } else if (typeof groupList.group === 'object' && groupList.group[groupName] !== {}) {
-            groupList.group[groupName] = {}
-            save(groupList.group)
-        }
+/**
+ * @param {GroupRequest} request
+ */
+function saveChanges(request) {
+    // TODO: 計２回もstorage参照するの良くなくない？
+    chrome.storage.sync.get('group', (savedGroupList) => {
+        const groupList = new GroupList(savedGroupList)
+        groupList.addGroup(request)
+        groupList.save()
     });
-
-    function save(groupList) {
-        chrome.storage.sync.set({'group': groupList}, function () {
-            console.log('Settings saved');
-        });
-    }
 }
 
 class Group {
     /** @type {string} */
     name;
 
-    /** @param {string} name */
-    constructor(name) {
+    /** TODO */
+    accounts = {}
+
+    /**
+     * @param {string} name
+     * @param {object} accounts
+     */
+    constructor(name, accounts = {}) {
         this.name = name;
     }
 }
@@ -154,5 +155,46 @@ class GroupList {
                 this.value.push(new Group(groupName))
             }
         }
+    }
+
+    /** @param {GroupRequest} req */
+    addGroup(req) {
+        // TODO: elseのときどうする？
+        if (this.value.length === 0 || !this.value.includes(req.name)) {
+            this.value.push(new Group(req.name))
+        }
+    }
+
+    /**
+     * 保存
+     */
+    save() {
+        chrome.storage.sync.set({'group': this.toObj()}, function () {
+            console.log('Settings saved')
+        });
+    }
+
+    /**
+     *
+     * @returns {{}}
+     */
+    toObj() {
+        const object = {}
+        this.value.map(group => {
+            object[group.name] = {}
+            object[group.name]['accounts'] = group.accounts
+        })
+        return object
+    }
+
+}
+
+class GroupRequest {
+    /** @type {string} */
+    name
+
+    /** @param {string} name */
+    constructor(name) {
+        this.name = name
     }
 }
