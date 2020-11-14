@@ -55,12 +55,13 @@ function buildTag() {
 //  modal ----------------------------------------------------------------------------
 function openModal() {
 
-    chrome.storage.sync.get('group', (groupList) => {
+    chrome.storage.sync.get('group', (savedGroupList) => {
+        const groupList = new GroupList(savedGroupList);
 
 
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal';
-        dialog.appendChild(addGroupElement(groupList.group));
+        dialog.appendChild(addGroupElement(groupList));
 
         const button = document.createElement("button")
         button.textContent = "Close"
@@ -72,18 +73,20 @@ function openModal() {
     });
 }
 
+/**
+ *
+ * @param {GroupList} groupList
+ * @returns {HTMLDivElement}
+ */
 function addGroupElement(groupList) {
     const datalist = document.createElement('datalist');
     datalist.id = 'group-list'
 
-    for (let groupName in groupList) {
-        if (groupList.hasOwnProperty(groupName)) {
-            const option = document.createElement('option')
-            option.value = groupName
-            datalist.appendChild(option)
-        }
-    }
-
+    groupList.value.forEach(group => {
+        const option = document.createElement('option')
+        option.value = group.name
+        datalist.appendChild(option)
+    })
 
     // 入力欄
     const input = document.createElement('input');
@@ -124,5 +127,26 @@ function saveChanges(groupName) {
         chrome.storage.sync.set({'group': groupList}, function () {
             console.log('Settings saved');
         });
+    }
+}
+
+class Group {
+    /** @param {string} name */
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+
+class GroupList {
+    /** @param {object} savedGroupList */
+    constructor(savedGroupList) {
+        /** @type {[Group]} */
+        this.value = [];
+        for (let groupName in savedGroupList.group) {
+            if (savedGroupList.group.hasOwnProperty(groupName)) {
+                this.value.push(new Group(groupName))
+            }
+        }
     }
 }
