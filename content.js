@@ -3,6 +3,8 @@ window.onload = () => setTimeout(listener, 2000);
 
 function listener() {
 
+    // chrome.storage.sync.clear();
+
     addShortcutEvent()
 
     // TODO: grouping setting
@@ -55,12 +57,12 @@ function buildTag() {
 //  modal ----------------------------------------------------------------------------
 function openModal() {
 
-    chrome.storage.sync.get('group', (groupList) => {
-
+    chrome.storage.sync.get('group', (savedGroupList) => {
+        const groupList = new GroupList(savedGroupList);
 
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal';
-        dialog.appendChild(addGroupElement(groupList.group));
+        dialog.appendChild(addGroupElement(groupList));
 
         const button = document.createElement("button")
         button.textContent = "Close"
@@ -72,18 +74,20 @@ function openModal() {
     });
 }
 
+/**
+ *
+ * @param {GroupList} groupList
+ * @returns {HTMLDivElement}
+ */
 function addGroupElement(groupList) {
     const datalist = document.createElement('datalist');
     datalist.id = 'group-list'
 
-    for (let groupName in groupList) {
-        if (groupList.hasOwnProperty(groupName)) {
-            const option = document.createElement('option')
-            option.value = groupName
-            datalist.appendChild(option)
-        }
-    }
-
+    groupList.value.forEach(group => {
+        const option = document.createElement('option')
+        option.value = group.name
+        datalist.appendChild(option)
+    })
 
     // 入力欄
     const input = document.createElement('input');
@@ -96,7 +100,8 @@ function addGroupElement(groupList) {
     const button = document.createElement("button")
     button.textContent = "追加"
     button.addEventListener('click', () => {
-        saveChanges(input.value)
+        const request = new GroupRequest(input.value)
+        saveChanges(request)
         input.value = ''
     })
 
@@ -110,19 +115,86 @@ function addGroupElement(groupList) {
     return div;
 }
 
-function saveChanges(groupName) {
-    chrome.storage.sync.get('group', (groupList) => {
-        if (typeof groupList.group === 'undefined') {
-            save({[groupName]: {}})
-        } else if (typeof groupList.group === 'object' && groupList.group[groupName] !== {}) {
-            groupList.group[groupName] = {}
-            save(groupList.group)
-        }
+/**
+ * @param {GroupRequest} request
+ */
+function saveChanges(request) {
+    // TODO: 計２回もstorage参照するの良くなくない？
+    chrome.storage.sync.get('group', (savedGroupList) => {
+        const groupList = new GroupList(savedGroupList)
+        groupList.addGroup(request)
+        groupList.save()
     });
+}
 
-    function save(groupList) {
-        chrome.storage.sync.set({'group': groupList}, function () {
-            console.log('Settings saved');
+class Group {
+    /** @type {string} */
+    name;
+
+    /** TODO */
+    accounts = {}
+
+    /**
+     * @param {string} name
+     * @param {object} accounts
+     */
+    constructor(name, accounts = {}) {
+        this.name = name;
+    }
+}
+
+
+class GroupList {
+    /** @type {[Group]} */
+    value = [];
+
+    /** @param {object} savedGroupList */
+    constructor(savedGroupList) {
+        for (let groupName in savedGroupList.group) {
+            if (savedGroupList.group.hasOwnProperty(groupName)) {
+                this.value.push(new Group(groupName))
+            }
+        }
+    }
+
+    /** @param {GroupRequest} req */
+    addGroup(req) {
+        // TODO: elseのときどうする？
+        if (this.value.length === 0 || !this.value.includes(req.name)) {
+            this.value.push(new Group(req.name))
+        }
+    }
+
+    /**
+     * 保存
+     */
+    save() {
+        chrome.storage.sync.set({'group': this.toObj()}, function () {
+            console.log('Settings saved')
         });
+    }
+
+    /**
+     *
+     * @returns {{}}
+     */
+    toObj() {
+        const object = {}
+        this.value.map(group => {
+            object[group.name] = {}
+            object[group.name]['accounts'] = group.accounts
+        })
+        return object
+    }
+
+}
+
+class GroupRequest {
+    /** @type {string} */
+    name
+
+    /** @param {string} name */
+    constructor(name) {
+        this.name = name
     }
 }
