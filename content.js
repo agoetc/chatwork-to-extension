@@ -57,9 +57,7 @@ function buildTag() {
 //  modal ----------------------------------------------------------------------------
 function openModal() {
 
-    chrome.storage.sync.get('group', (savedGroupList) => {
-        const groupList = new GroupList(savedGroupList)
-
+    GroupList.get(groupList => {
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal'
         dialog.appendChild(addGroupElement(groupList))
@@ -120,8 +118,7 @@ function addGroupElement(groupList) {
  */
 function saveChanges(request) {
     // TODO: 計２回もstorage参照するの良くなくない？
-    chrome.storage.sync.get('group', (savedGroupList) => {
-        const groupList = new GroupList(savedGroupList)
+    GroupList.get((groupList) => {
         groupList.addGroup(request)
         groupList.save()
     })
@@ -185,6 +182,19 @@ class GroupList {
             object[group.name]['accounts'] = group.accounts
         })
         return object
+    }
+
+    /**
+     *
+     * @callback getGroupList
+     * @param {GroupList} groupList
+     */
+
+    /** @param {getGroupList} callback */
+    static get(callback) {
+        chrome.storage.sync.get('group', (savedGroupList) => {
+            callback(new GroupList(savedGroupList))
+        });
     }
 
 }
