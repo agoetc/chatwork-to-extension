@@ -162,19 +162,8 @@ class GroupList {
         }
     }
 
-    /**
-     * 保存
-     */
-    save() {
-        chrome.storage.sync.set({'group': this.toObj()}, function () {
-            console.log('Settings saved')
-        })
-    }
 
-    /**
-     *
-     * @returns {{}}
-     */
+    /** @returns {{}}*/
     toObj() {
         const object = {}
         this.value.map(group => {
@@ -182,6 +171,17 @@ class GroupList {
             object[group.name]['accounts'] = group.accounts
         })
         return object
+    }
+
+    // storage ---------------------------------------------------------------------
+
+    /**
+     * 保存
+     */
+    save() {
+        chrome.storage.sync.set({'group': this.toObj()}, function () {
+            console.log('Settings saved')
+        })
     }
 
     /**
