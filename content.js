@@ -1,43 +1,43 @@
 // dom読み込むのを待つ（2000は適当な数値）
-window.onload = () => setTimeout(listener, 2000);
+window.onload = () => setTimeout(listener, 2000)
 
 function listener() {
 
-    // chrome.storage.sync.clear();
+    // chrome.storage.sync.clear()
 
     addShortcutEvent()
 
     // TODO: grouping setting
-    createGroupingSettingButton();
+    createGroupingSettingButton()
 }
 
 function addShortcutEvent() {
     window.addEventListener('keydown', (e) => {
         // ctrl + t でToを開く
-        if (e.ctrlKey && e.key === 't') document.getElementById('_to').click();
-    });
+        if (e.ctrlKey && e.key === 't') document.getElementById('_to').click()
+    })
 }
 
 function createGroupingSettingButton() {
-    const toList = document.getElementById('_toListFooter');
+    const toList = document.getElementById('_toListFooter')
     const groupingButton = document.createElement('a')
-    groupingButton.innerText = 'グループの設定';
+    groupingButton.innerText = 'グループの設定'
     groupingButton.addEventListener('click', () => openModal())
 
-    toList.appendChild(groupingButton);
+    toList.appendChild(groupingButton)
 }
 
 
 function getAccounts() {
     // ('_cwLTList tooltipList')[2]がtoの一覧
-    const toList = document.getElementsByClassName('_cwLTList tooltipList')[2].children;
+    const toList = document.getElementsByClassName('_cwLTList tooltipList')[2].children
 
     // toallの下に突っ込む
-    toList[0].parentNode.insertBefore(buildTag(), toList[0].nextSibling);
+    toList[0].parentNode.insertBefore(buildTag(), toList[0].nextSibling)
 
     // 0は toallなので含めない
     for (let i = 1; i < toList.length; i++) {
-        console.log(toList[i].dataset.cwuiLtValue);
+        console.log(toList[i].dataset.cwuiLtValue)
     }
 }
 
@@ -45,12 +45,12 @@ function getAccounts() {
 // TODO: addEventListener('click')でtextareaにtoを入れる
 function buildTag() {
     // liだとcwにclickイベント奪われるのでdivに
-    const div = document.createElement('div');
-    div.innerText = 'グループ名';
+    const div = document.createElement('div')
+    div.innerText = 'グループ名'
     div.addEventListener('click', () => {
         console.log('グルーピングしてる人間をtoで突っ込みたい')
     })
-    return div;
+    return div
 }
 
 
@@ -58,11 +58,11 @@ function buildTag() {
 function openModal() {
 
     chrome.storage.sync.get('group', (savedGroupList) => {
-        const groupList = new GroupList(savedGroupList);
+        const groupList = new GroupList(savedGroupList)
 
         const dialog = document.createElement("dialog")
-        dialog.id = 'grouping-modal';
-        dialog.appendChild(addGroupElement(groupList));
+        dialog.id = 'grouping-modal'
+        dialog.appendChild(addGroupElement(groupList))
 
         const button = document.createElement("button")
         button.textContent = "Close"
@@ -71,7 +71,7 @@ function openModal() {
         document.body.appendChild(dialog)
         dialog.showModal()
 
-    });
+    })
 }
 
 /**
@@ -80,7 +80,7 @@ function openModal() {
  * @returns {HTMLDivElement}
  */
 function addGroupElement(groupList) {
-    const datalist = document.createElement('datalist');
+    const datalist = document.createElement('datalist')
     datalist.id = 'group-list'
 
     groupList.value.forEach(group => {
@@ -90,7 +90,7 @@ function addGroupElement(groupList) {
     })
 
     // 入力欄
-    const input = document.createElement('input');
+    const input = document.createElement('input')
     input.type = 'text'
     input.autocomplete = 'on'
     input.setAttribute('list', 'group-list')
@@ -106,13 +106,13 @@ function addGroupElement(groupList) {
     })
 
     // まとめ役
-    const div = document.createElement('div');
+    const div = document.createElement('div')
 
     div.appendChild(input)
     div.appendChild(datalist)
     div.appendChild(button)
 
-    return div;
+    return div
 }
 
 /**
@@ -124,12 +124,12 @@ function saveChanges(request) {
         const groupList = new GroupList(savedGroupList)
         groupList.addGroup(request)
         groupList.save()
-    });
+    })
 }
 
 class Group {
     /** @type {string} */
-    name;
+    name
 
     /** TODO */
     accounts = {}
@@ -139,14 +139,14 @@ class Group {
      * @param {object} accounts
      */
     constructor(name, accounts = {}) {
-        this.name = name;
+        this.name = name
     }
 }
 
 
 class GroupList {
     /** @type {[Group]} */
-    value = [];
+    value = []
 
     /** @param {object} savedGroupList */
     constructor(savedGroupList) {
@@ -171,7 +171,7 @@ class GroupList {
     save() {
         chrome.storage.sync.set({'group': this.toObj()}, function () {
             console.log('Settings saved')
-        });
+        })
     }
 
     /**
