@@ -27,18 +27,6 @@ function createGroupingSettingButton() {
     toList.appendChild(groupingButton)
 }
 
-
-function getAccounts() {
-    // ('_cwLTList tooltipList')[2]がtoの一覧
-    const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
-    const accounts = AccountList.buildByAccountListDom(toAccountListDom)
-    console.log(accounts)
-
-    // toallの下に突っ込む
-    // toAccountListDom[0].parentNode.insertBefore(buildTag(), toAccountListDom[0].nextSibling)
-}
-
-
 // TODO: addEventListener('click')でtextareaにtoを入れる
 function buildTag() {
     // liだとcwにclickイベント奪われるのでdivに
@@ -49,7 +37,6 @@ function buildTag() {
     })
     return div
 }
-
 
 //  modal ----------------------------------------------------------------------------
 function openModal() {
@@ -176,6 +163,12 @@ class AccountList {
         }
         return accountList
     }
+
+    static getByToList() {
+        // ('_cwLTList tooltipList')[2]がtoの一覧
+        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+        return AccountList.buildByAccountListDom(toAccountListDom)
+    }
 }
 
 class Group {
@@ -193,7 +186,6 @@ class Group {
         this.name = name
     }
 }
-
 
 class GroupList {
     /** @type {[Group]} */
