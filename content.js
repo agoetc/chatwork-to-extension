@@ -30,15 +30,12 @@ function createGroupingSettingButton() {
 
 function getAccounts() {
     // ('_cwLTList tooltipList')[2]がtoの一覧
-    const toList = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+    const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+    const accounts = AccountList.buildByAccountListDom(toAccountListDom)
+    console.log(accounts)
 
     // toallの下に突っ込む
-    toList[0].parentNode.insertBefore(buildTag(), toList[0].nextSibling)
-
-    // 0は toallなので含めない
-    for (let i = 1; i < toList.length; i++) {
-        console.log(toList[i].dataset.cwuiLtValue)
-    }
+    // toAccountListDom[0].parentNode.insertBefore(buildTag(), toAccountListDom[0].nextSibling)
 }
 
 
@@ -124,11 +121,68 @@ function saveChanges(request) {
     })
 }
 
+class Account {
+    /** @type {int} */
+    accountId
+
+    /** @type {string} */
+    imagePath
+
+    /** @type {string} */
+    name
+
+    constructor(accountId, imagePath, name) {
+        this.accountId = accountId
+        this.imagePath = imagePath
+        this.name = name
+    }
+
+    /**
+     * @param {HTMLCollection} accountDom
+     * @return boolean
+     */
+    static isToAllByAccountDom(accountDom) {
+        return Number(accountDom.dataset.cwuiLtIdx) === 0
+    }
+
+    /**
+     * @param {HTMLCollection}accountDom
+     * @returns {Account}
+     */
+    static buildByAccountDom(accountDom) {
+        return new Account(
+            accountDom.dataset.cwuiLtValue,
+            accountDom.children[0].getAttribute('src'),
+            accountDom.children[1].innerText
+        )
+    }
+}
+
+class AccountList {
+    /** @type {[Account]} */
+    value = []
+
+    /**
+     * @param {HTMLCollection} accountListDom
+     * @returns {AccountList}
+     */
+    static buildByAccountListDom(accountListDom) {
+        const accountList = new AccountList()
+        for (let i = 0; i < accountListDom.length; i++) {
+            if (!Account.isToAllByAccountDom(accountListDom[i])) {
+                const account = Account.buildByAccountDom(accountListDom[i])
+                accountList.value.push(account)
+            }
+        }
+        return accountList
+    }
+}
+
 class Group {
     /** @type {string} */
     name
 
-    /** TODO */
+    /** @type {[Account]} */
     accounts = {}
 
     /**
