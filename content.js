@@ -110,21 +110,18 @@ function saveChanges(request) {
 // ----------------------------------
 
 /**
- * @param {GroupList} groupList
- * @return {HTMLTableElement}
+ *
+ * @param {GroupList}groupList
+ * @return {HTMLDivElement}
  */
 function buildGroupSettingTableDom(groupList) {
-
-    const div = document.createElement('div')
 
     const scrollableTable = document.createElement('div')
     scrollableTable.className = 'scrollableTable'
 
-
     const table = document.createElement('table')
     const thead = document.createElement('thead')
     const tbody = document.createElement('tbody')
-
 
     /** @return {HTMLTableRowElement} */
     const headTr = () => {
@@ -142,7 +139,6 @@ function buildGroupSettingTableDom(groupList) {
 
         return tr
     }
-
 
     /** @return {DocumentFragment} */
     const bodyTr = () => {
@@ -190,8 +186,10 @@ function buildGroupSettingTableDom(groupList) {
     table.appendChild(thead)
     table.appendChild(tbody)
 
+    const div = document.createElement('div')
+    div.appendChild(table)
 
-    return table
+    return div
 }
 
 // ----------------------------------
