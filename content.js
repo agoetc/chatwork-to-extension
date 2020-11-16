@@ -212,7 +212,7 @@ class GroupList {
     /** @returns {{}}*/
     toObj() {
         const object = {}
-        this.value.map(group => {
+        this.value.forEach(group => {
             object[group.name] = {}
             object[group.name]['accounts'] = group.accounts
         })
