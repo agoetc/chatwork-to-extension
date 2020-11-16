@@ -45,6 +45,7 @@ function openModal() {
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal'
         dialog.appendChild(addGroupElement(groupList))
+        dialog.appendChild(buildGroupSettingTableDom())
 
         const button = document.createElement("button")
         button.textContent = "Close"
@@ -107,6 +108,75 @@ function saveChanges(request) {
         groupList.save()
     })
 }
+
+// ----------------------------------
+
+/**
+ * @return {HTMLTableElement}
+ */
+function buildGroupSettingTableDom() {
+
+    const div = document.createElement('div')
+
+    const scrollableTable = document.createElement('div')
+    scrollableTable.className = 'scrollableTable'
+
+
+    const table = document.createElement('table')
+    const thead = document.createElement('thead')
+    const tbody = document.createElement('tbody')
+
+
+    /** @return {HTMLTableRowElement} */
+    const headTr = () => {
+        const iconTh = document.createElement('th')
+        const nameTh = document.createElement('th')
+        nameTh.innerText = '名前'
+        const groupTh = document.createElement('th')
+        groupTh.innerText = 'グループ'
+
+        const tr = document.createElement('tr')
+
+        tr.appendChild(iconTh)
+        tr.appendChild(nameTh)
+        tr.appendChild(groupTh)
+
+        return tr
+    }
+
+    /** @return {HTMLTableRowElement} */
+    const bodyTr = () => {
+        const iconTd = document.createElement('td')
+        iconTd.innerHTML = '<img class=" avatarMedium _avatar _avatarAid6" data-aid="6"\n' +
+            '                             src="https://appdata.chatwork.com/avatar/33/33816.jpg">'
+        const nameTd = document.createElement('td')
+        nameTd.innerHTML = '<span class="autotrim"><span class="_nameAid6">ほげほげほ</span></span>'
+        const groupTd = document.createElement('td')
+        groupTd.innerHTML = '<input type="text" id="_nickname6" value="">'
+
+
+        const tr = document.createElement('tr')
+
+        tr.appendChild(iconTd)
+        tr.appendChild(nameTd)
+        tr.appendChild(groupTd)
+
+        return tr
+
+    }
+
+    thead.appendChild(headTr())
+    tbody.appendChild(bodyTr())
+
+    table.appendChild(thead)
+    table.appendChild(tbody)
+
+
+    return table
+}
+
+// ----------------------------------
+
 
 class Account {
     /** @type {int} */
