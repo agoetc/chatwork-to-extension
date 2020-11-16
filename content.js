@@ -45,7 +45,7 @@ function openModal() {
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal'
         dialog.appendChild(addGroupElement(groupList))
-        dialog.appendChild(buildGroupSettingTableDom())
+        dialog.appendChild(buildGroupSettingTableDom(groupList))
 
         const button = document.createElement("button")
         button.textContent = "Close"
@@ -66,11 +66,9 @@ function addGroupElement(groupList) {
     const datalist = document.createElement('datalist')
     datalist.id = 'group-list'
 
-    groupList.value.forEach(group => {
-        const option = document.createElement('option')
-        option.value = group.name
-        datalist.appendChild(option)
-    })
+    const optionFragment = groupList.buildOptionFragment()
+
+    datalist.appendChild(optionFragment)
 
     // 入力欄
     const input = document.createElement('input')
@@ -112,9 +110,10 @@ function saveChanges(request) {
 // ----------------------------------
 
 /**
+ * @param {GroupList} groupList
  * @return {HTMLTableElement}
  */
-function buildGroupSettingTableDom() {
+function buildGroupSettingTableDom(groupList) {
 
     const div = document.createElement('div')
 
@@ -146,13 +145,28 @@ function buildGroupSettingTableDom() {
 
     /** @return {HTMLTableRowElement} */
     const bodyTr = () => {
+
+        const select = document.createElement('select')
+        const optionFragment = groupList.buildOptionFragment()
+        select.appendChild(optionFragment)
+
         const iconTd = document.createElement('td')
-        iconTd.innerHTML = '<img class=" avatarMedium _avatar _avatarAid6" data-aid="6"\n' +
-            '                             src="https://appdata.chatwork.com/avatar/33/33816.jpg">'
+        const icon = document.createElement('img')
+        icon.className = 'avatarMedium _avatar'
+        icon.src = 'https://appdata.chatwork.com/avatar/33/33816.jpg'
+        iconTd.appendChild(icon)
+
         const nameTd = document.createElement('td')
-        nameTd.innerHTML = '<span class="autotrim"><span class="_nameAid6">ほげほげほ</span></span>'
+        const nameSpan = document.createElement('span')
+        nameSpan.className = 'autotrim'
+        const name = document.createElement('span')
+
+        name.innerText = 'あああああああああああああああああ'
+        nameSpan.appendChild(name)
+        nameTd.appendChild(nameSpan)
+
         const groupTd = document.createElement('td')
-        groupTd.innerHTML = '<input type="text" id="_nickname6" value="">'
+        groupTd.appendChild(select)
 
 
         const tr = document.createElement('tr')
@@ -287,6 +301,20 @@ class GroupList {
             object[group.name]['accounts'] = group.accounts
         })
         return object
+    }
+
+
+    /** @return {DocumentFragment} */
+    buildOptionFragment() {
+        const fragment = document.createDocumentFragment()
+
+        this.value.forEach(group => {
+            const option = document.createElement('option')
+            option.value = group.name
+            fragment.appendChild(option)
+        })
+
+        return fragment
     }
 
     // storage ---------------------------------------------------------------------
