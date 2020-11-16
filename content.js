@@ -143,40 +143,45 @@ function buildGroupSettingTableDom(groupList) {
         return tr
     }
 
-    /** @return {HTMLTableRowElement} */
+
+    /** @return {DocumentFragment} */
     const bodyTr = () => {
+        const accountList = AccountList.getByToList()
 
-        const select = document.createElement('select')
-        const optionFragment = groupList.buildOptionFragment()
-        select.appendChild(optionFragment)
+        const groupSettingTableBodyFragment = document.createDocumentFragment()
 
-        const iconTd = document.createElement('td')
-        const icon = document.createElement('img')
-        icon.className = 'avatarMedium _avatar'
-        icon.src = 'https://appdata.chatwork.com/avatar/33/33816.jpg'
-        iconTd.appendChild(icon)
+        accountList.value.forEach(account => {
+            const iconTd = document.createElement('td')
+            const icon = document.createElement('img')
+            icon.className = 'avatarMedium _avatar'
+            icon.src = account.imagePath
+            iconTd.appendChild(icon)
 
-        const nameTd = document.createElement('td')
-        const nameSpan = document.createElement('span')
-        nameSpan.className = 'autotrim'
-        const name = document.createElement('span')
+            const nameTd = document.createElement('td')
+            const nameSpan = document.createElement('span')
+            nameSpan.className = 'autotrim'
+            const name = document.createElement('span')
 
-        name.innerText = 'あああああああああああああああああ'
-        nameSpan.appendChild(name)
-        nameTd.appendChild(nameSpan)
+            name.innerText = account.name
+            nameSpan.appendChild(name)
+            nameTd.appendChild(nameSpan)
 
-        const groupTd = document.createElement('td')
-        groupTd.appendChild(select)
+            const groupTd = document.createElement('td')
+            const select = document.createElement('select')
+            const optionFragment = groupList.buildOptionFragment()
+            select.appendChild(optionFragment)
+            groupTd.appendChild(select)
 
+            const tr = document.createElement('tr')
 
-        const tr = document.createElement('tr')
+            tr.appendChild(iconTd)
+            tr.appendChild(nameTd)
+            tr.appendChild(groupTd)
 
-        tr.appendChild(iconTd)
-        tr.appendChild(nameTd)
-        tr.appendChild(groupTd)
+            groupSettingTableBodyFragment.appendChild(tr)
+        })
 
-        return tr
-
+        return groupSettingTableBodyFragment
     }
 
     thead.appendChild(headTr())
