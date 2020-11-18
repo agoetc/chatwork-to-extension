@@ -115,10 +115,6 @@ function saveChanges(request) {
  * @return {HTMLDivElement}
  */
 function buildGroupSettingTableDom(groupList) {
-
-    const scrollableTable = document.createElement('div')
-    scrollableTable.className = 'scrollableTable'
-
     const table = document.createElement('table')
     const thead = document.createElement('thead')
     const tbody = document.createElement('tbody')
@@ -186,10 +182,12 @@ function buildGroupSettingTableDom(groupList) {
     table.appendChild(thead)
     table.appendChild(tbody)
 
-    const div = document.createElement('div')
-    div.appendChild(table)
 
-    return div
+    const scrollableTable = document.createElement('div')
+    scrollableTable.className = 'scrollableTable'
+    scrollableTable.appendChild(table)
+
+    return scrollableTable
 }
 
 // ----------------------------------
