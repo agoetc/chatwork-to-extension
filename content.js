@@ -147,10 +147,11 @@ class GroupListDomBuilder {
                 nameTd.appendChild(nameSpan)
 
                 const groupTd = document.createElement('td')
-                const select = document.createElement('select')
-                const optionFragment = this.optionFragment()
-                select.appendChild(optionFragment)
-                groupTd.appendChild(select)
+                const input = document.createElement('input')
+                input.type = 'checkbox'
+                input.value = account.accountId
+
+                groupTd.appendChild(input)
 
                 const tr = document.createElement('tr')
 
