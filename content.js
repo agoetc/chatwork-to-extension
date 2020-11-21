@@ -1,3 +1,12 @@
+const env = {
+    id: {
+        select: 'group-select'
+    },
+    class: {
+        checkBox: 'group-check'
+    }
+}
+
 // dom読み込むのを待つ（2000は適当な数値）
 window.onload = () => setTimeout(listener, 2000)
 
@@ -78,7 +87,9 @@ class GroupListDomBuilder {
         const button = document.createElement('button')
         button.textContent = '追加'
         button.addEventListener('click', () => {
-            const request = new GroupRequest(input.value)
+            // FIXME: テスト中のため差し替え
+            const request = GroupRequest.buildByCheckBox()
+            // const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
             input.value = ''
         })
@@ -96,6 +107,7 @@ class GroupListDomBuilder {
     /** @return {HTMLSelectElement}*/
     selectDom() {
         const select = document.createElement('select')
+        select.id = env.id.select
         select.appendChild(this.optionFragment())
 
         return select
@@ -148,7 +160,9 @@ class GroupListDomBuilder {
 
                 const groupTd = document.createElement('td')
                 const input = document.createElement('input')
+
                 input.type = 'checkbox'
+                input.className = env.class.checkBox
                 input.value = account.accountId
 
                 groupTd.appendChild(input)
@@ -279,19 +293,21 @@ class BuildAccountListByToListDom {
     }
 }
 
+// TODO objectからGroupを生成できるように
 class Group {
     /** @type {string} */
     name
 
-    /** @type {[Account]} */
-    accounts = []
+    /** @type {AccountList} */
+    accountList
 
     /**
      * @param {string} name
-     * @param {object} accounts
+     * @param {AccountList} accountList
      */
-    constructor(name, accounts = {}) {
+    constructor(name, accountList = new AccountList()) {
         this.name = name
+        this.accountList = accountList
     }
 }
 
@@ -303,6 +319,7 @@ class GroupList {
     constructor(savedGroupList) {
         for (let groupName in savedGroupList.group) {
             if (savedGroupList.group.hasOwnProperty(groupName)) {
+                // TODO: GroupListを受け取れるように
                 this.value.push(new Group(groupName))
             }
         }
@@ -312,7 +329,7 @@ class GroupList {
     addGroup(req) {
         // TODO: elseのときどうする？
         if (this.value.length === 0 || !this.value.includes(req.name)) {
-            this.value.push(new Group(req.name))
+            this.value.push(new Group(req.name, req.accountList))
             this.save()
         }
     }
@@ -323,7 +340,7 @@ class GroupList {
         const object = {}
         this.value.forEach(group => {
             object[group.name] = {}
-            object[group.name]['accounts'] = group.accounts
+            object[group.name]['accountList'] = group.accountList.value
         })
         return object
     }
@@ -348,6 +365,7 @@ class GroupList {
     /** @param {getGroupList} callback */
     static get(callback) {
         chrome.storage.sync.get('group', (savedGroupList) => {
+            console.log(savedGroupList)
             callback(new GroupList(savedGroupList))
         });
     }
@@ -358,8 +376,42 @@ class GroupRequest {
     /** @type {string} */
     name
 
-    /** @param {string} name */
-    constructor(name) {
+    /** @type {AccountList} */
+    accountList
+
+    /**
+     * @param {string} name
+     * @param {AccountList} accountList
+     */
+    constructor(name, accountList = new AccountList()) {
         this.name = name
+        this.accountList = accountList
+    }
+
+    /**
+     * @return {GroupRequest}
+     */
+    static buildByCheckBox() {
+        return BuildGroupAccountListRequestByCheckBox.build()
+    }
+}
+
+class BuildGroupAccountListRequestByCheckBox {
+    /**
+     * @returns {GroupRequest}
+     */
+    static build() {
+        const name = document.getElementById(env.id.select).value
+        const accountsDom = document.getElementsByClassName(env.class.checkBox)
+
+        const accountList = new AccountList()
+        accountList.value.push(new Account(8888888888, 'http://hogehoge.com', 'hoge'))
+
+        return new GroupRequest('hogehoge', accountList)
+
+        // for (let i = 0; i < accountListCheckBoxDom.length; i++) {
+        //     const account = Account.buildAccount(accountListCheckBoxDom[i])
+        //     accountList.value.push(account)
+        // }
     }
 }
