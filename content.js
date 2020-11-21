@@ -51,17 +51,6 @@ function openModal() {
     })
 }
 
-/**
- * @param {GroupRequest} request
- */
-function saveChanges(request) {
-    // TODO: 計２回もstorage参照するの良くなくない？
-    GroupList.get((groupList) => {
-        groupList.addGroup(request)
-        groupList.save()
-    })
-}
-
 class GroupListDomBuilder {
     /** @type {GroupList} */
     groupList
@@ -90,7 +79,7 @@ class GroupListDomBuilder {
         button.textContent = "追加"
         button.addEventListener('click', () => {
             const request = new GroupRequest(input.value)
-            saveChanges(request)
+            this.groupList.addGroup(request)
             input.value = ''
         })
 
@@ -316,6 +305,7 @@ class GroupList {
         // TODO: elseのときどうする？
         if (this.value.length === 0 || !this.value.includes(req.name)) {
             this.value.push(new Group(req.name))
+            this.save()
         }
     }
 
