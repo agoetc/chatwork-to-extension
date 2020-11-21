@@ -223,26 +223,6 @@ class Account {
         this.imagePath = imagePath
         this.name = name
     }
-
-    /**
-     * @param {HTMLCollection} accountDom
-     * @return boolean
-     */
-    static isToAllByAccountDom(accountDom) {
-        return Number(accountDom.dataset.cwuiLtIdx) === 0
-    }
-
-    /**
-     * @param {HTMLCollection}accountDom
-     * @returns {Account}
-     */
-    static buildByAccountDom(accountDom) {
-        return new Account(
-            accountDom.dataset.cwuiLtValue,
-            accountDom.children[0].getAttribute('src'),
-            accountDom.children[1].innerText
-        )
-    }
 }
 
 class AccountList {
@@ -250,24 +230,52 @@ class AccountList {
     value = []
 
     /**
-     * @param {HTMLCollection} accountListDom
+     * To一覧からAccountListを作成
+     * @return {AccountList}
+     */
+    static getByToList() {
+        return BuildAccountListByToListDom.build()
+    }
+}
+
+class BuildAccountListByToListDom {
+    /**
+     * To一覧からAccountListを作成
      * @returns {AccountList}
      */
-    static buildByAccountListDom(accountListDom) {
+    static build() {
+        // ('_cwLTList tooltipList')[2]がtoの一覧
+        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+
         const accountList = new AccountList()
-        for (let i = 0; i < accountListDom.length; i++) {
-            if (!Account.isToAllByAccountDom(accountListDom[i])) {
-                const account = Account.buildByAccountDom(accountListDom[i])
+
+        for (let i = 0; i < toAccountListDom.length; i++) {
+            if (!this.#isToAll(toAccountListDom[i])) {
+                const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
             }
         }
         return accountList
     }
 
-    static getByToList() {
-        // ('_cwLTList tooltipList')[2]がtoの一覧
-        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
-        return AccountList.buildByAccountListDom(toAccountListDom)
+    /**
+     * @param {HTMLCollection}accountDom
+     * @returns {Account}
+     */
+    static #buildAccount(accountDom) {
+        return new Account(
+            accountDom.dataset.cwuiLtValue,
+            accountDom.children[0].getAttribute('src'),
+            accountDom.children[1].innerText
+        )
+    }
+
+    /**
+     * @param {HTMLCollection}accountDom
+     * @return {boolean}
+     */
+    static #isToAll(accountDom) {
+        return Number(accountDom.dataset.cwuiLtIdx) === 0
     }
 }
 
@@ -311,7 +319,7 @@ class GroupList {
 
 
     /** @returns {{}}*/
-    toObj() {
+    #toObj() {
         const object = {}
         this.value.forEach(group => {
             object[group.name] = {}
@@ -326,7 +334,7 @@ class GroupList {
      * 保存
      */
     save() {
-        chrome.storage.sync.set({'group': this.toObj()}, function () {
+        chrome.storage.sync.set({'group': this.#toObj()}, function () {
             console.log('Settings saved')
         })
     }
