@@ -338,21 +338,29 @@ class GroupList {
     /** @type {[Group]} */
     value = []
 
-    /** @param {object} savedGroupList */
-    constructor(savedGroupList) {
-        for (let groupName in savedGroupList.group) {
-            if (savedGroupList.group.hasOwnProperty(groupName)) {
-                const accountListObj = savedGroupList.group[groupName].accountList
+    /**
+     * @param {object} groupListObj
+     * @return {GroupList}
+     */
+    static buildByObj(groupListObj) {
+        const groupList = new GroupList()
+
+        for (let groupName in groupListObj.group) {
+            if (groupListObj.group.hasOwnProperty(groupName)) {
+                const accountListObj = groupListObj.group[groupName].accountList
                 const accountList = AccountList.buildByObj(accountListObj)
-                this.value.push(new Group(groupName, accountList))
+                groupList.value.push(new Group(groupName, accountList))
             }
         }
+
+        return groupList
     }
 
     /** @param {GroupRequest} req */
     addGroup(req) {
         // TODO: elseのときどうする？
-        if (this.value.length === 0 || !this.value.includes(req.name)) {
+        const existsGroupName = this.value.find(a => a.name === req.name) !== undefined
+        if (this.value.length === 0 || !existsGroupName) {
             this.value.push(new Group(req.name, req.accountList))
             this.save()
         }
@@ -388,9 +396,9 @@ class GroupList {
 
     /** @param {getGroupList} callback */
     static get(callback) {
-        chrome.storage.sync.get('group', (savedGroupList) => {
-            console.log(savedGroupList)
-            callback(new GroupList(savedGroupList))
+        chrome.storage.sync.get('group', (groupListObj) => {
+            console.log(groupListObj)
+            callback(GroupList.buildByObj(groupListObj))
         });
     }
 
@@ -429,7 +437,10 @@ class BuildGroupAccountListRequestByCheckBox {
         const accountsDom = document.getElementsByClassName(env.class.checkBox)
 
         const accountList = new AccountList()
+
+        // TODO: ダミーデータ
         accountList.value.push(new Account(8888888888, 'http://hogehoge.com', 'hoge'))
+        accountList.value.push(new Account(9999999999, 'http://hogehoge.com', 'hoge'))
 
         return new GroupRequest('hogehoge', accountList)
 
