@@ -44,17 +44,33 @@ function openModal() {
     GroupList.get(groupList => {
         const dialog = document.createElement("dialog")
         dialog.id = 'grouping-modal'
+
+        // モーダルに要素を追加している
         dialog.appendChild(addGroupElement(groupList))
+        dialog.appendChild(buildGroupSelectDom(groupList))
         dialog.appendChild(buildGroupSettingTableDom(groupList))
 
         const button = document.createElement("button")
         button.textContent = "Close"
         dialog.appendChild(button)
         button.addEventListener("click", () => dialog.close())
+
         document.body.appendChild(dialog)
         dialog.showModal()
 
     })
+}
+
+/**
+ *
+ * @param {GroupList} groupList
+ * @return {HTMLSelectElement}
+ */
+function buildGroupSelectDom(groupList) {
+    const select = document.createElement('select')
+    select.appendChild(groupList.buildOptionFragment())
+
+    return select
 }
 
 /**
@@ -312,6 +328,7 @@ class GroupList {
         this.value.forEach(group => {
             const option = document.createElement('option')
             option.value = group.name
+            option.innerText = group.name
             fragment.appendChild(option)
         })
 
