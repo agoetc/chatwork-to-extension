@@ -40,6 +40,7 @@ function createGroupingSettingButton() {
 function openModal() {
 
     GroupList.get((groupList) => {
+        console.log(groupList)
         const groupListDomBuilder = new GroupListDomBuilder(groupList)
         const dialog = document.createElement('dialog')
         dialog.id = 'grouping-modal'
@@ -244,6 +245,28 @@ class AccountList {
     value = []
 
     /**
+     * {
+     *   accountId: 8888888888
+     *   imagePath: "http://hogehoge.com"
+     *   name: "hoge"
+     * }
+     * @param {object} accountListObj
+     */
+    static buildByObj(accountListObj) {
+        const accountList = new AccountList()
+        Object.keys(accountListObj).forEach((key) => {
+            const account = new Account(
+                accountListObj[key].accountId,
+                accountListObj[key].imagePath,
+                accountListObj[key].name,
+            )
+            accountList.value.push(account)
+        })
+
+        return accountList
+    }
+
+    /**
      * To一覧からAccountListを作成
      * @return {AccountList}
      */
@@ -319,8 +342,9 @@ class GroupList {
     constructor(savedGroupList) {
         for (let groupName in savedGroupList.group) {
             if (savedGroupList.group.hasOwnProperty(groupName)) {
-                // TODO: GroupListを受け取れるように
-                this.value.push(new Group(groupName))
+                const accountListObj = savedGroupList.group[groupName].accountList
+                const accountList = AccountList.buildByObj(accountListObj)
+                this.value.push(new Group(groupName, accountList))
             }
         }
     }
