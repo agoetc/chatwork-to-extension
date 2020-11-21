@@ -32,7 +32,7 @@ function openModal() {
 
     GroupList.get((groupList) => {
         const groupListDomBuilder = new GroupListDomBuilder(groupList)
-        const dialog = document.createElement("dialog")
+        const dialog = document.createElement('dialog')
         dialog.id = 'grouping-modal'
 
         // モーダルに要素を追加している
@@ -40,10 +40,10 @@ function openModal() {
         dialog.appendChild(groupListDomBuilder.selectDom())
         dialog.appendChild(groupListDomBuilder.settingTableDom())
 
-        const button = document.createElement("button")
-        button.textContent = "Close"
+        const button = document.createElement('button')
+        button.textContent = 'Close'
         dialog.appendChild(button)
-        button.addEventListener("click", () => dialog.close())
+        button.addEventListener('click', () => dialog.close())
 
         document.body.appendChild(dialog)
         dialog.showModal()
@@ -75,8 +75,8 @@ class GroupListDomBuilder {
 
 
         // 追加ボタン作成
-        const button = document.createElement("button")
-        button.textContent = "追加"
+        const button = document.createElement('button')
+        button.textContent = '追加'
         button.addEventListener('click', () => {
             const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
@@ -93,9 +93,7 @@ class GroupListDomBuilder {
         return div
     }
 
-    /**
-     * @return {HTMLSelectElement}
-     */
+    /** @return {HTMLSelectElement}*/
     selectDom() {
         const select = document.createElement('select')
         select.appendChild(this.optionFragment())
@@ -103,9 +101,7 @@ class GroupListDomBuilder {
         return select
     }
 
-    /**
-     * @return {HTMLDivElement}
-     */
+    /** @return {HTMLDivElement}*/
     settingTableDom() {
         const table = document.createElement('table')
         const thead = document.createElement('thead')
@@ -196,7 +192,10 @@ class GroupListDomBuilder {
         return fragment
     }
 
-    // TODO: addEventListener('click')でtextareaにtoを入れる
+    /**
+     * TODO: addEventListener('click')でtextareaにtoを入れる
+     * @return {HTMLDivElement}
+     */
     buildTag() {
         // liだとcwにclickイベント奪われるのでdivに
         const div = document.createElement('div')
