@@ -27,171 +27,185 @@ function createGroupingSettingButton() {
     toList.appendChild(groupingButton)
 }
 
-// TODO: addEventListener('click')でtextareaにtoを入れる
-function buildTag() {
-    // liだとcwにclickイベント奪われるのでdivに
-    const div = document.createElement('div')
-    div.innerText = 'グループ名'
-    div.addEventListener('click', () => {
-        console.log('グルーピングしてる人間をtoで突っ込みたい')
-    })
-    return div
-}
-
 //  modal ----------------------------------------------------------------------------
 function openModal() {
 
-    GroupList.get(groupList => {
-        const dialog = document.createElement("dialog")
+    GroupList.get((groupList) => {
+        const groupListDomBuilder = new GroupListDomBuilder(groupList)
+        const dialog = document.createElement('dialog')
         dialog.id = 'grouping-modal'
-        dialog.appendChild(addGroupElement(groupList))
-        dialog.appendChild(buildGroupSettingTableDom(groupList))
 
-        const button = document.createElement("button")
-        button.textContent = "Close"
+        // モーダルに要素を追加している
+        dialog.appendChild(groupListDomBuilder.formDom())
+        dialog.appendChild(groupListDomBuilder.selectDom())
+        dialog.appendChild(groupListDomBuilder.settingTableDom())
+
+        const button = document.createElement('button')
+        button.textContent = 'Close'
         dialog.appendChild(button)
-        button.addEventListener("click", () => dialog.close())
+        button.addEventListener('click', () => dialog.close())
+
         document.body.appendChild(dialog)
         dialog.showModal()
 
     })
 }
 
-/**
- *
- * @param {GroupList} groupList
- * @returns {HTMLDivElement}
- */
-function addGroupElement(groupList) {
-    const datalist = document.createElement('datalist')
-    datalist.id = 'group-list'
+class GroupListDomBuilder {
+    /** @type {GroupList} */
+    groupList
 
-    const optionFragment = groupList.buildOptionFragment()
-
-    datalist.appendChild(optionFragment)
-
-    // 入力欄
-    const input = document.createElement('input')
-    input.type = 'text'
-    input.autocomplete = 'on'
-    input.setAttribute('list', 'group-list')
-
-
-    // 追加ボタン作成
-    const button = document.createElement("button")
-    button.textContent = "追加"
-    button.addEventListener('click', () => {
-        const request = new GroupRequest(input.value)
-        saveChanges(request)
-        input.value = ''
-    })
-
-    // まとめ役
-    const div = document.createElement('div')
-
-    div.appendChild(input)
-    div.appendChild(datalist)
-    div.appendChild(button)
-
-    return div
-}
-
-/**
- * @param {GroupRequest} request
- */
-function saveChanges(request) {
-    // TODO: 計２回もstorage参照するの良くなくない？
-    GroupList.get((groupList) => {
-        groupList.addGroup(request)
-        groupList.save()
-    })
-}
-
-// ----------------------------------
-
-/**
- *
- * @param {GroupList}groupList
- * @return {HTMLDivElement}
- */
-function buildGroupSettingTableDom(groupList) {
-    const table = document.createElement('table')
-    const thead = document.createElement('thead')
-    const tbody = document.createElement('tbody')
-
-    /** @return {HTMLTableRowElement} */
-    const headTr = () => {
-        const iconTh = document.createElement('th')
-        const nameTh = document.createElement('th')
-        nameTh.innerText = '名前'
-        const groupTh = document.createElement('th')
-        groupTh.innerText = 'グループ'
-
-        const tr = document.createElement('tr')
-
-        tr.appendChild(iconTh)
-        tr.appendChild(nameTh)
-        tr.appendChild(groupTh)
-
-        return tr
+    /** @param {GroupList} groupList*/
+    constructor(groupList) {
+        this.groupList = groupList
     }
 
-    /** @return {DocumentFragment} */
-    const bodyTr = () => {
-        const accountList = AccountList.getByToList()
+    /** @returns {HTMLDivElement}*/
+    formDom() {
+        const datalist = document.createElement('datalist')
+        datalist.id = 'group-list'
 
-        const groupSettingTableBodyFragment = document.createDocumentFragment()
+        datalist.appendChild(this.optionFragment())
 
-        accountList.value.forEach(account => {
-            const iconTd = document.createElement('td')
-            const icon = document.createElement('img')
-            icon.className = 'avatarMedium _avatar'
-            icon.src = account.imagePath
-            iconTd.appendChild(icon)
+        // 入力欄
+        const input = document.createElement('input')
+        input.type = 'text'
+        input.autocomplete = 'on'
+        input.setAttribute('list', 'group-list')
 
-            const nameTd = document.createElement('td')
-            const nameSpan = document.createElement('span')
-            nameSpan.className = 'autotrim'
-            const name = document.createElement('span')
 
-            name.innerText = account.name
-            nameSpan.appendChild(name)
-            nameTd.appendChild(nameSpan)
+        // 追加ボタン作成
+        const button = document.createElement('button')
+        button.textContent = '追加'
+        button.addEventListener('click', () => {
+            const request = new GroupRequest(input.value)
+            this.groupList.addGroup(request)
+            input.value = ''
+        })
 
-            const groupTd = document.createElement('td')
-            const select = document.createElement('select')
-            const optionFragment = groupList.buildOptionFragment()
-            select.appendChild(optionFragment)
-            groupTd.appendChild(select)
+        // まとめ役
+        const div = document.createElement('div')
+
+        div.appendChild(input)
+        div.appendChild(datalist)
+        div.appendChild(button)
+
+        return div
+    }
+
+    /** @return {HTMLSelectElement}*/
+    selectDom() {
+        const select = document.createElement('select')
+        select.appendChild(this.optionFragment())
+
+        return select
+    }
+
+    /** @return {HTMLDivElement}*/
+    settingTableDom() {
+        const table = document.createElement('table')
+        const thead = document.createElement('thead')
+        const tbody = document.createElement('tbody')
+
+        /** @return {HTMLTableRowElement} */
+        const headTr = () => {
+            const iconTh = document.createElement('th')
+            const nameTh = document.createElement('th')
+            nameTh.innerText = '名前'
+            const groupTh = document.createElement('th')
+            groupTh.innerText = 'グループ'
 
             const tr = document.createElement('tr')
 
-            tr.appendChild(iconTd)
-            tr.appendChild(nameTd)
-            tr.appendChild(groupTd)
+            tr.appendChild(iconTh)
+            tr.appendChild(nameTh)
+            tr.appendChild(groupTh)
 
-            groupSettingTableBodyFragment.appendChild(tr)
-        })
+            return tr
+        }
 
-        return groupSettingTableBodyFragment
+        /** @return {DocumentFragment} */
+        const bodyTr = () => {
+            const accountList = AccountList.getByToList()
+
+            const groupSettingTableBodyFragment = document.createDocumentFragment()
+
+            accountList.value.forEach(account => {
+                const iconTd = document.createElement('td')
+                const icon = document.createElement('img')
+                icon.className = 'avatarMedium _avatar'
+                icon.src = account.imagePath
+                iconTd.appendChild(icon)
+
+                const nameTd = document.createElement('td')
+                const nameSpan = document.createElement('span')
+                nameSpan.className = 'autotrim'
+                const name = document.createElement('span')
+
+                name.innerText = account.name
+                nameSpan.appendChild(name)
+                nameTd.appendChild(nameSpan)
+
+                const groupTd = document.createElement('td')
+                const select = document.createElement('select')
+                const optionFragment = this.optionFragment()
+                select.appendChild(optionFragment)
+                groupTd.appendChild(select)
+
+                const tr = document.createElement('tr')
+
+                tr.appendChild(iconTd)
+                tr.appendChild(nameTd)
+                tr.appendChild(groupTd)
+
+                groupSettingTableBodyFragment.appendChild(tr)
+            })
+
+            return groupSettingTableBodyFragment
+        }
+
+        thead.appendChild(headTr())
+        tbody.appendChild(bodyTr())
+
+        table.appendChild(thead)
+        table.appendChild(tbody)
+
+
+        const scrollableTable = document.createElement('div')
+        scrollableTable.className = 'scrollableTable'
+        scrollableTable.appendChild(table)
+
+        return scrollableTable
     }
 
-    thead.appendChild(headTr())
-    tbody.appendChild(bodyTr())
+    /** @return {DocumentFragment} */
+    optionFragment() {
+        const fragment = document.createDocumentFragment()
 
-    table.appendChild(thead)
-    table.appendChild(tbody)
+        this.groupList.value.forEach(group => {
+            const option = document.createElement('option')
+            option.value = group.name
+            option.innerText = group.name
+            fragment.appendChild(option)
+        })
 
+        return fragment
+    }
 
-    const scrollableTable = document.createElement('div')
-    scrollableTable.className = 'scrollableTable'
-    scrollableTable.appendChild(table)
-
-    return scrollableTable
+    /**
+     * TODO: addEventListener('click')でtextareaにtoを入れる
+     * @return {HTMLDivElement}
+     */
+    buildTag() {
+        // liだとcwにclickイベント奪われるのでdivに
+        const div = document.createElement('div')
+        div.innerText = 'グループ名'
+        div.addEventListener('click', () => {
+            console.log('グルーピングしてる人間をtoで突っ込みたい')
+        })
+        return div
+    }
 }
-
-// ----------------------------------
-
 
 class Account {
     /** @type {int} */
@@ -261,7 +275,7 @@ class Group {
     name
 
     /** @type {[Account]} */
-    accounts = {}
+    accounts = []
 
     /**
      * @param {string} name
@@ -290,6 +304,7 @@ class GroupList {
         // TODO: elseのときどうする？
         if (this.value.length === 0 || !this.value.includes(req.name)) {
             this.value.push(new Group(req.name))
+            this.save()
         }
     }
 
@@ -304,20 +319,6 @@ class GroupList {
         return object
     }
 
-
-    /** @return {DocumentFragment} */
-    buildOptionFragment() {
-        const fragment = document.createDocumentFragment()
-
-        this.value.forEach(group => {
-            const option = document.createElement('option')
-            option.value = group.name
-            fragment.appendChild(option)
-        })
-
-        return fragment
-    }
-
     // storage ---------------------------------------------------------------------
 
     /**
@@ -330,7 +331,7 @@ class GroupList {
     }
 
     /**
-     *
+     * 読込
      * @callback getGroupList
      * @param {GroupList} groupList
      */
