@@ -560,13 +560,18 @@ class BuildAccountListByToListDom {
      * @returns {AccountList}
      */
     static build() {
-        // ('_cwLTList tooltipList')[2]がtoの一覧
-        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+        /**
+         *  ('_cwLTList tooltipList')[2]がtoの一覧
+         * @type {HTMLCollection<HTMLLIElement>}
+         */
+        const toAccountListDom =
+            document
+                .getElementsByClassName('_cwLTList tooltipList')[2]
+                .getElementsByTagName('li')
 
         const accountList = new AccountList()
 
         for (let i = 0; i < toAccountListDom.length; i++) {
-            // TODO: 自分で作ったgroup一覧も除外する
             if (!this.#isToAll(toAccountListDom[i])) {
                 const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
