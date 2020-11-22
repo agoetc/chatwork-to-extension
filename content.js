@@ -1,3 +1,18 @@
+const env = {
+    id: {
+        select: 'group-select',
+        defaultSelect: 'group-default-select',
+        tbody: 'group-body'
+    },
+    class: {
+        checkBox: 'group-check'
+    }
+}
+
+const state = {
+    isDefaultSelect: true
+}
+
 // dom読み込むのを待つ（2000は適当な数値）
 window.onload = () => setTimeout(listener, 2000)
 
@@ -31,6 +46,7 @@ function createGroupingSettingButton() {
 function openModal() {
 
     GroupList.get((groupList) => {
+        console.log(groupList)
         const groupListDomBuilder = new GroupListDomBuilder(groupList)
         const dialog = document.createElement('dialog')
         dialog.id = 'grouping-modal'
@@ -40,15 +56,33 @@ function openModal() {
         dialog.appendChild(groupListDomBuilder.selectDom())
         dialog.appendChild(groupListDomBuilder.settingTableDom())
 
-        const button = document.createElement('button')
-        button.textContent = 'Close'
-        dialog.appendChild(button)
-        button.addEventListener('click', () => dialog.close())
+        const buttonDiv = document.createElement('div')
+        const saveButton = groupListDomBuilder.saveButton()
+        const closeButton = UtilDomBuilder.closeButton(dialog)
 
+        buttonDiv.appendChild(saveButton)
+        buttonDiv.appendChild(closeButton)
+
+        dialog.appendChild(buttonDiv)
         document.body.appendChild(dialog)
         dialog.showModal()
 
     })
+}
+
+class UtilDomBuilder {
+    /**
+     * @param {HTMLDialogElement} dialog
+     * @return {HTMLButtonElement}
+     */
+    static closeButton(dialog) {
+        const button = document.createElement('button')
+
+        button.textContent = '閉じる'
+        button.addEventListener('click', () => dialog.close())
+
+        return button
+    }
 }
 
 class GroupListDomBuilder {
@@ -78,6 +112,7 @@ class GroupListDomBuilder {
         const button = document.createElement('button')
         button.textContent = '追加'
         button.addEventListener('click', () => {
+            // FIXME: テスト中のため差し替え
             const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
             input.value = ''
@@ -96,16 +131,47 @@ class GroupListDomBuilder {
     /** @return {HTMLSelectElement}*/
     selectDom() {
         const select = document.createElement('select')
+        select.id = env.id.select
+
+        const option = document.createElement('option')
+        option.id = env.id.defaultSelect
+        option.selected = true
+        option.innerText = '選択してください'
+
+        select.appendChild(option)
         select.appendChild(this.optionFragment())
 
+        select.addEventListener('change', () => {
+            state.isDefaultSelect = false
+
+            const group = this.groupList.getGroupByName(select.value)
+            if (group !== undefined) {
+                const tbody = document.getElementById(env.id.tbody)
+
+                while (tbody.childElementCount) {
+                    tbody.children[0].remove()
+                }
+
+                // 選択したら選択してくださいを削除
+                if (select.firstElementChild.id === env.id.defaultSelect) {
+                    select.firstElementChild.remove()
+                }
+                const tr = this.#bodyTr(group.accountList)
+                tbody.appendChild(tr)
+            }
+        })
         return select
     }
 
-    /** @return {HTMLDivElement}*/
-    settingTableDom() {
+    /**
+     * @param {AccountList} checkedAccountList
+     * @return {HTMLDivElement}
+     */
+    settingTableDom(checkedAccountList = new AccountList()) {
         const table = document.createElement('table')
         const thead = document.createElement('thead')
         const tbody = document.createElement('tbody')
+        tbody.id = env.id.tbody
 
         /** @return {HTMLTableRowElement} */
         const headTr = () => {
@@ -124,48 +190,8 @@ class GroupListDomBuilder {
             return tr
         }
 
-        /** @return {DocumentFragment} */
-        const bodyTr = () => {
-            const accountList = AccountList.getByToList()
-
-            const groupSettingTableBodyFragment = document.createDocumentFragment()
-
-            accountList.value.forEach(account => {
-                const iconTd = document.createElement('td')
-                const icon = document.createElement('img')
-                icon.className = 'avatarMedium _avatar'
-                icon.src = account.imagePath
-                iconTd.appendChild(icon)
-
-                const nameTd = document.createElement('td')
-                const nameSpan = document.createElement('span')
-                nameSpan.className = 'autotrim'
-                const name = document.createElement('span')
-
-                name.innerText = account.name
-                nameSpan.appendChild(name)
-                nameTd.appendChild(nameSpan)
-
-                const groupTd = document.createElement('td')
-                const select = document.createElement('select')
-                const optionFragment = this.optionFragment()
-                select.appendChild(optionFragment)
-                groupTd.appendChild(select)
-
-                const tr = document.createElement('tr')
-
-                tr.appendChild(iconTd)
-                tr.appendChild(nameTd)
-                tr.appendChild(groupTd)
-
-                groupSettingTableBodyFragment.appendChild(tr)
-            })
-
-            return groupSettingTableBodyFragment
-        }
-
         thead.appendChild(headTr())
-        tbody.appendChild(bodyTr())
+        tbody.appendChild(this.#bodyTr(checkedAccountList))
 
         table.appendChild(thead)
         table.appendChild(tbody)
@@ -192,6 +218,22 @@ class GroupListDomBuilder {
         return fragment
     }
 
+
+    saveButton() {
+        const button = document.createElement('button')
+
+        button.textContent = '保存'
+        button.addEventListener('click', () => {
+            if (!state.isDefaultSelect) {
+                const req = GroupRequest.buildByCheckBox()
+                this.groupList.addGroup(req)
+            }
+        })
+
+        return button
+    }
+
+
     /**
      * TODO: addEventListener('click')でtextareaにtoを入れる
      * @return {HTMLDivElement}
@@ -204,6 +246,67 @@ class GroupListDomBuilder {
             console.log('グルーピングしてる人間をtoで突っ込みたい')
         })
         return div
+    }
+
+
+    /**
+     * @param {AccountList} checkedAccountList
+     * @return {DocumentFragment}
+     */
+    #bodyTr(checkedAccountList = new AccountList()) {
+        const toAccountList = AccountList.getByToList()
+
+        const groupSettingTableBodyFragment = document.createDocumentFragment()
+
+
+        toAccountList.value.forEach(account => {
+            const iconTd = document.createElement('td')
+            const icon = document.createElement('img')
+            icon.className = 'avatarMedium _avatar'
+            icon.src = account.imagePath
+            iconTd.appendChild(icon)
+
+            const nameTd = document.createElement('td')
+            const nameSpan = document.createElement('span')
+            nameSpan.className = 'autotrim'
+            const name = document.createElement('span')
+
+            name.innerText = account.name
+            nameSpan.appendChild(name)
+            nameTd.appendChild(nameSpan)
+
+            const groupTd = document.createElement('td')
+            const input = document.createElement('input')
+
+            input.type = 'checkbox'
+            input.className = env.class.checkBox
+
+            input.dataset.aId = account.accountId
+            input.dataset.imagePath = account.imagePath
+            input.dataset.name = account.name
+
+            // 選択してください状態ならdisabled
+            if (state.isDefaultSelect) {
+                input.disabled = true
+            }
+
+            if (checkedAccountList.isSaved(account)) {
+                input.checked = true
+            }
+
+            groupTd.appendChild(input)
+
+            const tr = document.createElement('tr')
+
+            tr.appendChild(iconTd)
+            tr.appendChild(nameTd)
+            tr.appendChild(groupTd)
+
+            groupSettingTableBodyFragment.appendChild(tr)
+        })
+
+        state.isFirstLoad = false
+        return groupSettingTableBodyFragment
     }
 }
 
@@ -222,26 +325,6 @@ class Account {
         this.imagePath = imagePath
         this.name = name
     }
-
-    /**
-     * @param {HTMLCollection} accountDom
-     * @return boolean
-     */
-    static isToAllByAccountDom(accountDom) {
-        return Number(accountDom.dataset.cwuiLtIdx) === 0
-    }
-
-    /**
-     * @param {HTMLCollection}accountDom
-     * @returns {Account}
-     */
-    static buildByAccountDom(accountDom) {
-        return new Account(
-            accountDom.dataset.cwuiLtValue,
-            accountDom.children[0].getAttribute('src'),
-            accountDom.children[1].innerText
-        )
-    }
 }
 
 class AccountList {
@@ -249,40 +332,102 @@ class AccountList {
     value = []
 
     /**
-     * @param {HTMLCollection} accountListDom
+     * {
+     *   accountId: 8888888888
+     *   imagePath: "http://hogehoge.com"
+     *   name: "hoge"
+     * }
+     * @param {object} accountListObj
+     */
+    static buildByObj(accountListObj) {
+        const accountList = new AccountList()
+        Object.keys(accountListObj).forEach((key) => {
+            const account = new Account(
+                Number(accountListObj[key].accountId),
+                accountListObj[key].imagePath,
+                accountListObj[key].name,
+            )
+            accountList.value.push(account)
+        })
+
+        return accountList
+    }
+
+    /**
+     * To一覧からAccountListを作成
+     * @return {AccountList}
+     */
+    static getByToList() {
+        return BuildAccountListByToListDom.build()
+    }
+
+    /**
+     * @param {Account} account
+     * @return {boolean}
+     */
+    isSaved(account) {
+        return this.value.some(savedAccount => {
+            return savedAccount.accountId === account.accountId
+        })
+    }
+}
+
+class BuildAccountListByToListDom {
+    /**
+     * To一覧からAccountListを作成
      * @returns {AccountList}
      */
-    static buildByAccountListDom(accountListDom) {
+    static build() {
+        // ('_cwLTList tooltipList')[2]がtoの一覧
+        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+
         const accountList = new AccountList()
-        for (let i = 0; i < accountListDom.length; i++) {
-            if (!Account.isToAllByAccountDom(accountListDom[i])) {
-                const account = Account.buildByAccountDom(accountListDom[i])
+
+        for (let i = 0; i < toAccountListDom.length; i++) {
+            if (!this.#isToAll(toAccountListDom[i])) {
+                const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
             }
         }
         return accountList
     }
 
-    static getByToList() {
-        // ('_cwLTList tooltipList')[2]がtoの一覧
-        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
-        return AccountList.buildByAccountListDom(toAccountListDom)
+    /**
+     * @param {HTMLCollection}accountDom
+     * @returns {Account}
+     */
+    static #buildAccount(accountDom) {
+        return new Account(
+            Number(accountDom.dataset.cwuiLtValue),
+            accountDom.children[0].getAttribute('src'),
+            accountDom.children[1].innerText
+        )
+    }
+
+    /**
+     * @param {HTMLCollection}accountDom
+     * @return {boolean}
+     */
+    static #isToAll(accountDom) {
+        return Number(accountDom.dataset.cwuiLtIdx) === 0
     }
 }
 
+// TODO objectからGroupを生成できるように
 class Group {
     /** @type {string} */
     name
 
-    /** @type {[Account]} */
-    accounts = []
+    /** @type {AccountList} */
+    accountList
 
     /**
      * @param {string} name
-     * @param {object} accounts
+     * @param {AccountList} accountList
      */
-    constructor(name, accounts = {}) {
+    constructor(name, accountList = new AccountList()) {
         this.name = name
+        this.accountList = accountList
     }
 }
 
@@ -290,31 +435,54 @@ class GroupList {
     /** @type {[Group]} */
     value = []
 
-    /** @param {object} savedGroupList */
-    constructor(savedGroupList) {
-        for (let groupName in savedGroupList.group) {
-            if (savedGroupList.group.hasOwnProperty(groupName)) {
-                this.value.push(new Group(groupName))
+    /**
+     * @param {object} groupListObj
+     * @return {GroupList}
+     */
+    static buildByObj(groupListObj) {
+        const groupList = new GroupList()
+
+        for (let groupName in groupListObj.group) {
+            if (groupListObj.group.hasOwnProperty(groupName)) {
+                const accountListObj = groupListObj.group[groupName].accountList
+                const accountList = AccountList.buildByObj(accountListObj)
+                groupList.value.push(new Group(groupName, accountList))
             }
         }
+
+        return groupList
     }
 
     /** @param {GroupRequest} req */
     addGroup(req) {
         // TODO: elseのときどうする？
-        if (this.value.length === 0 || !this.value.includes(req.name)) {
-            this.value.push(new Group(req.name))
+        console.log(req)
+        const existsGroupName = this.value.find(a => a.name === req.name) !== undefined
+        if (this.value.length === 0 || !existsGroupName) {
+            this.value.push(new Group(req.name, req.accountList))
+            this.save()
+        } else if (existsGroupName) {
+            // TODO: 上書きされてしまう　本当は元あるデータとmergeしたい
+            this.value.push(new Group(req.name, req.accountList))
             this.save()
         }
     }
 
+    /**
+     * @param {string} name
+     * @return {Group | undefined}
+     */
+    getGroupByName(name) {
+        return this.value.find(group => group.name === name)
+    }
+
 
     /** @returns {{}}*/
-    toObj() {
+    #toObj() {
         const object = {}
         this.value.forEach(group => {
             object[group.name] = {}
-            object[group.name]['accounts'] = group.accounts
+            object[group.name]['accountList'] = group.accountList.value
         })
         return object
     }
@@ -325,7 +493,7 @@ class GroupList {
      * 保存
      */
     save() {
-        chrome.storage.sync.set({'group': this.toObj()}, function () {
+        chrome.storage.sync.set({'group': this.#toObj()}, function () {
             console.log('Settings saved')
         })
     }
@@ -338,8 +506,9 @@ class GroupList {
 
     /** @param {getGroupList} callback */
     static get(callback) {
-        chrome.storage.sync.get('group', (savedGroupList) => {
-            callback(new GroupList(savedGroupList))
+        chrome.storage.sync.get('group', (groupListObj) => {
+            console.log(groupListObj)
+            callback(GroupList.buildByObj(groupListObj))
         });
     }
 
@@ -349,8 +518,55 @@ class GroupRequest {
     /** @type {string} */
     name
 
-    /** @param {string} name */
-    constructor(name) {
+    /** @type {AccountList} */
+    accountList
+
+    /**
+     * @param {string} name
+     * @param {AccountList} accountList
+     */
+    constructor(name, accountList = new AccountList()) {
         this.name = name
+        this.accountList = accountList
+    }
+
+    /**
+     * @return {GroupRequest}
+     */
+    static buildByCheckBox() {
+        return BuildGroupAccountListRequestByCheckBox.build()
+    }
+}
+
+class BuildGroupAccountListRequestByCheckBox {
+    /**
+     * @returns {GroupRequest}
+     */
+    static build() {
+        /** @type {HTMLSelectElement} */
+        const select = document.getElementById(env.id.select)
+
+        /** @type {HTMLCollection} */
+        const accountListDom = document.getElementsByClassName(env.class.checkBox)
+
+        const accountList = new AccountList()
+
+        for (let i = 0; i < accountListDom.length; i++) {
+            /** @type {HTMLInputElement}*/
+            const accountDom = accountListDom[i]
+
+            if (accountDom.checked) {
+                const account = new Account(
+                    Number(accountDom.dataset.aId),
+                    accountDom.dataset.imagePath,
+                    accountDom.dataset.name
+                )
+
+                accountList.value.push(account)
+            }
+        }
+
+        return new GroupRequest(select.value, accountList)
+
     }
 }
