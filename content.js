@@ -275,7 +275,7 @@ class GroupListDomBuilder {
                 console.log(group.accountList)
 
                 // TODO: いい感じにする
-                this.addText3(group.toString())
+                GroupListDomBuilder.addText(group.accountList)
             })
 
             fragment.appendChild(div)
@@ -284,14 +284,21 @@ class GroupListDomBuilder {
         return fragment
     }
 
-    addText3(text) {
-        //テキストエリアと挿入する文字列を取得
-        const area = document.getElementById('_chatText');
-        //カーソルの位置を基準に前後を分割して、その間に文字列を挿入
-        area.value =
-            area.value.substr(0, area.selectionStart)
-            + text
-            + area.value.substr(area.selectionStart);
+    /** @param {AccountList} accountList */
+    static addText(accountList) {
+
+        const toList = accountList.value.map(account => {
+            return `[To:${account.accountId}]${account.name}`
+        })
+
+        console.log(toList.join())
+        const textArea = document.getElementById('_chatText');
+        textArea.value =
+            textArea.value.substr(0, textArea.selectionStart)
+            + toList.join('\n')
+            + textArea.value.substr(textArea.selectionStart);
+
+        textArea.focus()
     }
 
 
@@ -559,6 +566,7 @@ class BuildAccountListByToListDom {
         const accountList = new AccountList()
 
         for (let i = 0; i < toAccountListDom.length; i++) {
+            // TODO: 自分で作ったgroup一覧も除外する
             if (!this.#isToAll(toAccountListDom[i])) {
                 const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
