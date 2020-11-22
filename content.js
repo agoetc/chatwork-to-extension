@@ -50,15 +50,33 @@ function openModal() {
         dialog.appendChild(groupListDomBuilder.selectDom())
         dialog.appendChild(groupListDomBuilder.settingTableDom())
 
-        const button = document.createElement('button')
-        button.textContent = 'Close'
-        dialog.appendChild(button)
-        button.addEventListener('click', () => dialog.close())
+        const buttonDiv = document.createElement('div')
+        const saveButton = groupListDomBuilder.saveButton()
+        const closeButton = UtilDomBuilder.closeButton(dialog)
 
+        buttonDiv.appendChild(saveButton)
+        buttonDiv.appendChild(closeButton)
+
+        dialog.appendChild(buttonDiv)
         document.body.appendChild(dialog)
         dialog.showModal()
 
     })
+}
+
+class UtilDomBuilder {
+    /**
+     * @param {HTMLDialogElement} dialog
+     * @return {HTMLButtonElement}
+     */
+    static closeButton(dialog) {
+        const button = document.createElement('button')
+
+        button.textContent = '閉じる'
+        button.addEventListener('click', () => dialog.close())
+
+        return button
+    }
 }
 
 class GroupListDomBuilder {
@@ -89,8 +107,7 @@ class GroupListDomBuilder {
         button.textContent = '追加'
         button.addEventListener('click', () => {
             // FIXME: テスト中のため差し替え
-            const request = GroupRequest.buildByCheckBox()
-            // const request = new GroupRequest(input.value)
+            const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
             input.value = ''
         })
@@ -211,6 +228,20 @@ class GroupListDomBuilder {
 
         return fragment
     }
+
+
+    saveButton() {
+        const button = document.createElement('button')
+
+        button.textContent = '保存'
+        button.addEventListener('click', () => {
+            const req = GroupRequest.buildByCheckBox()
+            this.groupList.addGroup(req)
+        })
+
+        return button
+    }
+
 
     /**
      * TODO: addEventListener('click')でtextareaにtoを入れる
@@ -465,11 +496,7 @@ class BuildGroupAccountListRequestByCheckBox {
             }
         }
 
-        // TODO: ダミーデータ
-        accountList.value.push(new Account(8888888888, 'http://hogehoge.com', 'hoge'))
-        accountList.value.push(new Account(9999999999, 'http://hogehoge.com', 'hoge'))
-
-        return new GroupRequest('hogehoge', accountList)
+        return new GroupRequest(select.value, accountList)
 
     }
 }
