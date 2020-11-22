@@ -381,6 +381,11 @@ class AccountList {
     /** @type {[Account]} */
     value = []
 
+    /** @param {[Account]}accountList*/
+    constructor(accountList = []) {
+        this.value = accountList
+    }
+
     /**
      * {
      *   accountId: 8888888888
@@ -470,10 +475,31 @@ class GroupList {
             this.value.push(new Group(req.name, req.accountList))
             this.save()
         } else if (existsGroupName) {
-            // TODO: 上書きされてしまう　本当は元あるデータとmergeしたい
-            this.value.push(new Group(req.name, req.accountList))
+            const mergedAccountList = this.mergeAccountList(req)
+            this.value.push(new Group(req.name, mergedAccountList))
             this.save()
         }
+    }
+
+    /** @param {GroupRequest} req */
+    mergeAccountList(req) {
+        const group = this.value.find(g => g.name === g.name)
+
+        const accountListByToList = AccountList.getByToList()
+
+        /**
+         * チャット外の人は使い回す
+         * 既にGroupに追加されている人は使い回さない（名前とか変わっている可能性あるので）
+         * @type {Array<Account>}
+         */
+        const reuseAccountList = group.accountList.value.filter(g => {
+            const isOutsider = !accountListByToList.value.some(a => a.accountId === g.accountId)
+            const exists = req.accountList.value.some(a => a.accountId !== g.accountId)
+
+            return isOutsider || exists
+        })
+
+        return new AccountList(reuseAccountList.concat(req.accountList.value))
     }
 
     /**
