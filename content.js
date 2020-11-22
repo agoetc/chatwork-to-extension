@@ -22,8 +22,33 @@ function listener() {
 
     addShortcutEvent()
 
-    const toList = document.getElementById('_toListFooter')
-    toList.appendChild(UtilDomBuilder.groupingSettingButton())
+    const toListFooter = document.getElementById('_toListFooter')
+    toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+
+    const toList = document.getElementById('_toList')
+
+    /** @type {HTMLUListElement} */
+    const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
+    const observer = new MutationObserver(() => {
+        /** DOMの変化が起こった時の処理 */
+        console.log('DOMが変化しました');
+
+        // TODO: なんか閉じたときにいっぱいDOM変化してそう
+        GroupList.get((groupList) => {
+            const groupListDomBuilder = new GroupListDomBuilder(groupList)
+            toolTipList.insertBefore(groupListDomBuilder.buildTag(), toolTipList.children[1])
+        })
+    })
+
+    const config = {
+        attributes: true,
+        childList: false,
+        characterData: true
+    }
+
+
+    observer.observe(toList, config)
+
 }
 
 function addShortcutEvent() {
@@ -238,16 +263,42 @@ class GroupListDomBuilder {
 
     /**
      * TODO: addEventListener('click')でtextareaにtoを入れる
-     * @return {HTMLDivElement}
+     * @return {DocumentFragment}
      */
     buildTag() {
-        // liだとcwにclickイベント奪われるのでdivに
-        const div = document.createElement('div')
-        div.innerText = 'グループ名'
-        div.addEventListener('click', () => {
-            console.log('グルーピングしてる人間をtoで突っ込みたい')
+        const fragment = document.createDocumentFragment()
+        this.groupList.value.map(group => {
+            // liだとcwにclickイベント奪われるのでdivに
+            const div = document.createElement('div')
+            div.innerText = group.name
+            div.addEventListener('click', () => {
+                console.log(group.accountList)
+
+                // TODO: いい感じにする
+                GroupListDomBuilder.addText(group.accountList)
+            })
+
+            fragment.appendChild(div)
         })
-        return div
+
+        return fragment
+    }
+
+    /** @param {AccountList} accountList */
+    static addText(accountList) {
+
+        const toList = accountList.value.map(account => {
+            return `[To:${account.accountId}]${account.name}`
+        })
+
+        console.log(toList.join())
+        const textArea = document.getElementById('_chatText');
+        textArea.value =
+            textArea.value.substr(0, textArea.selectionStart)
+            + toList.join('\n')
+            + textArea.value.substr(textArea.selectionStart);
+
+        textArea.focus()
     }
 
 
@@ -515,6 +566,7 @@ class BuildAccountListByToListDom {
         const accountList = new AccountList()
 
         for (let i = 0; i < toAccountListDom.length; i++) {
+            // TODO: 自分で作ったgroup一覧も除外する
             if (!this.#isToAll(toAccountListDom[i])) {
                 const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
