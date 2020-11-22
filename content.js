@@ -425,6 +425,29 @@ class AccountList {
             return savedAccount.accountId === account.accountId
         })
     }
+
+    /**
+     * @param {AccountList} accountList
+     * @return {AccountList}
+     */
+    mergeAccountListRequest(accountList) {
+        const accountListByToList = AccountList.getByToList()
+
+        /**
+         * チャット外の人は使い回す
+         * 既にGroupに追加されている人は使い回さない（名前とか変わっている可能性あるので）
+         * @type {Array<Account>}
+         */
+        const reuseAccountList = this.value.filter(oldAccount => {
+            const isOutsider = !accountListByToList.value.some(toAccount => toAccount.accountId === oldAccount.accountId)
+            const exists = accountList.value.some(reqAccount => reqAccount.accountId !== oldAccount.accountId)
+
+            return isOutsider || exists
+        })
+
+        return new AccountList(reuseAccountList.concat(accountList.value))
+    }
+
 }
 
 class Group {
@@ -470,36 +493,17 @@ class GroupList {
     addGroup(req) {
         // TODO: elseのときどうする？
         console.log(req)
-        const existsGroupName = this.value.find(a => a.name === req.name) !== undefined
+        const group = this.getGroupByName(req.name)
+        const existsGroupName = group !== undefined
+
         if (this.value.length === 0 || !existsGroupName) {
             this.value.push(new Group(req.name, req.accountList))
             this.save()
         } else if (existsGroupName) {
-            const mergedAccountList = this.mergeAccountList(req)
+            const mergedAccountList = group.accountList.mergeAccountListRequest(req.accountList)
             this.value.push(new Group(req.name, mergedAccountList))
             this.save()
         }
-    }
-
-    /** @param {GroupRequest} req */
-    mergeAccountList(req) {
-        const group = this.value.find(g => g.name === g.name)
-
-        const accountListByToList = AccountList.getByToList()
-
-        /**
-         * チャット外の人は使い回す
-         * 既にGroupに追加されている人は使い回さない（名前とか変わっている可能性あるので）
-         * @type {Array<Account>}
-         */
-        const reuseAccountList = group.accountList.value.filter(g => {
-            const isOutsider = !accountListByToList.value.some(a => a.accountId === g.accountId)
-            const exists = req.accountList.value.some(a => a.accountId !== g.accountId)
-
-            return isOutsider || exists
-        })
-
-        return new AccountList(reuseAccountList.concat(req.accountList.value))
     }
 
     /**
@@ -571,7 +575,6 @@ class GroupRequest {
         return BuildGroupAccountListRequestByCheckBox.build()
     }
 }
-
 
 // modelBuilder ----------------------------------------------------------------------------
 
