@@ -139,7 +139,6 @@ class GroupListDomBuilder {
         const button = document.createElement('button')
         button.textContent = '追加'
         button.addEventListener('click', () => {
-            // FIXME: テスト中のため差し替え
             const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
             input.value = ''
@@ -262,7 +261,6 @@ class GroupListDomBuilder {
 
 
     /**
-     * TODO: addEventListener('click')でtextareaにtoを入れる
      * @return {DocumentFragment}
      */
     buildTag() {
@@ -272,9 +270,6 @@ class GroupListDomBuilder {
             const div = document.createElement('div')
             div.innerText = group.name
             div.addEventListener('click', () => {
-                console.log(group.accountList)
-
-                // TODO: いい感じにする
                 GroupListDomBuilder.addText(group.accountList)
             })
 
@@ -386,6 +381,11 @@ class AccountList {
     /** @type {[Account]} */
     value = []
 
+    /** @param {[Account]}accountList*/
+    constructor(accountList = []) {
+        this.value = accountList
+    }
+
     /**
      * {
      *   accountId: 8888888888
@@ -425,6 +425,29 @@ class AccountList {
             return savedAccount.accountId === account.accountId
         })
     }
+
+    /**
+     * @param {AccountList} accountList
+     * @return {AccountList}
+     */
+    mergeAccountListRequest(accountList) {
+        const accountListByToList = AccountList.getByToList()
+
+        /**
+         * チャット外の人は使い回す
+         * 既にGroupに追加されている人は使い回さない（名前とか変わっている可能性あるので）
+         * @type {Array<Account>}
+         */
+        const reuseAccountList = this.value.filter(oldAccount => {
+            const isOutsider = !accountListByToList.value.some(toAccount => toAccount.accountId === oldAccount.accountId)
+            const exists = accountList.value.some(reqAccount => reqAccount.accountId !== oldAccount.accountId)
+
+            return isOutsider || exists
+        })
+
+        return new AccountList(reuseAccountList.concat(accountList.value))
+    }
+
 }
 
 class Group {
@@ -470,13 +493,15 @@ class GroupList {
     addGroup(req) {
         // TODO: elseのときどうする？
         console.log(req)
-        const existsGroupName = this.value.find(a => a.name === req.name) !== undefined
+        const group = this.getGroupByName(req.name)
+        const existsGroupName = group !== undefined
+
         if (this.value.length === 0 || !existsGroupName) {
             this.value.push(new Group(req.name, req.accountList))
             this.save()
         } else if (existsGroupName) {
-            // TODO: 上書きされてしまう　本当は元あるデータとmergeしたい
-            this.value.push(new Group(req.name, req.accountList))
+            const mergedAccountList = group.accountList.mergeAccountListRequest(req.accountList)
+            this.value.push(new Group(req.name, mergedAccountList))
             this.save()
         }
     }
@@ -551,7 +576,6 @@ class GroupRequest {
     }
 }
 
-
 // modelBuilder ----------------------------------------------------------------------------
 
 class BuildAccountListByToListDom {
@@ -560,13 +584,18 @@ class BuildAccountListByToListDom {
      * @returns {AccountList}
      */
     static build() {
-        // ('_cwLTList tooltipList')[2]がtoの一覧
-        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+        /**
+         *  ('_cwLTList tooltipList')[2]がtoの一覧
+         * @type {HTMLCollection<HTMLLIElement>}
+         */
+        const toAccountListDom =
+            document
+                .getElementsByClassName('_cwLTList tooltipList')[2]
+                .getElementsByTagName('li')
 
         const accountList = new AccountList()
 
         for (let i = 0; i < toAccountListDom.length; i++) {
-            // TODO: 自分で作ったgroup一覧も除外する
             if (!this.#isToAll(toAccountListDom[i])) {
                 const account = this.#buildAccount(toAccountListDom[i])
                 accountList.value.push(account)
