@@ -273,12 +273,25 @@ class GroupListDomBuilder {
             div.innerText = group.name
             div.addEventListener('click', () => {
                 console.log(group.accountList)
+
+                // TODO: いい感じにする
+                this.addText3(group.toString())
             })
 
             fragment.appendChild(div)
         })
 
         return fragment
+    }
+
+    addText3(text) {
+        //テキストエリアと挿入する文字列を取得
+        const area = document.getElementById('_chatText');
+        //カーソルの位置を基準に前後を分割して、その間に文字列を挿入
+        area.value =
+            area.value.substr(0, area.selectionStart)
+            + text
+            + area.value.substr(area.selectionStart);
     }
 
 
