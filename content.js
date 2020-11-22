@@ -139,7 +139,6 @@ class GroupListDomBuilder {
         const button = document.createElement('button')
         button.textContent = '追加'
         button.addEventListener('click', () => {
-            // FIXME: テスト中のため差し替え
             const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
             input.value = ''
@@ -262,7 +261,6 @@ class GroupListDomBuilder {
 
 
     /**
-     * TODO: addEventListener('click')でtextareaにtoを入れる
      * @return {DocumentFragment}
      */
     buildTag() {
@@ -272,9 +270,6 @@ class GroupListDomBuilder {
             const div = document.createElement('div')
             div.innerText = group.name
             div.addEventListener('click', () => {
-                console.log(group.accountList)
-
-                // TODO: いい感じにする
                 GroupListDomBuilder.addText(group.accountList)
             })
 
