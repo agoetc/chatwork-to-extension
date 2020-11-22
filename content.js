@@ -22,8 +22,8 @@ function listener() {
 
     addShortcutEvent()
 
-    // TODO: grouping setting
-    createGroupingSettingButton()
+    const toList = document.getElementById('_toListFooter')
+    toList.appendChild(UtilDomBuilder.groupingSettingButton())
 }
 
 function addShortcutEvent() {
@@ -33,18 +33,7 @@ function addShortcutEvent() {
     })
 }
 
-function createGroupingSettingButton() {
-    const toList = document.getElementById('_toListFooter')
-    const groupingButton = document.createElement('a')
-    groupingButton.innerText = 'グループの設定'
-    groupingButton.addEventListener('click', () => openModal())
-
-    toList.appendChild(groupingButton)
-}
-
-//  modal ----------------------------------------------------------------------------
 function openModal() {
-
     GroupList.get((groupList) => {
         console.log(groupList)
         const groupListDomBuilder = new GroupListDomBuilder(groupList)
@@ -70,6 +59,8 @@ function openModal() {
     })
 }
 
+
+// domBuilder ----------------------------------------------------------------------------
 class UtilDomBuilder {
     /**
      * @param {HTMLDialogElement} dialog
@@ -83,6 +74,17 @@ class UtilDomBuilder {
 
         return button
     }
+
+    /**
+     * @return {HTMLAnchorElement}
+     */
+    static groupingSettingButton() {
+        const groupingButton = document.createElement('a')
+        groupingButton.innerText = 'グループの設定'
+        groupingButton.addEventListener('click', () => openModal())
+        return groupingButton
+    }
+
 }
 
 class GroupListDomBuilder {
@@ -310,6 +312,8 @@ class GroupListDomBuilder {
     }
 }
 
+// model ----------------------------------------------------------------------------
+
 class Account {
     /** @type {int} */
     accountId
@@ -372,48 +376,6 @@ class AccountList {
     }
 }
 
-class BuildAccountListByToListDom {
-    /**
-     * To一覧からAccountListを作成
-     * @returns {AccountList}
-     */
-    static build() {
-        // ('_cwLTList tooltipList')[2]がtoの一覧
-        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
-
-        const accountList = new AccountList()
-
-        for (let i = 0; i < toAccountListDom.length; i++) {
-            if (!this.#isToAll(toAccountListDom[i])) {
-                const account = this.#buildAccount(toAccountListDom[i])
-                accountList.value.push(account)
-            }
-        }
-        return accountList
-    }
-
-    /**
-     * @param {HTMLCollection}accountDom
-     * @returns {Account}
-     */
-    static #buildAccount(accountDom) {
-        return new Account(
-            Number(accountDom.dataset.cwuiLtValue),
-            accountDom.children[0].getAttribute('src'),
-            accountDom.children[1].innerText
-        )
-    }
-
-    /**
-     * @param {HTMLCollection}accountDom
-     * @return {boolean}
-     */
-    static #isToAll(accountDom) {
-        return Number(accountDom.dataset.cwuiLtIdx) === 0
-    }
-}
-
-// TODO objectからGroupを生成できるように
 class Group {
     /** @type {string} */
     name
@@ -535,6 +497,50 @@ class GroupRequest {
      */
     static buildByCheckBox() {
         return BuildGroupAccountListRequestByCheckBox.build()
+    }
+}
+
+
+// modelBuilder ----------------------------------------------------------------------------
+
+class BuildAccountListByToListDom {
+    /**
+     * To一覧からAccountListを作成
+     * @returns {AccountList}
+     */
+    static build() {
+        // ('_cwLTList tooltipList')[2]がtoの一覧
+        const toAccountListDom = document.getElementsByClassName('_cwLTList tooltipList')[2].children
+
+        const accountList = new AccountList()
+
+        for (let i = 0; i < toAccountListDom.length; i++) {
+            if (!this.#isToAll(toAccountListDom[i])) {
+                const account = this.#buildAccount(toAccountListDom[i])
+                accountList.value.push(account)
+            }
+        }
+        return accountList
+    }
+
+    /**
+     * @param {HTMLCollection}accountDom
+     * @returns {Account}
+     */
+    static #buildAccount(accountDom) {
+        return new Account(
+            Number(accountDom.dataset.cwuiLtValue),
+            accountDom.children[0].getAttribute('src'),
+            accountDom.children[1].innerText
+        )
+    }
+
+    /**
+     * @param {HTMLCollection}accountDom
+     * @return {boolean}
+     */
+    static #isToAll(accountDom) {
+        return Number(accountDom.dataset.cwuiLtIdx) === 0
     }
 }
 
