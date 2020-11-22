@@ -164,7 +164,11 @@ class GroupListDomBuilder {
 
                 input.type = 'checkbox'
                 input.className = env.class.checkBox
-                input.value = account.accountId
+
+                input.dataset.aId = account.accountId
+                input.dataset.imagePath = account.imagePath
+                input.dataset.name = account.name
+
 
                 groupTd.appendChild(input)
 
@@ -359,8 +363,13 @@ class GroupList {
     /** @param {GroupRequest} req */
     addGroup(req) {
         // TODO: elseのときどうする？
+        console.log(req)
         const existsGroupName = this.value.find(a => a.name === req.name) !== undefined
         if (this.value.length === 0 || !existsGroupName) {
+            this.value.push(new Group(req.name, req.accountList))
+            this.save()
+        } else if (existsGroupName) {
+            // TODO: 上書きされてしまう　本当は元あるデータとmergeしたい
             this.value.push(new Group(req.name, req.accountList))
             this.save()
         }
@@ -433,10 +442,28 @@ class BuildGroupAccountListRequestByCheckBox {
      * @returns {GroupRequest}
      */
     static build() {
-        const name = document.getElementById(env.id.select).value
-        const accountsDom = document.getElementsByClassName(env.class.checkBox)
+        /** @type {HTMLSelectElement} */
+        const select = document.getElementById(env.id.select)
+
+        /** @type {HTMLCollection} */
+        const accountListDom = document.getElementsByClassName(env.class.checkBox)
 
         const accountList = new AccountList()
+
+        for (let i = 0; i < accountListDom.length; i++) {
+            /** @type {HTMLInputElement}*/
+            const accountDom = accountListDom[i]
+
+            if (accountDom.checked) {
+                const account = new Account(
+                    Number(accountDom.dataset.aId),
+                    accountDom.dataset.imagePath,
+                    accountDom.dataset.name
+                )
+
+                accountList.value.push(account)
+            }
+        }
 
         // TODO: ダミーデータ
         accountList.value.push(new Account(8888888888, 'http://hogehoge.com', 'hoge'))
@@ -444,9 +471,5 @@ class BuildGroupAccountListRequestByCheckBox {
 
         return new GroupRequest('hogehoge', accountList)
 
-        // for (let i = 0; i < accountListCheckBoxDom.length; i++) {
-        //     const account = Account.buildAccount(accountListCheckBoxDom[i])
-        //     accountList.value.push(account)
-        // }
     }
 }
