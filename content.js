@@ -26,7 +26,7 @@ window.onload = () => setTimeout(listener, 2000)
 
 function listener() {
 
-    chrome.storage.sync.clear()
+    // chrome.storage.sync.clear()
 
     addShortcutEvent()
 
@@ -59,7 +59,6 @@ class DomApplier {
         selectDiv.appendChild(domBuilder.selectDom(selectGroupName))
 
         const buttonDiv = document.getElementById(env.id.saveButton.div)
-        console.log(buttonDiv)
         buttonDiv.innerHTML = ''
         buttonDiv.appendChild(domBuilder.saveButton())
     }
@@ -101,8 +100,6 @@ class DomApplier {
         /** @type {HTMLUListElement} */
         const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
         const observer = new MutationObserver(() => {
-            console.log('DOMが変化しました')
-
             // 既にGroupのtoListが生成されていればなにもしない
             if (document.getElementById(env.id.toList) !== null) return
 
@@ -354,21 +351,24 @@ class GroupListDomBuilder {
         groupToList.id = env.id.toList
 
         this.groupList.value.map(group => {
-            // liだとcwにclickイベント奪われるのでdivに
-            const div = document.createElement('div')
-            div.innerText = group.name
-
             // chat内の人だけに絞る
             const chatInsideAccountList =
                 new AccountList(
                     toAccountList.value.filter(account => group.accountList.value.some(a => a.accountId === account.accountId))
                 )
 
-            div.addEventListener('click', () => {
-                DomApplier.addText(chatInsideAccountList)
-            })
+            if (chatInsideAccountList.value.length > 0) {
+                // liだとcwにclickイベント奪われるのでdivに
+                const div = document.createElement('div')
+                div.className = 'tooltipList__item'
+                div.innerText = group.name
 
-            fragment.appendChild(div)
+                div.addEventListener('click', () => {
+                    DomApplier.addText(chatInsideAccountList)
+                })
+
+                fragment.appendChild(div)
+            }
         })
 
         groupToList.appendChild(fragment)
