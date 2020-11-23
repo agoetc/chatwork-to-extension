@@ -59,6 +59,7 @@ function addShortcutEvent() {
 }
 
 function openModal() {
+    state.isDefaultSelect = true
     GroupList.get((groupList) => {
         console.log(groupList)
         const groupListDomBuilder = new GroupListDomBuilder(groupList)
@@ -95,7 +96,10 @@ class UtilDomBuilder {
         const button = document.createElement('button')
 
         button.textContent = '閉じる'
-        button.addEventListener('click', () => dialog.close())
+        button.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+        })
 
         return button
     }
@@ -290,7 +294,7 @@ class GroupListDomBuilder {
         const textArea = document.getElementById('_chatText');
         textArea.value =
             textArea.value.substr(0, textArea.selectionStart)
-            + toList.join('\n')
+            + toList.join('\n') + ('\n')
             + textArea.value.substr(textArea.selectionStart);
 
         textArea.focus()
