@@ -1,6 +1,9 @@
 const env = {
     id: {
-        select: 'group-select',
+        select: {
+            select: 'group-select',
+            div: 'group-select-div'
+        },
         defaultSelect: 'group-default-select',
         tbody: 'group-body',
         toList: 'group-to-list'
@@ -19,38 +22,13 @@ window.onload = () => setTimeout(listener, 2000)
 
 function listener() {
 
-    // chrome.storage.sync.clear()
+    chrome.storage.sync.clear()
 
     addShortcutEvent()
 
-    const toListFooter = document.getElementById('_toListFooter')
-    toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+    DomApplier.groupButton()
 
-    const toList = document.getElementById('_toList')
-
-    /** @type {HTMLUListElement} */
-    const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
-    const observer = new MutationObserver(() => {
-        console.log('DOMが変化しました')
-
-        // 既にGroupのtoListが生成されていればなにもしない
-        if (document.getElementById(env.id.toList) !== null) return
-
-        GroupList.get((groupList) => {
-            const groupListDomBuilder = new GroupListDomBuilder(groupList)
-            toolTipList.insertBefore(groupListDomBuilder.buildTag(), toolTipList.children[1])
-        })
-    })
-
-    const config = {
-        attributes: false,
-        childList: true,
-        characterData: false
-    }
-
-
-    observer.observe(toList, config)
-
+    DomApplier.observeToList()
 }
 
 function addShortcutEvent() {
@@ -60,33 +38,101 @@ function addShortcutEvent() {
     })
 }
 
-function openModal() {
-    state.isDefaultSelect = true
-    GroupList.get((groupList) => {
+// domApplier
+class DomApplier {
+    /**
+     *
+     * @param {GroupList} groupList
+     */
+    static reloadModalContains(groupList) {
         console.log(groupList)
-        const groupListDomBuilder = new GroupListDomBuilder(groupList)
-        const dialog = document.createElement('dialog')
-        dialog.id = 'grouping-modal'
+        const domBuilder = new GroupListDomBuilder(groupList)
 
-        // モーダルに要素を追加している
-        dialog.appendChild(groupListDomBuilder.formDom())
-        dialog.appendChild(groupListDomBuilder.selectDom())
-        dialog.appendChild(groupListDomBuilder.settingTableDom())
+        const selectGroupName = document.getElementById(env.id.select.select).value
 
-        const buttonDiv = document.createElement('div')
-        const saveButton = groupListDomBuilder.saveButton()
-        const closeButton = UtilDomBuilder.closeButton(dialog)
+        console.log(selectGroupName)
+        const newSelect = domBuilder.selectDom(selectGroupName)
+        const selectDiv = document.getElementById(env.id.select.div)
+        selectDiv.innerHTML = ''
+        selectDiv.appendChild(newSelect)
+    }
 
-        buttonDiv.appendChild(saveButton)
-        buttonDiv.appendChild(closeButton)
+    static openModal() {
+        state.isDefaultSelect = true
+        GroupList.get((groupList) => {
+            console.log(groupList)
+            const groupListDomBuilder = new GroupListDomBuilder(groupList)
+            const dialog = document.createElement('dialog')
+            dialog.id = 'grouping-modal'
 
-        dialog.appendChild(buttonDiv)
-        document.body.appendChild(dialog)
-        dialog.showModal()
+            // モーダルに要素を追加している
+            dialog.appendChild(groupListDomBuilder.formDom())
+            dialog.appendChild(groupListDomBuilder.selectDom())
+            dialog.appendChild(groupListDomBuilder.settingTableDom())
 
-    })
+            const buttonDiv = document.createElement('div')
+            const saveButton = groupListDomBuilder.saveButton()
+            const closeButton = UtilDomBuilder.closeButton(dialog)
+
+            buttonDiv.appendChild(saveButton)
+            buttonDiv.appendChild(closeButton)
+
+            dialog.appendChild(buttonDiv)
+            document.body.appendChild(dialog)
+            dialog.showModal()
+        })
+    }
+
+    static groupButton() {
+        const toListFooter = document.getElementById('_toListFooter')
+        toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+    }
+
+    static observeToList() {
+        const toList = document.getElementById('_toList')
+
+        /** @type {HTMLUListElement} */
+        const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
+        const observer = new MutationObserver(() => {
+            console.log('DOMが変化しました')
+
+            // 既にGroupのtoListが生成されていればなにもしない
+            if (document.getElementById(env.id.toList) !== null) return
+
+            GroupList.get((groupList) => {
+                const groupListDomBuilder = new GroupListDomBuilder(groupList)
+                toolTipList.insertBefore(groupListDomBuilder.addGroupOnToList(), toolTipList.children[1])
+            })
+        })
+
+        const config = {
+            attributes: false,
+            childList: true,
+            characterData: false
+        }
+
+        observer.observe(toList, config)
+    }
+
+    /** @param {AccountList} accountList */
+    static addText(accountList) {
+
+        const toList = accountList.value.map(account => {
+            return `[To:${account.accountId}]${account.name}`
+        })
+
+        console.log(toList.join())
+        const textArea = document.getElementById('_chatText')
+        textArea.value =
+            textArea.value.substr(0, textArea.selectionStart)
+            + toList.join('\n') + ('\n')
+            + textArea.value.substr(textArea.selectionStart)
+
+        textArea.focus()
+    }
+
+
 }
-
 
 // domBuilder ----------------------------------------------------------------------------
 class UtilDomBuilder {
@@ -112,7 +158,7 @@ class UtilDomBuilder {
     static groupingSettingButton() {
         const groupingButton = document.createElement('a')
         groupingButton.innerText = 'グループの設定'
-        groupingButton.addEventListener('click', () => openModal())
+        groupingButton.addEventListener('click', () => DomApplier.openModal())
         return groupingButton
     }
 
@@ -130,15 +176,15 @@ class GroupListDomBuilder {
     /** @returns {HTMLDivElement}*/
     formDom() {
         const datalist = document.createElement('datalist')
-        datalist.id = 'group-list'
+        datalist.id = 'group-list-datalist'
 
-        datalist.appendChild(this.optionFragment())
+        datalist.appendChild(this.#optionFragment())
 
         // 入力欄
         const input = document.createElement('input')
         input.type = 'text'
         input.autocomplete = 'on'
-        input.setAttribute('list', 'group-list')
+        input.setAttribute('list', 'group-list-datalist')
 
 
         // 追加ボタン作成
@@ -160,18 +206,27 @@ class GroupListDomBuilder {
         return div
     }
 
-    /** @return {HTMLSelectElement}*/
-    selectDom() {
+    /**
+     *
+     * @param {string} selectGroupName
+     * @return {HTMLDivElement}
+     */
+    selectDom(selectGroupName = '') {
+
         const select = document.createElement('select')
-        select.id = env.id.select
+        select.id = env.id.select.select
 
-        const option = document.createElement('option')
-        option.id = env.id.defaultSelect
-        option.selected = true
-        option.innerText = '選択してください'
+        if (selectGroupName === '') {
+            const option = document.createElement('option')
+            option.id = env.id.defaultSelect
+            option.selected = true
+            option.innerText = '選択してください'
+            option.value = ''
 
-        select.appendChild(option)
-        select.appendChild(this.optionFragment())
+            select.appendChild(option)
+        }
+
+        select.appendChild(this.#optionFragment(selectGroupName))
 
         select.addEventListener('change', () => {
             state.isDefaultSelect = false
@@ -192,7 +247,12 @@ class GroupListDomBuilder {
                 tbody.appendChild(tr)
             }
         })
-        return select
+
+        const div = document.createElement('div')
+        div.id = env.id.select.div
+        div.appendChild(select)
+
+        return div
     }
 
     /**
@@ -236,14 +296,20 @@ class GroupListDomBuilder {
         return scrollableTable
     }
 
-    /** @return {DocumentFragment} */
-    optionFragment() {
+    /**
+     * @param {string} selectGroupName
+     * @return {DocumentFragment}
+     */
+    #optionFragment(selectGroupName = '') {
         const fragment = document.createDocumentFragment()
 
         this.groupList.value.forEach(group => {
             const option = document.createElement('option')
             option.value = group.name
             option.innerText = group.name
+            if (group.name === selectGroupName) {
+                option.selected = true
+            }
             fragment.appendChild(option)
         })
 
@@ -269,7 +335,7 @@ class GroupListDomBuilder {
     /**
      * @return {HTMLDivElement}
      */
-    buildTag() {
+    addGroupOnToList() {
         const groupToList = document.createElement('div')
         const fragment = document.createDocumentFragment()
         const toAccountList = AccountList.getByToList()
@@ -287,7 +353,7 @@ class GroupListDomBuilder {
                 )
 
             div.addEventListener('click', () => {
-                GroupListDomBuilder.addText(chatInsideAccountList)
+                DomApplier.addText(chatInsideAccountList)
             })
 
             fragment.appendChild(div)
@@ -295,23 +361,6 @@ class GroupListDomBuilder {
 
         groupToList.appendChild(fragment)
         return groupToList
-    }
-
-    /** @param {AccountList} accountList */
-    static addText(accountList) {
-
-        const toList = accountList.value.map(account => {
-            return `[To:${account.accountId}]${account.name}`
-        })
-
-        console.log(toList.join())
-        const textArea = document.getElementById('_chatText')
-        textArea.value =
-            textArea.value.substr(0, textArea.selectionStart)
-            + toList.join('\n') + ('\n')
-            + textArea.value.substr(textArea.selectionStart)
-
-        textArea.focus()
     }
 
 
@@ -548,9 +597,13 @@ class GroupList {
     /**
      * 保存
      */
-    save() {
-        chrome.storage.sync.set({'group': this.#toObj()}, function () {
+    async save() {
+        chrome.storage.sync.set({'group': this.#toObj()}, () => {
             console.log('Settings saved')
+            GroupList.getAsync().then(groupList => {
+                this.value = groupList.value
+                DomApplier.reloadModalContains(this)
+            })
         })
     }
 
@@ -566,6 +619,13 @@ class GroupList {
             console.log(groupListObj)
             callback(GroupList.buildByObj(groupListObj))
         })
+    }
+
+    /**
+     * @return {Promise<GroupList>}
+     */
+    static async getAsync() {
+        return new Promise((resolve) => GroupList.get(resolve))
     }
 
 }
@@ -649,7 +709,7 @@ class BuildGroupAccountListRequestByCheckBox {
      */
     static build() {
         /** @type {HTMLSelectElement} */
-        const select = document.getElementById(env.id.select)
+        const select = document.getElementById(env.id.select.select)
 
         /** @type {HTMLCollection} */
         const accountListDom = document.getElementsByClassName(env.class.checkBox)
