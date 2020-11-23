@@ -31,7 +31,7 @@ function listener() {
     const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
     const observer = new MutationObserver(() => {
         /** DOMの変化が起こった時の処理 */
-        console.log('DOMが変化しました');
+        console.log('DOMが変化しました')
 
         // TODO: なんか閉じたときにいっぱいDOM変化してそう
         GroupList.get((groupList) => {
@@ -269,12 +269,21 @@ class GroupListDomBuilder {
      */
     buildTag() {
         const fragment = document.createDocumentFragment()
+        const toAccountList = AccountList.getByToList()
+
         this.groupList.value.map(group => {
             // liだとcwにclickイベント奪われるのでdivに
             const div = document.createElement('div')
             div.innerText = group.name
+
+            // chat内の人だけに絞る
+            const chatInsideAccountList =
+                new AccountList(
+                    toAccountList.value.filter(account => group.accountList.value.some(a => a.accountId === account.accountId))
+                )
+
             div.addEventListener('click', () => {
-                GroupListDomBuilder.addText(group.accountList)
+                GroupListDomBuilder.addText(chatInsideAccountList)
             })
 
             fragment.appendChild(div)
@@ -291,11 +300,11 @@ class GroupListDomBuilder {
         })
 
         console.log(toList.join())
-        const textArea = document.getElementById('_chatText');
+        const textArea = document.getElementById('_chatText')
         textArea.value =
             textArea.value.substr(0, textArea.selectionStart)
             + toList.join('\n') + ('\n')
-            + textArea.value.substr(textArea.selectionStart);
+            + textArea.value.substr(textArea.selectionStart)
 
         textArea.focus()
     }
@@ -551,7 +560,7 @@ class GroupList {
         chrome.storage.sync.get('group', (groupListObj) => {
             console.log(groupListObj)
             callback(GroupList.buildByObj(groupListObj))
-        });
+        })
     }
 
 }
