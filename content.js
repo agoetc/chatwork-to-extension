@@ -8,6 +8,9 @@ const env = {
             button: 'group-save-account-list-button',
             span: 'group-save-account-list-button-span'
         },
+        deleteButton: {
+            button: 'group-delete-button',
+        },
         defaultSelect: 'group-default-select',
         tbody: 'group-body',
         toList: 'group-to-list'
@@ -52,8 +55,8 @@ class DomApplier {
         console.log(groupList)
         const domBuilder = new GroupListDomBuilder(groupList)
 
+        state.isDefaultSelect = true
         const selectGroupName = document.getElementById(env.id.select.select).value
-
         const selectDiv = document.getElementById(env.id.select.span)
         selectDiv.innerHTML = ''
         selectDiv.appendChild(domBuilder.selectDom(selectGroupName))
@@ -74,6 +77,7 @@ class DomApplier {
             const groupDiv = document.createElement('div')
             groupDiv.appendChild(groupListDomBuilder.formDom())
             groupDiv.appendChild(groupListDomBuilder.selectDom())
+            groupDiv.appendChild(groupListDomBuilder.deleteButton())
 
             const saveButton = groupListDomBuilder.saveButton()
             const closeButton = UtilDomBuilder.closeButton(dialog)
@@ -227,7 +231,8 @@ class GroupListDomBuilder {
         const select = document.createElement('select')
         select.id = env.id.select.select
 
-        if (selectGroupName === '') {
+        const haveGroupName = this.groupList.value.some(g => g.name === selectGroupName)
+        if (!haveGroupName) {
             const option = document.createElement('option')
             option.id = env.id.defaultSelect
             option.selected = true
@@ -351,6 +356,25 @@ class GroupListDomBuilder {
         return span
     }
 
+    deleteButton() {
+        const button = document.createElement('button')
+        button.id = env.id.saveButton.button
+        button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'
+
+        button.textContent = '削除する'
+        button.addEventListener('click', () => {
+            if (!state.isDefaultSelect) {
+                const groupName = document.getElementById(env.id.select.select).value
+                this.groupList.deleteGroup(groupName)
+            }
+        })
+
+        const span = document.createElement('span')
+        span.id = env.id.deleteButton.button
+        span.appendChild(button)
+
+        return span
+    }
 
     /**
      * @return {HTMLDivElement}
@@ -629,6 +653,12 @@ class GroupList {
                 DomApplier.reloadModalContains(this)
             })
         })
+    }
+
+    /** @param {string} groupName */
+    deleteGroup(groupName) {
+        this.value = this.value.filter(g => g.name !== groupName)
+        this.save()
     }
 
     /**
