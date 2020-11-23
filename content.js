@@ -269,12 +269,21 @@ class GroupListDomBuilder {
      */
     buildTag() {
         const fragment = document.createDocumentFragment()
+        const toAccountList = AccountList.getByToList()
+
         this.groupList.value.map(group => {
             // liだとcwにclickイベント奪われるのでdivに
             const div = document.createElement('div')
             div.innerText = group.name
+
+            // chat内の人だけに絞る
+            const chatInsideAccountList =
+                new AccountList(
+                    toAccountList.value.filter(account => group.accountList.value.some(a => a.accountId === account.accountId))
+                )
+
             div.addEventListener('click', () => {
-                GroupListDomBuilder.addText(group.accountList)
+                GroupListDomBuilder.addText(chatInsideAccountList)
             })
 
             fragment.appendChild(div)
