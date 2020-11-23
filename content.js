@@ -1,6 +1,9 @@
 const env = {
     id: {
-        select: 'group-select',
+        select: {
+            select: 'group-select',
+            div: 'group-select-div'
+        },
         defaultSelect: 'group-default-select',
         tbody: 'group-body',
         toList: 'group-to-list'
@@ -88,6 +91,23 @@ function openModal() {
 }
 
 
+// domApplier
+class DomApplier {
+    /**
+     *
+     * @param {GroupList} groupList
+     */
+    static reloadModalContains(groupList) {
+
+        console.log(groupList)
+        const domBuilder = new GroupListDomBuilder(groupList)
+        const newSelect = domBuilder.selectDom()
+        const selectDiv = document.getElementById(env.id.select.div)
+        selectDiv.innerHTML = ''
+        selectDiv.appendChild(newSelect)
+    }
+}
+
 // domBuilder ----------------------------------------------------------------------------
 class UtilDomBuilder {
     /**
@@ -130,7 +150,7 @@ class GroupListDomBuilder {
     /** @returns {HTMLDivElement}*/
     formDom() {
         const datalist = document.createElement('datalist')
-        datalist.id = 'group-list'
+        datalist.id = 'group-list-datalist'
 
         datalist.appendChild(this.#optionFragment())
 
@@ -138,7 +158,7 @@ class GroupListDomBuilder {
         const input = document.createElement('input')
         input.type = 'text'
         input.autocomplete = 'on'
-        input.setAttribute('list', 'group-list')
+        input.setAttribute('list', 'group-list-datalist')
 
 
         // 追加ボタン作成
@@ -160,10 +180,10 @@ class GroupListDomBuilder {
         return div
     }
 
-    /** @return {HTMLSelectElement}*/
+    /** @return {HTMLDivElement}*/
     selectDom() {
         const select = document.createElement('select')
-        select.id = env.id.select
+        select.id = env.id.select.select
 
         const option = document.createElement('option')
         option.id = env.id.defaultSelect
@@ -192,7 +212,12 @@ class GroupListDomBuilder {
                 tbody.appendChild(tr)
             }
         })
-        return select
+
+        const div = document.createElement('div')
+        div.id = env.id.select.div
+        div.appendChild(select)
+
+        return div
     }
 
     /**
@@ -551,7 +576,10 @@ class GroupList {
     async save() {
         chrome.storage.sync.set({'group': this.#toObj()}, () => {
             console.log('Settings saved')
-            GroupList.getAsync().then(groupList => this.value = groupList.value)
+            GroupList.getAsync().then(groupList => {
+                this.value = groupList.value
+                DomApplier.reloadModalContains(this)
+            })
         })
     }
 
@@ -657,7 +685,7 @@ class BuildGroupAccountListRequestByCheckBox {
      */
     static build() {
         /** @type {HTMLSelectElement} */
-        const select = document.getElementById(env.id.select)
+        const select = document.getElementById(env.id.select.select)
 
         /** @type {HTMLCollection} */
         const accountListDom = document.getElementsByClassName(env.class.checkBox)
