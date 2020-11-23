@@ -19,7 +19,7 @@ window.onload = () => setTimeout(listener, 2000)
 
 function listener() {
 
-    // chrome.storage.sync.clear()
+    chrome.storage.sync.clear()
 
     addShortcutEvent()
 
@@ -132,7 +132,7 @@ class GroupListDomBuilder {
         const datalist = document.createElement('datalist')
         datalist.id = 'group-list'
 
-        datalist.appendChild(this.optionFragment())
+        datalist.appendChild(this.#optionFragment())
 
         // 入力欄
         const input = document.createElement('input')
@@ -171,7 +171,7 @@ class GroupListDomBuilder {
         option.innerText = '選択してください'
 
         select.appendChild(option)
-        select.appendChild(this.optionFragment())
+        select.appendChild(this.#optionFragment())
 
         select.addEventListener('change', () => {
             state.isDefaultSelect = false
@@ -237,7 +237,7 @@ class GroupListDomBuilder {
     }
 
     /** @return {DocumentFragment} */
-    optionFragment() {
+    #optionFragment() {
         const fragment = document.createDocumentFragment()
 
         this.groupList.value.forEach(group => {
@@ -548,9 +548,10 @@ class GroupList {
     /**
      * 保存
      */
-    save() {
-        chrome.storage.sync.set({'group': this.#toObj()}, function () {
+    async save() {
+        chrome.storage.sync.set({'group': this.#toObj()}, () => {
             console.log('Settings saved')
+            GroupList.getAsync().then(groupList => this.value = groupList.value)
         })
     }
 
@@ -566,6 +567,13 @@ class GroupList {
             console.log(groupListObj)
             callback(GroupList.buildByObj(groupListObj))
         })
+    }
+
+    /**
+     * @return {Promise<GroupList>}
+     */
+    static async getAsync() {
+        return new Promise((resolve) => GroupList.get(resolve))
     }
 
 }
