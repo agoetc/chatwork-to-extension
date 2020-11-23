@@ -26,34 +26,9 @@ function listener() {
 
     addShortcutEvent()
 
-    const toListFooter = document.getElementById('_toListFooter')
-    toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+    DomApplier.groupButton()
 
-    const toList = document.getElementById('_toList')
-
-    /** @type {HTMLUListElement} */
-    const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
-    const observer = new MutationObserver(() => {
-        console.log('DOMが変化しました')
-
-        // 既にGroupのtoListが生成されていればなにもしない
-        if (document.getElementById(env.id.toList) !== null) return
-
-        GroupList.get((groupList) => {
-            const groupListDomBuilder = new GroupListDomBuilder(groupList)
-            toolTipList.insertBefore(groupListDomBuilder.buildTag(), toolTipList.children[1])
-        })
-    })
-
-    const config = {
-        attributes: false,
-        childList: true,
-        characterData: false
-    }
-
-
-    observer.observe(toList, config)
-
+    DomApplier.observeToList()
 }
 
 function addShortcutEvent() {
@@ -62,34 +37,6 @@ function addShortcutEvent() {
         if (e.ctrlKey && e.key === 't') document.getElementById('_to').click()
     })
 }
-
-function openModal() {
-    state.isDefaultSelect = true
-    GroupList.get((groupList) => {
-        console.log(groupList)
-        const groupListDomBuilder = new GroupListDomBuilder(groupList)
-        const dialog = document.createElement('dialog')
-        dialog.id = 'grouping-modal'
-
-        // モーダルに要素を追加している
-        dialog.appendChild(groupListDomBuilder.formDom())
-        dialog.appendChild(groupListDomBuilder.selectDom())
-        dialog.appendChild(groupListDomBuilder.settingTableDom())
-
-        const buttonDiv = document.createElement('div')
-        const saveButton = groupListDomBuilder.saveButton()
-        const closeButton = UtilDomBuilder.closeButton(dialog)
-
-        buttonDiv.appendChild(saveButton)
-        buttonDiv.appendChild(closeButton)
-
-        dialog.appendChild(buttonDiv)
-        document.body.appendChild(dialog)
-        dialog.showModal()
-
-    })
-}
-
 
 // domApplier
 class DomApplier {
@@ -106,6 +53,85 @@ class DomApplier {
         selectDiv.innerHTML = ''
         selectDiv.appendChild(newSelect)
     }
+
+
+    static openModal() {
+        state.isDefaultSelect = true
+        GroupList.get((groupList) => {
+            console.log(groupList)
+            const groupListDomBuilder = new GroupListDomBuilder(groupList)
+            const dialog = document.createElement('dialog')
+            dialog.id = 'grouping-modal'
+
+            // モーダルに要素を追加している
+            dialog.appendChild(groupListDomBuilder.formDom())
+            dialog.appendChild(groupListDomBuilder.selectDom())
+            dialog.appendChild(groupListDomBuilder.settingTableDom())
+
+            const buttonDiv = document.createElement('div')
+            const saveButton = groupListDomBuilder.saveButton()
+            const closeButton = UtilDomBuilder.closeButton(dialog)
+
+            buttonDiv.appendChild(saveButton)
+            buttonDiv.appendChild(closeButton)
+
+            dialog.appendChild(buttonDiv)
+            document.body.appendChild(dialog)
+            dialog.showModal()
+        })
+    }
+
+    static groupButton() {
+        const toListFooter = document.getElementById('_toListFooter')
+        toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+    }
+
+
+    static observeToList() {
+        const toList = document.getElementById('_toList')
+
+        /** @type {HTMLUListElement} */
+        const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
+        const observer = new MutationObserver(() => {
+            console.log('DOMが変化しました')
+
+            // 既にGroupのtoListが生成されていればなにもしない
+            if (document.getElementById(env.id.toList) !== null) return
+
+            GroupList.get((groupList) => {
+                const groupListDomBuilder = new GroupListDomBuilder(groupList)
+                toolTipList.insertBefore(groupListDomBuilder.addGroupOnToList(), toolTipList.children[1])
+            })
+        })
+
+        const config = {
+            attributes: false,
+            childList: true,
+            characterData: false
+        }
+
+        observer.observe(toList, config)
+    }
+
+
+    /** @param {AccountList} accountList */
+    static addText(accountList) {
+
+        const toList = accountList.value.map(account => {
+            return `[To:${account.accountId}]${account.name}`
+        })
+
+        console.log(toList.join())
+        const textArea = document.getElementById('_chatText')
+        textArea.value =
+            textArea.value.substr(0, textArea.selectionStart)
+            + toList.join('\n') + ('\n')
+            + textArea.value.substr(textArea.selectionStart)
+
+        textArea.focus()
+    }
+
+
 }
 
 // domBuilder ----------------------------------------------------------------------------
@@ -132,7 +158,7 @@ class UtilDomBuilder {
     static groupingSettingButton() {
         const groupingButton = document.createElement('a')
         groupingButton.innerText = 'グループの設定'
-        groupingButton.addEventListener('click', () => openModal())
+        groupingButton.addEventListener('click', () => DomApplier.openModal())
         return groupingButton
     }
 
@@ -294,7 +320,7 @@ class GroupListDomBuilder {
     /**
      * @return {HTMLDivElement}
      */
-    buildTag() {
+    addGroupOnToList() {
         const groupToList = document.createElement('div')
         const fragment = document.createDocumentFragment()
         const toAccountList = AccountList.getByToList()
@@ -312,7 +338,7 @@ class GroupListDomBuilder {
                 )
 
             div.addEventListener('click', () => {
-                GroupListDomBuilder.addText(chatInsideAccountList)
+                DomApplier.addText(chatInsideAccountList)
             })
 
             fragment.appendChild(div)
@@ -320,23 +346,6 @@ class GroupListDomBuilder {
 
         groupToList.appendChild(fragment)
         return groupToList
-    }
-
-    /** @param {AccountList} accountList */
-    static addText(accountList) {
-
-        const toList = accountList.value.map(account => {
-            return `[To:${account.accountId}]${account.name}`
-        })
-
-        console.log(toList.join())
-        const textArea = document.getElementById('_chatText')
-        textArea.value =
-            textArea.value.substr(0, textArea.selectionStart)
-            + toList.join('\n') + ('\n')
-            + textArea.value.substr(textArea.selectionStart)
-
-        textArea.focus()
     }
 
 
