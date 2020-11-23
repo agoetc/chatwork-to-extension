@@ -2,7 +2,8 @@ const env = {
     id: {
         select: 'group-select',
         defaultSelect: 'group-default-select',
-        tbody: 'group-body'
+        tbody: 'group-body',
+        toList: 'group-to-list'
     },
     class: {
         checkBox: 'group-check'
@@ -30,10 +31,11 @@ function listener() {
     /** @type {HTMLUListElement} */
     const toolTipList = toList.getElementsByClassName('_cwLTList tooltipList')[0]
     const observer = new MutationObserver(() => {
-        /** DOMの変化が起こった時の処理 */
         console.log('DOMが変化しました')
 
-        // TODO: なんか閉じたときにいっぱいDOM変化してそう
+        // 既にGroupのtoListが生成されていればなにもしない
+        if (document.getElementById(env.id.toList) !== null) return
+
         GroupList.get((groupList) => {
             const groupListDomBuilder = new GroupListDomBuilder(groupList)
             toolTipList.insertBefore(groupListDomBuilder.buildTag(), toolTipList.children[1])
@@ -41,9 +43,9 @@ function listener() {
     })
 
     const config = {
-        attributes: true,
-        childList: false,
-        characterData: true
+        attributes: false,
+        childList: true,
+        characterData: false
     }
 
 
@@ -265,11 +267,13 @@ class GroupListDomBuilder {
 
 
     /**
-     * @return {DocumentFragment}
+     * @return {HTMLDivElement}
      */
     buildTag() {
+        const groupToList = document.createElement('div')
         const fragment = document.createDocumentFragment()
         const toAccountList = AccountList.getByToList()
+        groupToList.id = env.id.toList
 
         this.groupList.value.map(group => {
             // liだとcwにclickイベント奪われるのでdivに
@@ -289,7 +293,8 @@ class GroupListDomBuilder {
             fragment.appendChild(div)
         })
 
-        return fragment
+        groupToList.appendChild(fragment)
+        return groupToList
     }
 
     /** @param {AccountList} accountList */
