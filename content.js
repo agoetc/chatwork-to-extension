@@ -4,6 +4,10 @@ const env = {
             select: 'group-select',
             div: 'group-select-div'
         },
+        saveButton: {
+            button: 'group-save-account-list-button',
+            div: 'group-save-account-list-button-div'
+        },
         defaultSelect: 'group-default-select',
         tbody: 'group-body',
         toList: 'group-to-list'
@@ -50,11 +54,14 @@ class DomApplier {
 
         const selectGroupName = document.getElementById(env.id.select.select).value
 
-        console.log(selectGroupName)
-        const newSelect = domBuilder.selectDom(selectGroupName)
         const selectDiv = document.getElementById(env.id.select.div)
         selectDiv.innerHTML = ''
-        selectDiv.appendChild(newSelect)
+        selectDiv.appendChild(domBuilder.selectDom(selectGroupName))
+
+        const buttonDiv = document.getElementById(env.id.saveButton.div)
+        console.log(buttonDiv)
+        buttonDiv.innerHTML = ''
+        buttonDiv.appendChild(domBuilder.saveButton())
     }
 
     static openModal() {
@@ -71,7 +78,7 @@ class DomApplier {
             dialog.appendChild(groupListDomBuilder.settingTableDom())
 
             const buttonDiv = document.createElement('div')
-            const saveButton = groupListDomBuilder.saveButton()
+            const saveButton = groupListDomBuilder.saveButton(groupList)
             const closeButton = UtilDomBuilder.closeButton(dialog)
 
             buttonDiv.appendChild(saveButton)
@@ -319,6 +326,7 @@ class GroupListDomBuilder {
 
     saveButton() {
         const button = document.createElement('button')
+        button.id = env.id.saveButton.button
 
         button.textContent = '保存'
         button.addEventListener('click', () => {
@@ -328,7 +336,11 @@ class GroupListDomBuilder {
             }
         })
 
-        return button
+        const div = document.createElement('div')
+        div.id = env.id.saveButton.div
+        div.appendChild(button)
+
+        return div
     }
 
 
@@ -509,7 +521,7 @@ class AccountList {
             const isOutsider = !accountListByToList.value.some(toAccount => toAccount.accountId === oldAccount.accountId)
             const exists = accountList.value.some(reqAccount => reqAccount.accountId !== oldAccount.accountId)
 
-            return isOutsider || exists
+            return isOutsider || !exists
         })
 
         return new AccountList(reuseAccountList.concat(accountList.value))
