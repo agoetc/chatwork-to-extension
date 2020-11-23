@@ -45,15 +45,17 @@ class DomApplier {
      * @param {GroupList} groupList
      */
     static reloadModalContains(groupList) {
-
         console.log(groupList)
         const domBuilder = new GroupListDomBuilder(groupList)
-        const newSelect = domBuilder.selectDom()
+
+        const selectGroupName = document.getElementById(env.id.select.select).value
+
+        console.log(selectGroupName)
+        const newSelect = domBuilder.selectDom(selectGroupName)
         const selectDiv = document.getElementById(env.id.select.div)
         selectDiv.innerHTML = ''
         selectDiv.appendChild(newSelect)
     }
-
 
     static openModal() {
         state.isDefaultSelect = true
@@ -86,7 +88,6 @@ class DomApplier {
         toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
     }
 
-
     static observeToList() {
         const toList = document.getElementById('_toList')
 
@@ -112,7 +113,6 @@ class DomApplier {
 
         observer.observe(toList, config)
     }
-
 
     /** @param {AccountList} accountList */
     static addText(accountList) {
@@ -206,18 +206,27 @@ class GroupListDomBuilder {
         return div
     }
 
-    /** @return {HTMLDivElement}*/
-    selectDom() {
+    /**
+     *
+     * @param {string} selectGroupName
+     * @return {HTMLDivElement}
+     */
+    selectDom(selectGroupName = '') {
+
         const select = document.createElement('select')
         select.id = env.id.select.select
 
-        const option = document.createElement('option')
-        option.id = env.id.defaultSelect
-        option.selected = true
-        option.innerText = '選択してください'
+        if (selectGroupName === '') {
+            const option = document.createElement('option')
+            option.id = env.id.defaultSelect
+            option.selected = true
+            option.innerText = '選択してください'
+            option.value = ''
 
-        select.appendChild(option)
-        select.appendChild(this.#optionFragment())
+            select.appendChild(option)
+        }
+
+        select.appendChild(this.#optionFragment(selectGroupName))
 
         select.addEventListener('change', () => {
             state.isDefaultSelect = false
@@ -287,14 +296,20 @@ class GroupListDomBuilder {
         return scrollableTable
     }
 
-    /** @return {DocumentFragment} */
-    #optionFragment() {
+    /**
+     * @param {string} selectGroupName
+     * @return {DocumentFragment}
+     */
+    #optionFragment(selectGroupName = '') {
         const fragment = document.createDocumentFragment()
 
         this.groupList.value.forEach(group => {
             const option = document.createElement('option')
             option.value = group.name
             option.innerText = group.name
+            if (group.name === selectGroupName) {
+                option.selected = true
+            }
             fragment.appendChild(option)
         })
 
