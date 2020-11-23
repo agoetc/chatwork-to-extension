@@ -1,3 +1,11 @@
 #grouping-modal {
-    width: 800px;
+    width: 520px;
+}
+
+#group-form-span {
+    margin-right: 50px;
+}
+
+.group-table-tr:hover {
+    background-color: #dcf0fa;
 }

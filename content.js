@@ -2,11 +2,11 @@ const env = {
     id: {
         select: {
             select: 'group-select',
-            div: 'group-select-div'
+            span: 'group-select-span'
         },
         saveButton: {
             button: 'group-save-account-list-button',
-            div: 'group-save-account-list-button-div'
+            span: 'group-save-account-list-button-span'
         },
         defaultSelect: 'group-default-select',
         tbody: 'group-body',
@@ -54,11 +54,11 @@ class DomApplier {
 
         const selectGroupName = document.getElementById(env.id.select.select).value
 
-        const selectDiv = document.getElementById(env.id.select.div)
+        const selectDiv = document.getElementById(env.id.select.span)
         selectDiv.innerHTML = ''
         selectDiv.appendChild(domBuilder.selectDom(selectGroupName))
 
-        const buttonDiv = document.getElementById(env.id.saveButton.div)
+        const buttonDiv = document.getElementById(env.id.saveButton.span)
         buttonDiv.innerHTML = ''
         buttonDiv.appendChild(domBuilder.saveButton())
     }
@@ -71,19 +71,23 @@ class DomApplier {
             const dialog = document.createElement('dialog')
             dialog.id = 'grouping-modal'
 
-            // モーダルに要素を追加している
-            dialog.appendChild(groupListDomBuilder.formDom())
-            dialog.appendChild(groupListDomBuilder.selectDom())
-            dialog.appendChild(groupListDomBuilder.settingTableDom())
+            const groupDiv = document.createElement('div')
+            groupDiv.appendChild(groupListDomBuilder.formDom())
+            groupDiv.appendChild(groupListDomBuilder.selectDom())
 
-            const buttonDiv = document.createElement('div')
-            const saveButton = groupListDomBuilder.saveButton(groupList)
+            const saveButton = groupListDomBuilder.saveButton()
             const closeButton = UtilDomBuilder.closeButton(dialog)
 
+            const buttonDiv = document.createElement('div')
+            buttonDiv.className = '_cwDGFooter dialogContainer__footer'
             buttonDiv.appendChild(saveButton)
             buttonDiv.appendChild(closeButton)
 
+            // モーダルに要素を追加している
+            dialog.appendChild(groupDiv)
+            dialog.appendChild(groupListDomBuilder.settingTableDom())
             dialog.appendChild(buttonDiv)
+
             document.body.appendChild(dialog)
             dialog.showModal()
         })
@@ -146,8 +150,9 @@ class UtilDomBuilder {
      */
     static closeButton(dialog) {
         const button = document.createElement('button')
+        button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'
+        button.textContent = 'キャンセル'
 
-        button.textContent = '閉じる'
         button.addEventListener('click', () => {
             dialog.close()
             dialog.remove()
@@ -177,7 +182,7 @@ class GroupListDomBuilder {
         this.groupList = groupList
     }
 
-    /** @returns {HTMLDivElement}*/
+    /** @returns {HTMLSpanElement}*/
     formDom() {
         const datalist = document.createElement('datalist')
         datalist.id = 'group-list-datalist'
@@ -193,7 +198,8 @@ class GroupListDomBuilder {
 
         // 追加ボタン作成
         const button = document.createElement('button')
-        button.textContent = '追加'
+        button.className = '_cwDGButton  button btnPrimary'
+        button.textContent = '追加する'
         button.addEventListener('click', () => {
             const request = new GroupRequest(input.value)
             this.groupList.addGroup(request)
@@ -201,19 +207,20 @@ class GroupListDomBuilder {
         })
 
         // まとめ役
-        const div = document.createElement('div')
+        const span = document.createElement('span')
+        span.id = 'group-form-span'
 
-        div.appendChild(input)
-        div.appendChild(datalist)
-        div.appendChild(button)
+        span.appendChild(input)
+        span.appendChild(datalist)
+        span.appendChild(button)
 
-        return div
+        return span
     }
 
     /**
      *
      * @param {string} selectGroupName
-     * @return {HTMLDivElement}
+     * @return {HTMLSpanElement}
      */
     selectDom(selectGroupName = '') {
 
@@ -252,11 +259,11 @@ class GroupListDomBuilder {
             }
         })
 
-        const div = document.createElement('div')
-        div.id = env.id.select.div
-        div.appendChild(select)
+        const span = document.createElement('span')
+        span.id = env.id.select.span
+        span.appendChild(select)
 
-        return div
+        return span
     }
 
     /**
@@ -321,11 +328,15 @@ class GroupListDomBuilder {
     }
 
 
+    /**
+     * @return {HTMLSpanElement}
+     */
     saveButton() {
         const button = document.createElement('button')
         button.id = env.id.saveButton.button
+        button.className = '_cwDGButton  button btnPrimary'
 
-        button.textContent = '保存'
+        button.textContent = '保存する'
         button.addEventListener('click', () => {
             if (!state.isDefaultSelect) {
                 const req = GroupRequest.buildByCheckBox()
@@ -333,11 +344,11 @@ class GroupListDomBuilder {
             }
         })
 
-        const div = document.createElement('div')
-        div.id = env.id.saveButton.div
-        div.appendChild(button)
+        const span = document.createElement('span')
+        span.id = env.id.saveButton.span
+        span.appendChild(button)
 
-        return div
+        return span
     }
 
 
@@ -424,6 +435,7 @@ class GroupListDomBuilder {
             groupTd.appendChild(input)
 
             const tr = document.createElement('tr')
+            tr.className = 'group-table-tr'
 
             tr.appendChild(iconTd)
             tr.appendChild(nameTd)
