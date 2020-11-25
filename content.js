@@ -24,7 +24,7 @@ const state = {
     isDefaultSelect: true
 }
 
-// dom読み込むのを待つ（2000は適当な数値）
+// DOM読み込むのを待つ（2000は適当な数値）
 window.onload = () => setTimeout(listener, 2000)
 
 function listener() {
