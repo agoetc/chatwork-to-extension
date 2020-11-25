@@ -705,7 +705,7 @@ class GroupRequest {
      * @return {GroupRequest}
      */
     static buildByCheckBox() {
-        return BuildGroupAccountListRequestByCheckBox.build()
+        return BuildGroupAccountListRequestByCheckBoxDom.build()
     }
 }
 
@@ -758,7 +758,7 @@ class BuildAccountListByToListDom {
     }
 }
 
-class BuildGroupAccountListRequestByCheckBox {
+class BuildGroupAccountListRequestByCheckBoxDom {
     /**
      * @returns {GroupRequest}
      */
