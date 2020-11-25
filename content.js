@@ -33,9 +33,9 @@ function listener() {
 
     addShortcutEvent()
 
-    DomApplier.groupButton()
+    DOMApplier.groupButton()
 
-    DomApplier.observeToList()
+    DOMApplier.observeToList()
 }
 
 function addShortcutEvent() {
@@ -45,21 +45,21 @@ function addShortcutEvent() {
     })
 }
 
-// DomApplier ----------------------------------------------------------------------------
-class DomApplier {
+// DOMApplier ----------------------------------------------------------------------------
+class DOMApplier {
     /**
      *
      * @param {GroupList} groupList
      */
     static reloadModalContains(groupList) {
         console.log(groupList)
-        const domBuilder = new GroupListDomBuilder(groupList)
+        const domBuilder = new GroupListDOMBuilder(groupList)
 
         state.isDefaultSelect = true
         const selectGroupName = document.getElementById(env.id.select.select).value
         const selectDiv = document.getElementById(env.id.select.span)
         selectDiv.innerHTML = ''
-        selectDiv.appendChild(domBuilder.selectDom(selectGroupName))
+        selectDiv.appendChild(domBuilder.selectDOM(selectGroupName))
 
         const buttonDiv = document.getElementById(env.id.saveButton.span)
         buttonDiv.innerHTML = ''
@@ -70,17 +70,17 @@ class DomApplier {
         state.isDefaultSelect = true
         GroupList.get((groupList) => {
             console.log(groupList)
-            const groupListDomBuilder = new GroupListDomBuilder(groupList)
+            const groupListDOMBuilder = new GroupListDOMBuilder(groupList)
             const dialog = document.createElement('dialog')
             dialog.id = 'grouping-modal'
 
             const groupDiv = document.createElement('div')
-            groupDiv.appendChild(groupListDomBuilder.formDom())
-            groupDiv.appendChild(groupListDomBuilder.selectDom())
-            groupDiv.appendChild(groupListDomBuilder.deleteButton())
+            groupDiv.appendChild(groupListDOMBuilder.formDOM())
+            groupDiv.appendChild(groupListDOMBuilder.selectDOM())
+            groupDiv.appendChild(groupListDOMBuilder.deleteButton())
 
-            const saveButton = groupListDomBuilder.saveButton()
-            const closeButton = UtilDomBuilder.closeButton(dialog)
+            const saveButton = groupListDOMBuilder.saveButton()
+            const closeButton = UtilDOMBuilder.closeButton(dialog)
 
             const buttonDiv = document.createElement('div')
             buttonDiv.className = '_cwDGFooter dialogContainer__footer'
@@ -89,7 +89,7 @@ class DomApplier {
 
             // モーダルに要素を追加している
             dialog.appendChild(groupDiv)
-            dialog.appendChild(groupListDomBuilder.settingTableDom())
+            dialog.appendChild(groupListDOMBuilder.settingTableDOM())
             dialog.appendChild(buttonDiv)
 
             document.body.appendChild(dialog)
@@ -99,7 +99,7 @@ class DomApplier {
 
     static groupButton() {
         const toListFooter = document.getElementById('_toListFooter')
-        toListFooter.appendChild(UtilDomBuilder.groupingSettingButton())
+        toListFooter.appendChild(UtilDOMBuilder.groupingSettingButton())
     }
 
     static observeToList() {
@@ -112,8 +112,8 @@ class DomApplier {
             if (document.getElementById(env.id.toList) !== null) return
 
             GroupList.get((groupList) => {
-                const groupListDomBuilder = new GroupListDomBuilder(groupList)
-                toolTipList.insertBefore(groupListDomBuilder.addGroupOnToList(), toolTipList.children[1])
+                const groupListDOMBuilder = new GroupListDOMBuilder(groupList)
+                toolTipList.insertBefore(groupListDOMBuilder.addGroupOnToList(), toolTipList.children[1])
             })
         })
 
@@ -146,9 +146,9 @@ class DomApplier {
 
 }
 
-// DomBuilder ----------------------------------------------------------------------------
+// DOMBuilder ----------------------------------------------------------------------------
 
-class UtilDomBuilder {
+class UtilDOMBuilder {
     /**
      * @param {HTMLDialogElement} dialog
      * @return {HTMLButtonElement}
@@ -172,13 +172,13 @@ class UtilDomBuilder {
     static groupingSettingButton() {
         const groupingButton = document.createElement('a')
         groupingButton.innerText = 'グループの設定'
-        groupingButton.addEventListener('click', () => DomApplier.openModal())
+        groupingButton.addEventListener('click', () => DOMApplier.openModal())
         return groupingButton
     }
 
 }
 
-class GroupListDomBuilder {
+class GroupListDOMBuilder {
     /** @type {GroupList} */
     groupList
 
@@ -188,7 +188,7 @@ class GroupListDomBuilder {
     }
 
     /** @returns {HTMLSpanElement}*/
-    formDom() {
+    formDOM() {
         const datalist = document.createElement('datalist')
         datalist.id = 'group-list-datalist'
 
@@ -227,7 +227,7 @@ class GroupListDomBuilder {
      * @param {string} selectGroupName
      * @return {HTMLSpanElement}
      */
-    selectDom(selectGroupName = '') {
+    selectDOM(selectGroupName = '') {
 
         const select = document.createElement('select')
         select.id = env.id.select.select
@@ -276,7 +276,7 @@ class GroupListDomBuilder {
      * @param {AccountList} checkedAccountList
      * @return {HTMLDivElement}
      */
-    settingTableDom(checkedAccountList = new AccountList()) {
+    settingTableDOM(checkedAccountList = new AccountList()) {
         const table = document.createElement('table')
         const thead = document.createElement('thead')
         const tbody = document.createElement('tbody')
@@ -400,7 +400,7 @@ class GroupListDomBuilder {
                 div.innerText = group.name
 
                 div.addEventListener('click', () => {
-                    DomApplier.addText(chatInsideAccountList)
+                    DOMApplier.addText(chatInsideAccountList)
                 })
 
                 fragment.appendChild(div)
@@ -529,7 +529,7 @@ class AccountList {
      * @return {AccountList}
      */
     static getByToList() {
-        return BuildAccountListByToListDom.build()
+        return BuildAccountListByToListDOM.build()
     }
 
     /**
@@ -651,7 +651,7 @@ class GroupList {
             console.log('Settings saved')
             GroupList.getAsync().then(groupList => {
                 this.value = groupList.value
-                DomApplier.reloadModalContains(this)
+                DOMApplier.reloadModalContains(this)
             })
         })
     }
@@ -705,13 +705,13 @@ class GroupRequest {
      * @return {GroupRequest}
      */
     static buildByCheckBox() {
-        return BuildGroupAccountListRequestByCheckBoxDom.build()
+        return BuildGroupAccountListRequestByCheckBoxDOM.build()
     }
 }
 
-// BuildByDom ----------------------------------------------------------------------------
+// BuildByDOM ----------------------------------------------------------------------------
 
-class BuildAccountListByToListDom {
+class BuildAccountListByToListDOM {
     /**
      * To一覧からAccountListを作成
      * @returns {AccountList}
@@ -721,16 +721,16 @@ class BuildAccountListByToListDom {
          *  ('_cwLTList tooltipList')[2]がtoの一覧
          * @type {HTMLCollection<HTMLLIElement>}
          */
-        const toAccountListDom =
+        const toAccountListDOM =
             document
                 .getElementsByClassName('_cwLTList tooltipList')[2]
                 .getElementsByTagName('li')
 
         const accountList = new AccountList()
 
-        for (let i = 0; i < toAccountListDom.length; i++) {
-            if (!this.#isToAll(toAccountListDom[i])) {
-                const account = this.#buildAccount(toAccountListDom[i])
+        for (let i = 0; i < toAccountListDOM.length; i++) {
+            if (!this.#isToAll(toAccountListDOM[i])) {
+                const account = this.#buildAccount(toAccountListDOM[i])
                 accountList.value.push(account)
             }
         }
@@ -738,27 +738,27 @@ class BuildAccountListByToListDom {
     }
 
     /**
-     * @param {HTMLCollection}accountDom
+     * @param {HTMLCollection}accountDOM
      * @returns {Account}
      */
-    static #buildAccount(accountDom) {
+    static #buildAccount(accountDOM) {
         return new Account(
-            Number(accountDom.dataset.cwuiLtValue),
-            accountDom.children[0].getAttribute('src'),
-            accountDom.children[1].innerText
+            Number(accountDOM.dataset.cwuiLtValue),
+            accountDOM.children[0].getAttribute('src'),
+            accountDOM.children[1].innerText
         )
     }
 
     /**
-     * @param {HTMLCollection}accountDom
+     * @param {HTMLCollection}accountDOM
      * @return {boolean}
      */
-    static #isToAll(accountDom) {
-        return Number(accountDom.dataset.cwuiLtIdx) === 0
+    static #isToAll(accountDOM) {
+        return Number(accountDOM.dataset.cwuiLtIdx) === 0
     }
 }
 
-class BuildGroupAccountListRequestByCheckBoxDom {
+class BuildGroupAccountListRequestByCheckBoxDOM {
     /**
      * @returns {GroupRequest}
      */
@@ -767,19 +767,19 @@ class BuildGroupAccountListRequestByCheckBoxDom {
         const select = document.getElementById(env.id.select.select)
 
         /** @type {HTMLCollection} */
-        const accountListDom = document.getElementsByClassName(env.class.checkBox)
+        const accountListDOM = document.getElementsByClassName(env.class.checkBox)
 
         const accountList = new AccountList()
 
-        for (let i = 0; i < accountListDom.length; i++) {
+        for (let i = 0; i < accountListDOM.length; i++) {
             /** @type {HTMLInputElement}*/
-            const accountDom = accountListDom[i]
+            const accountDOM = accountListDOM[i]
 
-            if (accountDom.checked) {
+            if (accountDOM.checked) {
                 const account = new Account(
-                    Number(accountDom.dataset.aId),
-                    accountDom.dataset.imagePath,
-                    accountDom.dataset.name
+                    Number(accountDOM.dataset.aId),
+                    accountDOM.dataset.imagePath,
+                    accountDOM.dataset.name
                 )
 
                 accountList.value.push(account)
