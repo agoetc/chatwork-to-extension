@@ -1,0 +1,12 @@
+#grouping-modal {
+    width: 520px;
+    height: 500px;
+}
+
+#group-form-span {
+    margin-right: 50px;
+}
+
+.group-table-tr:hover {
+    background-color: #dcf0fa;
+}

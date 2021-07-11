@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Chatwork To Extension",
+  "short_name": "CTE",
+  "version": "1",
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.chatwork.com/"
+      ],
+      "js": [
+        "./dist/content.js"
+      ],
+      "css": [
+        "./public/modal.css"
+      ]
+    }
+  ]
+}
