@@ -1,4 +1,4 @@
-import {AccountDomReader} from "../dom/reader/AccountDomReader";
+import {AccountDomReader} from "../adapter/dom/reader/AccountDomReader";
 
 export interface Account {
     accountId: number,

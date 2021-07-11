@@ -1,6 +1,6 @@
-import {AccountList} from "../../domain/Account";
-import {Group, GroupList, GroupRequest} from "../../domain/Group";
-import {GroupRepository} from "../../adapter/storage/repository/GroupRepository";
+import {AccountList} from "../../../domain/Account";
+import {Group, GroupList, GroupRequest} from "../../../domain/Group";
+import {GroupRepository} from "../../storage/repository/GroupRepository";
 
 const groupRepository = GroupRepository
 export const GroupDomReader = {

@@ -1,6 +1,6 @@
-import {env} from "../../env"
-import {Account, AccountList} from "../../domain/Account";
-import {GroupRequest} from "../../domain/Group";
+import {env} from "../../../env"
+import {Account, AccountList} from "../../../domain/Account";
+import {GroupRequest} from "../../../domain/Group";
 
 export const AccountDomReader = {
     buildAccountList(): AccountList {
