@@ -36,15 +36,15 @@ export const AccountDomReader = {
 export const GroupAccountListDomReader = {
     build() {
         /** @type {HTMLSelectElement} */
-        const select: HTMLSelectElement | null = document.getElementById(env.id.select.select)
+        const select: any = document.getElementById(env.id.select.select)
         /** @type {HTMLCollection} */
-        const accountListDOM: HTMLCollection | null = document.getElementsByClassName(env.class.checkBox)
+        const accountListDOM: any = document.getElementsByClassName(env.class.checkBox)
 
         const accountList: AccountList = {value: []}
 
         for (let i = 0; i < accountListDOM.length; i++) {
             /** @type {HTMLInputElement}*/
-            const accountDOM: HTMLInputElement | null = accountListDOM[i]
+            const accountDOM: any = accountListDOM[i]
 
             if (accountDOM !== null && accountDOM.checked) {
                 const account: Account = {
