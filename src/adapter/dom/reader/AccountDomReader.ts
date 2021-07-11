@@ -1,8 +1,7 @@
-import {env} from "../../../env"
-import {Account, AccountList} from "../../../domain/Account";
-import {GroupRequest} from "../../../domain/Group";
+import {Account, AccountId, AccountList} from "../../../domain/Account";
 
 export const AccountDomReader = {
+    /** CanDo **/
     buildAccountList(): AccountList {
         const toAccountListDOM: HTMLCollection =
             document
@@ -12,55 +11,46 @@ export const AccountDomReader = {
         const accountList: AccountList = {value: []}
 
         for (let i = 0; i < toAccountListDOM.length; i++) {
-            const item: Element | null = toAccountListDOM.item(i)
-            if (item && !this.isToAll(item)) {
-                const account = this.buildAccount(item)
-                accountList.value.push(account)
+            const item: Element = toAccountListDOM[i]
+            if (!PrivateAccountDomReader.isToAll(item)) {
+                const account: Account | null = PrivateAccountDomReader.buildAccount(item)
+                if (account !== null) {
+                    accountList.value.push(account)
+                }
             }
         }
         return accountList
-    },
-    buildAccount(accountDOM: Element): Account {
-        return {
-            accountId: Number(accountDOM.getAttribute('cwuiLtValue')),
-            // TODO: stub
-            imagePath: 'tmpImagePath',  //accountDOM[0].getAttribute('src'),
-            name: 'tmpName' //accountDOM.children[1].innerText
-        }
-    },
-    isToAll(accountDOM: Element): boolean {
-        return Number(accountDOM.getAttribute('cwuiLtValue')) === 0
     }
 }
-
-export const GroupAccountListDomReader = {
-    build() {
-        /** @type {HTMLSelectElement} */
-        const select: any = document.getElementById(env.id.select.select)
-        /** @type {HTMLCollection} */
-        const accountListDOM: any = document.getElementsByClassName(env.class.checkBox)
-
-        const accountList: AccountList = {value: []}
-
-        for (let i = 0; i < accountListDOM.length; i++) {
-            /** @type {HTMLInputElement}*/
-            const accountDOM: any = accountListDOM[i]
-
-            if (accountDOM !== null && accountDOM.checked) {
-                const account: Account = {
-                    accountId: Number(accountDOM.dataset.aId),
-                    imagePath: accountDOM.dataset.imagePath,
-                    name: accountDOM.dataset.name
-                }
-
-                accountList.value.push(account)
+const PrivateAccountDomReader = {
+    /**
+     * CanDo
+     * TODO: any
+     * @param accountDOM
+     */
+    buildAccount(accountDOM: any): Account | null {
+        const accountId: string | null = accountDOM.dataset.cwuiLtValue
+        const imagePath: string | null = accountDOM.children[0].getAttribute('src')
+        const name: string | null = accountDOM.children[1].textContent
+        if (accountId !== null && imagePath !== null && name !== null) {
+            return {
+                accountId: AccountId.fromString(accountId),
+                imagePath: imagePath,
+                name: name
             }
+        } else {
+            console.log('error')
+            console.log(accountId, imagePath, name)
+            // TODO: throw
+            return null
         }
-
-        const request: GroupRequest = {
-            name: select?.name,
-            accountList: accountList
-        }
-        return request
+    },
+    /**
+     * CanDo
+     * TODO: any
+     * @param accountDOM Element
+     */
+    isToAll(accountDOM: any): boolean {
+        return Number(accountDOM.dataset.cwuiLtValue) === 0
     }
 }

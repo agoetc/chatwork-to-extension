@@ -1,13 +1,22 @@
 import {AccountDomReader} from "../adapter/dom/reader/AccountDomReader";
+import {ListObject, ValueObject} from "./Common";
 
 export interface Account {
-    accountId: number,
+    accountId: AccountId,
     imagePath: string,
     name: string
 }
 
-export interface ListObject {
+export interface AccountId extends ValueObject {
+    value: number
 }
+
+export const AccountId = {
+    fromString(idStr: string): AccountId {
+        return {value: Number(idStr)}
+    }
+}
+
 
 export interface AccountList extends ListObject {
     value: Account[]
@@ -19,7 +28,7 @@ export const AccountList = {
         Object.keys(accountListObj.value).forEach((key) => {
             const keyNumber = Number(key)
             const account: Account = {
-                accountId: Number(accountListObj.value[keyNumber].accountId),
+                accountId: accountListObj.value[keyNumber].accountId,
                 imagePath: accountListObj.value[keyNumber].imagePath,
                 name: accountListObj.value[keyNumber].name
             }
