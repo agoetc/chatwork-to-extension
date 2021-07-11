@@ -15,7 +15,7 @@
         "./dist/content.js"
       ],
       "css": [
-        "./public/modal.css"
+        "./dist/modal.css"
       ]
     }
   ]
