@@ -12,10 +12,10 @@
         "https://www.chatwork.com/"
       ],
       "js": [
-        "./dist/content.js"
+        "./content.js"
       ],
       "css": [
-        "./dist/modal.css"
+        "./modal.css"
       ]
     }
   ]
