@@ -1,4 +1,4 @@
-import {AccountDomReader} from "./adapter/dom/reader/AccountDomReader";
+import {AccountService} from "./service/AccountService";
 
 window.onload = () => setTimeout(listener, 2000)
 
@@ -7,5 +7,5 @@ const listener = () => {
 }
 
 const aa = ()  =>  {
-    console.log(AccountDomReader.getAccountList())
+    console.log(AccountService.getAccountList())
 }
