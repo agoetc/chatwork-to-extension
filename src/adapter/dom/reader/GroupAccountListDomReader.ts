@@ -3,7 +3,7 @@ import {Account, AccountId, AccountList} from "../../../domain/Account";
 import {GroupRequest} from "../../../domain/Group";
 
 export const GroupAccountListDomReader = {
-    build() {
+    getRequest(): GroupRequest {
         /** @type {HTMLSelectElement} */
         const select: any = document.getElementById(env.id.select.select)
         /** @type {HTMLCollection} */
@@ -26,10 +26,9 @@ export const GroupAccountListDomReader = {
             }
         }
 
-        const request: GroupRequest = {
+        return {
             name: select?.name,
             accountList: accountList
         }
-        return request
     }
 }

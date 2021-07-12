@@ -7,5 +7,5 @@ const listener = () => {
 }
 
 const aa = ()  =>  {
-    console.log(AccountDomReader.buildAccountList())
+    console.log(AccountDomReader.getAccountList())
 }

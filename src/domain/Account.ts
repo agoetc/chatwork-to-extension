@@ -38,7 +38,7 @@ export const AccountList = {
         return accountList
     },
     mergeAccountListRequest(savedAccountList: AccountList, accountList: AccountList): AccountList {
-        const accountListByToList: AccountList = AccountDomReader.buildAccountList()
+        const accountListByToList: AccountList = AccountDomReader.getAccountList()
         /**
          * チャット外の人は使い回す
          * 既にGroupに追加されている人は使い回さない（名前とか変わっている可能性あるので）

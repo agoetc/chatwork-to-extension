@@ -1,8 +1,9 @@
 import {Account, AccountId, AccountList} from "../../../domain/Account";
+import {AccountReader} from "../../../domain/reader/AccountReader";
 
-export const AccountDomReader = {
+export const AccountDomReader: AccountReader = {
     /** CanDo **/
-    buildAccountList(): AccountList {
+    getAccountList(): AccountList {
         const toAccountListDOM: HTMLCollection =
             document
                 .getElementsByClassName('_cwLTList tooltipList')[2]

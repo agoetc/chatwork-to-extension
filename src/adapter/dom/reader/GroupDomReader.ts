@@ -17,32 +17,5 @@ export const GroupDomReader = {
             }
         }
         return groupList
-    },
-    addGroup(groupList: GroupList, req: GroupRequest): Promise<void> {
-        // TODO: elseのときどうする？
-        console.log(req)
-        const group = this.getGroupByName(groupList, req.name)
-        const existsGroupName = group !== undefined
-
-        if (groupList.value.length === 0 || !existsGroupName) {
-            groupList.value.push({
-                name: req.name,
-                accountList: req.accountList
-            })
-            return groupRepository.save(groupList)
-        } else if (group !== undefined) {
-            const mergedAccountList = AccountList.mergeAccountListRequest(group.accountList, req.accountList)
-            groupList.value.push({
-                name: req.name,
-                accountList: mergedAccountList
-            })
-            return groupRepository.save(groupList)
-        } else {
-            return new Promise<void>(() => {
-            });
-        }
-    },
-    getGroupByName(groupList: GroupList, name: string): Group | undefined {
-        return groupList.value.find(group => group.name === name)
     }
 }
