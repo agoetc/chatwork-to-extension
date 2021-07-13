@@ -1,6 +1,6 @@
-import {GroupList, GroupRequest} from "../../../domain/Group";
-import {GroupService} from "../../../service/GroupService";
-import {env} from "../../../env";
+import {GroupList, GroupRequest} from "../../../../../domain/Group";
+import {GroupService} from "../../../../../service/GroupService";
+import {env} from "../../../../../env";
 
 const common = {
     optionFragment(groupList: GroupList) {
@@ -17,7 +17,7 @@ const common = {
     },
     dialog(): HTMLDialogElement {
         const dialog = document.createElement('dialog')
-        dialog.id = 'grouping-modal'
+        dialog.id = 'grouping-dialog'
         return dialog
     }
 }
@@ -114,7 +114,7 @@ export const ButtonField = {
 
 }
 
-export const GroupListModal = {
+export const GroupEditDialog = {
     generate(groupList: GroupList): HTMLDialogElement {
         console.log(groupList)
         const groupDiv = document.createElement('div')
