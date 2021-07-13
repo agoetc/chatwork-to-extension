@@ -15,7 +15,7 @@
         "./content.js"
       ],
       "css": [
-        "./modal.css"
+        "./dialog.css"
       ]
     }
   ]

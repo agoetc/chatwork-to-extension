@@ -10,8 +10,8 @@ export const GroupButtonApplier = {
             throw new DOMException()
         }
     },
-    applyGroupButton(modal: HTMLDialogElement): void {
+    applyGroupButton(dialog: HTMLDialogElement): void {
         const toListFooter = this.getToListFooter()
-        toListFooter.appendChild(EffectGroupButton.effect(modal))
+        toListFooter.appendChild(EffectGroupButton.effect(dialog))
     }
 }

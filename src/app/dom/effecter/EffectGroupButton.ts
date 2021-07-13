@@ -1,10 +1,10 @@
 import {GroupButton} from "../generater/GroupButton";
 
 export const EffectGroupButton = {
-    effect(modal: HTMLDialogElement): HTMLAnchorElement {
+    effect(dialog: HTMLDialogElement): HTMLAnchorElement {
         const button = GroupButton.generate()
         button.addEventListener('click', () => {
-            modal.showModal()
+            dialog.showModal()
         })
         return button
     }
