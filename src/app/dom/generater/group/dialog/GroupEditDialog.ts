@@ -1,14 +1,14 @@
-import {GroupList} from "../../../../../domain/Group";
+import {Group, GroupList} from "../../../../../domain/Group";
 import {ButtonField} from "./ButtonField";
 import {AddForm} from "./AddForm";
-
+import {SelectBox} from "./SelectBox";
 
 export const GroupEditDialog = {
     generate(groupList: GroupList): HTMLDialogElement {
         console.log(groupList)
         const groupDiv = document.createElement('div')
         groupDiv.appendChild(AddForm.generate(groupList))
-        // groupDiv.appendChild(groupListDOMBuilder.selectDOM())
+        groupDiv.appendChild(SelectBox.generate(groupList))
         // groupDiv.appendChild(groupListDOMBuilder.deleteButton())
 
 

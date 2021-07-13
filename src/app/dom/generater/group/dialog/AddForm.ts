@@ -1,5 +1,6 @@
 import {GroupList} from "../../../../../domain/Group";
 import {GroupService} from "../../../../../service/GroupService";
+import {OptionFragment} from "./OptionFragment";
 
 export const AddForm = {
     generate(groupList: GroupList): HTMLSpanElement {
@@ -55,20 +56,5 @@ const PAddForm = {
                 })
         })
         return button
-    }
-}
-
-const OptionFragment = {
-    generate(groupList: GroupList) {
-        const fragment = document.createDocumentFragment()
-
-        groupList.value.forEach(group => {
-            const option = document.createElement('option')
-            option.value = group.name
-            option.innerText = group.name
-            fragment.appendChild(option)
-        })
-
-        return fragment
     }
 }
