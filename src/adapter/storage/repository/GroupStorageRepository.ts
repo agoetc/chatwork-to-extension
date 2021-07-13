@@ -2,15 +2,16 @@ import {Group, GroupList, GroupRequest} from "../../../domain/Group";
 import {browser} from "webextension-polyfill-ts";
 import {AccountList} from "../../../domain/Account";
 
-const PrivateGroupRepository = {
+const PrivateGroupStorageRepository = {
     getListByName(groupList: GroupList, name: string): Group | undefined {
         return groupList.value.find(group => group.name === name)
     },
     save(groupList: GroupList): Promise<void> {
         return browser.storage.sync.set({'group': GroupList.toObj(groupList)})
     },
-    buildGroupListByObj(groupListObj: GroupList): GroupList {
+    buildGroupListByObj(groupListObj: object): GroupList {
         const groupList: GroupList = {value: []}
+        console.log(groupListObj)
 
         for (let groupName in groupListObj.value) {
             if (groupListObj.value.hasOwnProperty(groupName)) {
@@ -27,18 +28,20 @@ const PrivateGroupRepository = {
     }
 }
 
-export const GroupRepository = {
+export const GroupStorageRepository = {
     delete(groupList: GroupList, groupName: string): Promise<void> {
         groupList.value.filter(g => g.name !== groupName)
-        return PrivateGroupRepository.save(groupList)
+        return PrivateGroupStorageRepository.save(groupList)
     },
-    get() {
-        return browser.storage.sync.get('group')
+    get(): Promise<GroupList> {
+        return browser.storage.sync.get('group').then((a) =>
+            PrivateGroupStorageRepository.buildGroupListByObj(a)
+        )
     },
     addList(groupList: GroupList, req: GroupRequest): Promise<void> {
         // TODO: elseのときどうする？
         console.log(req)
-        const group = PrivateGroupRepository.getListByName(groupList, req.name)
+        const group = PrivateGroupStorageRepository.getListByName(groupList, req.name)
         const existsGroupName = group !== undefined
 
         if (groupList.value.length === 0 || !existsGroupName) {
@@ -46,14 +49,14 @@ export const GroupRepository = {
                 name: req.name,
                 accountList: req.accountList
             })
-            return PrivateGroupRepository.save(groupList)
+            return PrivateGroupStorageRepository.save(groupList)
         } else if (group !== undefined) {
             const mergedAccountList = AccountList.mergeAccountListRequest(group.accountList, req.accountList)
             groupList.value.push({
                 name: req.name,
                 accountList: mergedAccountList
             })
-            return PrivateGroupRepository.save(groupList)
+            return PrivateGroupStorageRepository.save(groupList)
         } else {
             return new Promise<void>(() => {
             });
