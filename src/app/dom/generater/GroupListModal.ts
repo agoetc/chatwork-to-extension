@@ -1,5 +1,6 @@
 import {GroupList, GroupRequest} from "../../../domain/Group";
 import {GroupService} from "../../../service/GroupService";
+import {env} from "../../../env";
 
 const common = {
     optionFragment(groupList: GroupList) {
@@ -69,6 +70,50 @@ const form = {
     },
 }
 
+export const ButtonField = {
+    groupSaveButton() {
+        const button = document.createElement('button')
+        button.id = env.id.saveButton.button
+        button.className = '_cwDGButton  button btnPrimary'
+
+        button.textContent = '保存する'
+        button.addEventListener('click', () => {
+            console.log('save')
+            // if (!state.isDefaultSelect) {
+            //     const req = GroupRequest.buildByCheckBox()
+            //     this.groupList.addGroup(req)
+            // }
+        })
+
+        const span = document.createElement('span')
+        span.id = env.id.saveButton.span
+        span.appendChild(button)
+
+        return span
+    },
+    closeButton(dialog: HTMLDialogElement): HTMLButtonElement {
+        const button = document.createElement('button')
+        button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'
+        button.textContent = 'キャンセル'
+
+        button.addEventListener('click', () => {
+            dialog.close()
+            dialog.remove()
+        })
+        return button
+
+    },
+    generate(dialog: HTMLDialogElement): HTMLDivElement {
+        const buttonDiv = document.createElement('div')
+        buttonDiv.className = '_cwDGFooter dialogContainer__footer'
+        buttonDiv.appendChild(this.groupSaveButton())
+        buttonDiv.appendChild(this.closeButton(dialog))
+
+        return buttonDiv
+    }
+
+}
+
 export const GroupListModal = {
     generate(groupList: GroupList): HTMLDialogElement {
         console.log(groupList)
@@ -77,19 +122,14 @@ export const GroupListModal = {
         // groupDiv.appendChild(groupListDOMBuilder.selectDOM())
         // groupDiv.appendChild(groupListDOMBuilder.deleteButton())
 
-        // const saveButton = groupListDOMBuilder.saveButton()
-        // const closeButton = UtilDOMBuilder.closeButton(dialog)
-
-        // const buttonDiv = document.createElement('div')
-        // buttonDiv.className = '_cwDGFooter dialogContainer__footer'
-        // buttonDiv.appendChild(saveButton)
-        // buttonDiv.appendChild(closeButton)
 
         // モーダルに要素を追加している
         const dialog: HTMLDialogElement = common.dialog()
         dialog.appendChild(groupDiv)
         // dialog.appendChild(groupListDOMBuilder.settingTableDOM())
-        // dialog.appendChild(buttonDiv)
+
+        const buttonField = ButtonField.generate(dialog)
+        dialog.appendChild(buttonField)
 
         return dialog
     }
