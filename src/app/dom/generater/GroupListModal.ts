@@ -70,7 +70,7 @@ const form = {
 }
 
 export const GroupListModal = {
-    generate(groupList: GroupList): void {
+    generate(groupList: GroupList): HTMLDialogElement {
         console.log(groupList)
         const groupDiv = document.createElement('div')
         groupDiv.appendChild(form.formSpan(groupList))
@@ -91,7 +91,6 @@ export const GroupListModal = {
         // dialog.appendChild(groupListDOMBuilder.settingTableDOM())
         // dialog.appendChild(buttonDiv)
 
-        document.body.appendChild(dialog)
-        dialog.showModal()
+        return dialog
     }
 }

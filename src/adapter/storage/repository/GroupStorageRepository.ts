@@ -9,7 +9,7 @@ const PrivateGroupStorageRepository = {
     save(groupList: GroupList): Promise<void> {
         return browser.storage.sync.set({'group': GroupList.toObj(groupList)})
     },
-    buildGroupListByObj(groupListObj: object): GroupList {
+    buildGroupListByObj(groupListObj: any): GroupList {
         const groupList: GroupList = {value: []}
         console.log(groupListObj)
 
