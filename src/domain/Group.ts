@@ -25,9 +25,3 @@ export interface GroupRequest {
     name: string,
     accountList: AccountList
 }
-
-export const GroupRequest = {
-    buildByCheckBox() {
-        return GroupAccountListDomReader.getRequest()
-    }
-}

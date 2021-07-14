@@ -1,7 +1,7 @@
 import {AccountService} from "./service/AccountService";
 import {Applier} from "./app/dom/applier/Applier";
 
-window.onload = () => setTimeout(listener, 2000)
+window.onload = () => setTimeout(listener, 1000)
 
 const listener = async () => {
 

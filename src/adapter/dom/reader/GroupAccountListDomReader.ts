@@ -1,34 +1,51 @@
-import {env} from "../../../env";
 import {Account, AccountId, AccountList} from "../../../domain/Account";
 import {GroupRequest} from "../../../domain/Group";
+import {GroupGetter} from "../getter/group/GroupGetter";
 
 export const GroupAccountListDomReader = {
     getRequest(): GroupRequest {
-        /** @type {HTMLSelectElement} */
-        const select: any = document.getElementById(env.id.select.select)
-        /** @type {HTMLCollection} */
-        const accountListDOM: any = document.getElementsByClassName(env.class.checkBox)
+        const select = GroupGetter.getGroupSelect()
+        const checkedAccountList = GroupGetter.getCheckAccounts()
 
-        const accountList: AccountList = {value: []}
-
-        for (let i = 0; i < accountListDOM.length; i++) {
-            /** @type {HTMLInputElement}*/
-            const accountDOM: any = accountListDOM[i]
-
-            if (accountDOM !== null && accountDOM.checked) {
-                const account: Account = {
-                    accountId: AccountId.fromString(accountDOM.dataset.aId),
-                    imagePath: accountDOM.dataset.imagePath,
-                    name: accountDOM.dataset.name
-                }
-
-                accountList.value.push(account)
-            }
-        }
+        const accountList: AccountList = AccountListElement.buildAccountList(checkedAccountList)
 
         return {
-            name: select?.name,
+            name: select.name,
             accountList: accountList
         }
     }
+}
+
+const AccountListElement = {
+    buildAccountList(accountListElement: HTMLCollection): AccountList {
+        const accountList: AccountList = {value: []}
+
+        for (let i = 0; i < accountListElement.length; i++) {
+            const checkedAccountElement = <HTMLInputElement>accountListElement[i]
+            const checkedAccount = this.buildAccount(checkedAccountElement)
+            accountList.value.push(checkedAccount)
+        }
+
+        return accountList
+
+    },
+    buildAccount(accountElement: HTMLInputElement): Account {
+        const accountId = accountElement.dataset.aid
+        const imagePath = accountElement.dataset.imagePath
+        const name = accountElement.dataset.name
+
+        if (accountId !== undefined
+            && imagePath !== undefined
+            && name !== undefined
+        ) {
+            return {
+                accountId: AccountId.fromString(accountId),
+                imagePath: imagePath,
+                name: name
+            }
+        } else {
+            throw DOMException
+        }
+    }
+
 }
