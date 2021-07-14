@@ -1,5 +1,5 @@
-import {AccountList} from "../Account";
+import { AccountList } from '../Account'
 
 export interface AccountReader {
-    getAccountList(): AccountList
+  getAccountList(): AccountList
 }

@@ -1,6 +1,6 @@
 export interface ValueObject {
-    value: any
+  value: any
 }
 export interface ListObject {
-    value: any
+  value: any
 }
