@@ -1,4 +1,4 @@
-import { AccountService } from './service/AccountService'
+import { AccountService } from './app/service/AccountService'
 import { Applier } from './app/dom/applier/Applier'
 
 window.onload = () => setTimeout(listener, 1000)

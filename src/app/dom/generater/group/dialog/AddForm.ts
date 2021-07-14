@@ -1,5 +1,5 @@
 import { GroupList } from '../../../../../domain/Group'
-import { GroupService } from '../../../../../service/GroupService'
+import { GroupService } from '../../../../service/GroupService'
 import { OptionFragment } from './OptionFragment'
 
 export const AddForm = {

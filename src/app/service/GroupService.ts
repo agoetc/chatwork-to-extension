@@ -1,5 +1,5 @@
-import { GroupList, GroupRequest } from '../domain/Group'
-import { GroupStorageRepository } from '../adapter/storage/repository/GroupStorageRepository'
+import { GroupList, GroupRequest } from '../../domain/Group'
+import { GroupStorageRepository } from '../../adapter/storage/repository/GroupStorageRepository'
 
 export const GroupService = {
   getGroupList(): Promise<GroupList> {
