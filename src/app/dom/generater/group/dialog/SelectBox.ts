@@ -5,28 +5,6 @@ import { GroupGetter } from '../../../../../adapter/dom/getter/group/GroupGetter
 import { Tr } from './Tr'
 
 export const SelectBox = {
-  effect(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
-    const span = this.generate(groupList, selectGroupName)
-    span.addEventListener('change', () => {
-      // state.isDefaultSelect = false
-      // TODO
-      const select: HTMLSelectElement = span.getElementsByTagName('select')[0]
-      const group = groupList.value.find((group) => group.name === select.value)
-      if (group !== undefined) {
-        const tBody = GroupGetter.getTBody()
-        PSelectBox.removeTBodyChild(tBody)
-
-        // // 選択したら選択してくださいを削除
-        // if (select.firstElementChild.id === env.id.defaultSelect) {
-        //     select.firstElementChild.remove()
-        // }
-
-        const tr = Tr.generate(group.accountList)
-        tBody.appendChild(tr)
-      }
-    })
-    return this.generate(groupList, selectGroupName)
-  },
   generate(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
     const select = PSelectBox.select()
     const span = PSelectBox.span()
@@ -47,11 +25,6 @@ const PSelectBox = {
     const select = document.createElement('select')
     select.id = env.id.select.select
     return select
-  },
-  removeTBodyChild(tBody: HTMLElement): void {
-    while (tBody.childElementCount) {
-      tBody.children[0].remove()
-    }
   },
   appendOption(
     select: HTMLSelectElement,
