@@ -16,7 +16,7 @@ const PAccountDomReader = {
 
     for (let i = 0; i < accountListDom.length; i++) {
       const accountDom = <HTMLLIElement>accountListDom[i]
-      if (!PAccountDomReader.isToAll(accountDom)) {
+      if (PAccountDomReader.isAccount(accountDom)) {
         const account: Account = PAccountDomReader.buildAccount(accountDom)
         accountList.value.push(account)
       }
@@ -45,8 +45,8 @@ const PAccountDomReader = {
   /**
    * CanDo
    */
-  isToAll(accountDOM: HTMLLIElement): boolean {
+  isAccount(accountDOM: HTMLLIElement): boolean {
     const index: string | undefined = accountDOM.dataset.cwuiLtValue
-    return index !== undefined || index === '0'
+    return index !== undefined && index !== 'toall'
   },
 }

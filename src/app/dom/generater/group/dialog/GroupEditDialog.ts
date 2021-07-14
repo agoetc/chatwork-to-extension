@@ -2,9 +2,14 @@ import { Group, GroupList } from '../../../../../domain/Group'
 import { ButtonField } from './ButtonField'
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
+import { CheckTable } from './CheckTable'
+import { AccountList } from '../../../../../domain/Account'
 
 export const GroupEditDialog = {
-  generate(groupList: GroupList): HTMLDialogElement {
+  generate(
+    groupList: GroupList,
+    toAccountList: AccountList
+  ): HTMLDialogElement {
     console.log(groupList)
     const groupDiv = document.createElement('div')
     groupDiv.appendChild(AddForm.generate(groupList))
@@ -14,7 +19,7 @@ export const GroupEditDialog = {
     // モーダルに要素を追加している
     const dialog: HTMLDialogElement = PGroupEditDialog.dialog()
     dialog.appendChild(groupDiv)
-    // dialog.appendChild(groupListDOMBuilder.settingTableDOM())
+    dialog.appendChild(CheckTable.generate(toAccountList))
 
     const buttonField = ButtonField.generate(dialog)
     dialog.appendChild(buttonField)

@@ -6,16 +6,18 @@ import { env } from '../../../../../env'
 const accountReader: AccountReader = AccountDomReader
 
 export const Tr = {
-  generate(inGroupAccountList: AccountList = { value: [] }) {
-    const toAccountList: AccountList = accountReader.getAccountList()
-    return PTr.fragment(inGroupAccountList, toAccountList)
+  generate(
+    toAccountList: AccountList,
+    inGroupAccountList: AccountList = { value: [] }
+  ): DocumentFragment {
+    return PTr.fragment(toAccountList, inGroupAccountList)
   },
 }
 
 const PTr = {
   fragment(
-    inGroupAccountList: AccountList,
-    accountList: AccountList
+    accountList: AccountList,
+    inGroupAccountList: AccountList
   ): DocumentFragment {
     const groupSettingTableBodyFragment = document.createDocumentFragment()
 
