@@ -9,4 +9,9 @@ export const Applier = {
       GroupButtonApplier.applyGroupButton(dialog)
     })
   },
+  reload(): Promise<void> {
+    return GroupStorageRepository.get().then((groupList) => {
+      DialogApplier.reload(groupList)
+    })
+  },
 }

@@ -1,9 +1,5 @@
 import { Account, AccountList } from '../../../../../domain/Account'
-import { AccountReader } from '../../../../../domain/reader/AccountReader'
-import { AccountDomReader } from '../../../../../adapter/dom/reader/AccountDomReader'
 import { env } from '../../../../../env'
-
-const accountReader: AccountReader = AccountDomReader
 
 export const Tr = {
   generate(
@@ -16,12 +12,12 @@ export const Tr = {
 
 const PTr = {
   fragment(
-    accountList: AccountList,
+    toAccountList: AccountList,
     inGroupAccountList: AccountList
   ): DocumentFragment {
     const groupSettingTableBodyFragment = document.createDocumentFragment()
 
-    accountList.value.forEach((account) => {
+    toAccountList.value.forEach((account) => {
       const tr = this.tr()
 
       tr.appendChild(this.iconTd(account))

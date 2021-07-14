@@ -12,6 +12,18 @@ export const GroupGetter = {
     )
     return Common.nullCheck(groupSelect)
   },
+  getGroupSelectSpan(): HTMLSpanElement {
+    const groupSelectSpan = <HTMLSpanElement>(
+      document.getElementById(env.id.select.span)
+    )
+    return Common.nullCheck(groupSelectSpan)
+  },
+  getSaveButton() {
+    const saveButtonSpan = <HTMLSpanElement>(
+      document.getElementById(env.id.saveButton.span)
+    )
+    return Common.nullCheck(saveButtonSpan)
+  },
   getCheckAccounts(): HTMLCollection {
     const checkAccounts = <HTMLCollection>(
       document.getElementsByClassName(env.class.checkBox)

@@ -5,7 +5,7 @@ import { Tr } from './Tr'
 export const CheckTable = {
   generate(
     toAccountList: AccountList,
-    checkedAccountList: AccountList = { value: [] }
+    checkedAccountList: AccountList
   ): HTMLDivElement {
     const table = document.createElement('table')
     const thead = document.createElement('thead')

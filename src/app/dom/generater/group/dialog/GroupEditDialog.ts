@@ -19,7 +19,7 @@ export const GroupEditDialog = {
     // モーダルに要素を追加している
     const dialog: HTMLDialogElement = PGroupEditDialog.dialog()
     dialog.appendChild(groupDiv)
-    dialog.appendChild(CheckTable.generate(toAccountList))
+    dialog.appendChild(CheckTable.generate(toAccountList, { value: [] }))
 
     const buttonField = ButtonField.generate(dialog)
     dialog.appendChild(buttonField)

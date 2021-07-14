@@ -4,14 +4,11 @@ export const ButtonField = {
   generate(dialog: HTMLDialogElement): HTMLDivElement {
     const buttonDiv = document.createElement('div')
     buttonDiv.className = '_cwDGFooter dialogContainer__footer'
-    buttonDiv.appendChild(PButtonField.groupSaveButton())
+    buttonDiv.appendChild(this.groupSaveButton())
     buttonDiv.appendChild(PButtonField.closeButton(dialog))
 
     return buttonDiv
   },
-}
-
-const PButtonField = {
   groupSaveButton() {
     const button = document.createElement('button')
     button.id = env.id.saveButton.button
@@ -32,6 +29,9 @@ const PButtonField = {
 
     return span
   },
+}
+
+const PButtonField = {
   closeButton(dialog: HTMLDialogElement): HTMLButtonElement {
     const button = document.createElement('button')
     button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'

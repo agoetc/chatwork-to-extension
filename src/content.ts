@@ -5,9 +5,9 @@ window.onload = () => setTimeout(listener, 1000)
 
 const listener = async () => {
   await Applier.apply()
-  setInterval(aa, 10000)
+  setInterval(aa, 5000)
 }
 
-const aa = () => {
+const aa = async () => {
   console.log(AccountService.getAccountList())
 }
