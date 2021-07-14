@@ -1,4 +1,4 @@
-import { EffectGroupButton } from '../effecter/EffectGroupButton'
+import { EffectGroupButton } from '../effecter/group/EffectGroupButton'
 
 export const GroupButtonApplier = {
   getToListFooter(): HTMLElement {

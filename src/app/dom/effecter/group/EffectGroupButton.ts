@@ -1,4 +1,4 @@
-import { GroupButton } from '../generater/GroupButton'
+import { GroupButton } from '../../generater/group/dialog/GroupButton'
 
 export const EffectGroupButton = {
   effect(dialog: HTMLDialogElement): HTMLAnchorElement {
