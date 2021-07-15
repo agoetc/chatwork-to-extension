@@ -1,4 +1,6 @@
 import { EffectGroupButton } from '../effecter/group/EffectGroupButton'
+import { DialogApplier } from './DialogApplier'
+import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 
 export const GroupButtonApplier = {
   getToListFooter(): HTMLElement {
@@ -10,8 +12,13 @@ export const GroupButtonApplier = {
       throw new DOMException()
     }
   },
-  applyGroupButton(dialog: HTMLDialogElement): void {
+  applyGroupButton(): void {
     const toListFooter = this.getToListFooter()
-    toListFooter.appendChild(EffectGroupButton.effect(dialog))
+    const groupButton = EffectGroupButton.effect(this.createDialogFunction())
+    toListFooter.appendChild(groupButton)
+  },
+  createDialogFunction(): () => Promise<HTMLDialogElement> {
+    return () =>
+      GroupStorageRepository.get().then((gl) => DialogApplier.apply(gl))
   },
 }

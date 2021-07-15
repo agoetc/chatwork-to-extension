@@ -8,20 +8,23 @@ export const AddForm = {
     const input = PAddForm.input()
     const button = PAddForm.button(groupList, input)
 
-    const span = PAddForm.span()
+    return PAddForm.span(input, datalist, button)
+  },
+}
+
+const PAddForm = {
+  span(
+    input: HTMLInputElement,
+    datalist: HTMLDataListElement,
+    button: HTMLButtonElement
+  ): HTMLSpanElement {
+    const span = document.createElement('span')
+    span.id = 'group-form-span'
 
     span.appendChild(input)
     span.appendChild(datalist)
     span.appendChild(button)
 
-    return span
-  },
-}
-
-const PAddForm = {
-  span(): HTMLSpanElement {
-    const span = document.createElement('span')
-    span.id = 'group-form-span'
     return span
   },
   datalist(groupList: GroupList): HTMLDataListElement {

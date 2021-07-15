@@ -9,9 +9,7 @@ export const DialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {
     const toAccountList = AccountDomReader.getAccountList()
     console.log(toAccountList)
-    const dialog = GroupEditDialog.generate(groupList, toAccountList)
-    document.body.appendChild(dialog)
-    return dialog
+    return GroupEditDialog.generate(groupList, toAccountList)
   },
   reload(groupList: GroupList) {
     console.log(groupList)

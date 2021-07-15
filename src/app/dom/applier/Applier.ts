@@ -3,11 +3,8 @@ import { GroupButtonApplier } from './GroupButtonApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 
 export const Applier = {
-  apply(): Promise<void> {
-    return GroupStorageRepository.get().then((groupList) => {
-      const dialog = DialogApplier.apply(groupList)
-      GroupButtonApplier.applyGroupButton(dialog)
-    })
+  apply(): void {
+    GroupButtonApplier.applyGroupButton()
   },
   reload(): Promise<void> {
     return GroupStorageRepository.get().then((groupList) => {

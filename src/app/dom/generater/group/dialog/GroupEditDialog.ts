@@ -1,4 +1,4 @@
-import { Group, GroupList } from '../../../../../domain/Group'
+import { GroupList } from '../../../../../domain/Group'
 import { ButtonField } from './ButtonField'
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
@@ -17,22 +17,25 @@ export const GroupEditDialog = {
     groupDiv.appendChild(SelectBox.generate(groupList))
     groupDiv.appendChild(PGroupEditDialog.deleteButton())
 
-    // モーダルに要素を追加している
-    const dialog: HTMLDialogElement = PGroupEditDialog.dialog()
-    dialog.appendChild(groupDiv)
-    dialog.appendChild(CheckTable.generate(toAccountList, { value: [] }))
+    const checkTable = CheckTable.generate(toAccountList, { value: [] })
 
-    const buttonField = ButtonField.generate(dialog)
-    dialog.appendChild(buttonField)
-
-    return dialog
+    return PGroupEditDialog.dialog(groupDiv, checkTable)
   },
 }
 
 const PGroupEditDialog = {
-  dialog(): HTMLDialogElement {
+  dialog(
+    groupDiv: HTMLDivElement,
+    checkTable: HTMLDivElement
+  ): HTMLDialogElement {
     const dialog = document.createElement('dialog')
     dialog.id = 'grouping-dialog'
+    const buttonField = ButtonField.generate(dialog)
+
+    dialog.appendChild(groupDiv)
+    dialog.appendChild(checkTable)
+
+    dialog.appendChild(buttonField)
     return dialog
   },
   deleteButton(): HTMLSpanElement {
