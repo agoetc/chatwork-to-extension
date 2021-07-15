@@ -5,15 +5,17 @@ import { SelectBox } from './SelectBox'
 import { CheckTable } from './CheckTable'
 import { AccountList } from '../../../../../domain/Account'
 import { env } from '../../../../../env'
+import { AddEffect } from '../../../effecter/group/dialog/AddForm'
 
 export const GroupEditDialog = {
   generate(
     groupList: GroupList,
-    toAccountList: AccountList
+    toAccountList: AccountList,
+    addEffect: (input: HTMLInputElement) => AddEffect
   ): HTMLDialogElement {
     console.log(groupList)
     const groupDiv = document.createElement('div')
-    groupDiv.appendChild(AddForm.generate(groupList))
+    groupDiv.appendChild(AddForm.generate(groupList, addEffect))
     groupDiv.appendChild(SelectBox.generate(groupList))
     groupDiv.appendChild(PGroupEditDialog.deleteButton())
 

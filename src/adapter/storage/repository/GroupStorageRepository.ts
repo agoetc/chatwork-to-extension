@@ -2,10 +2,48 @@ import { Group, GroupList, GroupRequest } from '../../../domain/Group'
 import { browser } from 'webextension-polyfill-ts'
 import { AccountList } from '../../../domain/Account'
 
-const PrivateGroupStorageRepository = {
-  getListByName(groupList: GroupList, name: string): Group | undefined {
-    return groupList.value.find((group) => group.name === name)
+export const GroupStorageRepository = {
+  delete(groupList: GroupList, groupName: string): Promise<void> {
+    groupList.value.filter((g) => g.name !== groupName)
+    return PGroupStorageRepository.save(groupList)
   },
+  get(): Promise<GroupList> {
+    return browser.storage.sync
+      .get('group')
+      .then((groupListObj) =>
+        PGroupStorageRepository.buildGroupListByObj(groupListObj)
+      )
+  },
+  addList(groupList: GroupList, req: GroupRequest): Promise<void> {
+    console.log(req)
+    const group: Group | undefined = groupList.value.find(
+      (group) => group.name === req.name
+    )
+    if (group === undefined) {
+      // グループ名が被っていない場合、新規に追加
+      groupList.value.push({
+        name: req.name,
+        accountList: req.accountList,
+      })
+      return PGroupStorageRepository.save(groupList)
+    } else {
+      // グループ名が被っている場合、古いAccountListと新しいAccountListで合成する
+      const mergedAccountList = AccountList.mergeAccountListRequest(
+        group.accountList,
+        req.accountList
+      )
+
+      groupList.value.push({
+        name: req.name,
+        accountList: mergedAccountList,
+      })
+
+      return PGroupStorageRepository.save(groupList)
+    }
+  },
+}
+
+const PGroupStorageRepository = {
   save(groupList: GroupList): Promise<void> {
     return browser.storage.sync.set({ group: GroupList.toObj(groupList) })
   },
@@ -25,48 +63,5 @@ const PrivateGroupStorageRepository = {
     }
 
     return groupList
-  },
-}
-
-export const GroupStorageRepository = {
-  delete(groupList: GroupList, groupName: string): Promise<void> {
-    groupList.value.filter((g) => g.name !== groupName)
-    return PrivateGroupStorageRepository.save(groupList)
-  },
-  get(): Promise<GroupList> {
-    return browser.storage.sync
-      .get('group')
-      .then((groupListObj) =>
-        PrivateGroupStorageRepository.buildGroupListByObj(groupListObj)
-      )
-  },
-  addList(groupList: GroupList, req: GroupRequest): Promise<void> {
-    // TODO: elseのときどうする？
-    console.log(req)
-    const group = PrivateGroupStorageRepository.getListByName(
-      groupList,
-      req.name
-    )
-    const existsGroupName = group !== undefined
-
-    if (groupList.value.length === 0 || !existsGroupName) {
-      groupList.value.push({
-        name: req.name,
-        accountList: req.accountList,
-      })
-      return PrivateGroupStorageRepository.save(groupList)
-    } else if (group !== undefined) {
-      const mergedAccountList = AccountList.mergeAccountListRequest(
-        group.accountList,
-        req.accountList
-      )
-      groupList.value.push({
-        name: req.name,
-        accountList: mergedAccountList,
-      })
-      return PrivateGroupStorageRepository.save(groupList)
-    } else {
-      return new Promise<void>(() => {})
-    }
   },
 }

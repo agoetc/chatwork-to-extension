@@ -1,14 +1,26 @@
 import { GroupList } from '../../../../../domain/Group'
-import { GroupService } from '../../../../service/GroupService'
 import { OptionFragment } from './OptionFragment'
+import {
+  AddEffect,
+  EffectAddForm,
+} from '../../../effecter/group/dialog/AddForm'
 
 export const AddForm = {
-  generate(groupList: GroupList): HTMLSpanElement {
+  generate(
+    groupList: GroupList,
+    addEffect: (input: HTMLInputElement) => AddEffect
+  ): HTMLSpanElement {
     const datalist = PAddForm.datalist(groupList)
     const input = PAddForm.input()
-    const button = PAddForm.button(groupList, input)
+    const button = EffectAddForm.effectAddButton(addEffect(input))
 
     return PAddForm.span(input, datalist, button)
+  },
+  addButton(): HTMLButtonElement {
+    const button = document.createElement('button')
+    button.className = '_cwDGButton  button btnPrimary'
+    button.textContent = '追加する'
+    return button
   },
 }
 
@@ -40,23 +52,5 @@ const PAddForm = {
     input.autocomplete = 'on'
     input.setAttribute('list', 'group-list-datalist')
     return input
-  },
-  button(groupList: GroupList, input: HTMLInputElement): HTMLButtonElement {
-    // 追加ボタン作成
-    const button = document.createElement('button')
-    button.className = '_cwDGButton  button btnPrimary'
-    button.textContent = '追加する'
-    button.addEventListener('click', () => {
-      GroupService.add(groupList, {
-        name: input.value,
-        accountList: { value: [] },
-      })
-        .then(() => (input.value = ''))
-        .catch((e) => {
-          console.log(e)
-          throw DOMException
-        })
-    })
-    return button
   },
 }

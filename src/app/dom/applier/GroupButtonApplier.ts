@@ -1,16 +1,11 @@
 import { EffectGroupButton } from '../effecter/group/EffectGroupButton'
 import { DialogApplier } from './DialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
+import { Common } from '../../../adapter/dom/getter/Common'
 
 export const GroupButtonApplier = {
   getToListFooter(): HTMLElement {
-    const toListFooter = document.getElementById('_toListFooter')
-    if (toListFooter) {
-      return toListFooter
-    } else {
-      // TODO
-      throw new DOMException()
-    }
+    return Common.nullCheck(document.getElementById('_toListFooter'))
   },
   applyGroupButton(): void {
     const toListFooter = this.getToListFooter()
