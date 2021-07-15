@@ -36,7 +36,9 @@ export const GroupStorageRepository = {
   get(): Promise<GroupList> {
     return browser.storage.sync
       .get('group')
-      .then((a) => PrivateGroupStorageRepository.buildGroupListByObj(a))
+      .then((groupListObj) =>
+        PrivateGroupStorageRepository.buildGroupListByObj(groupListObj)
+      )
   },
   addList(groupList: GroupList, req: GroupRequest): Promise<void> {
     // TODO: elseのときどうする？

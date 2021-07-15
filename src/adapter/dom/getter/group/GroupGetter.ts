@@ -30,4 +30,8 @@ export const GroupGetter = {
     )
     return Common.nullCheck(checkAccounts)
   },
+  getToList(): HTMLElement {
+    const toList = document.getElementById(env.id.toList)
+    return Common.nullCheck(toList)
+  },
 }
