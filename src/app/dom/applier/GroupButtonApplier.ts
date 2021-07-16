@@ -1,4 +1,4 @@
-import { EffectGroupButton } from '../effecter/group/EffectGroupButton'
+import { EffectGroupButton } from '../effecter/group/dialog/dialog/EffectGroupButton'
 import { DialogApplier } from './DialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 import { Common } from '../../../adapter/dom/getter/Common'

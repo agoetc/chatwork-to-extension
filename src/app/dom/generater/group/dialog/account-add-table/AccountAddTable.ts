@@ -1,8 +1,8 @@
-import { AccountList } from '../../../../../domain/Account'
-import { env } from '../../../../../env'
-import { Tr } from './Tr'
+import { AccountList } from '../../../../../../domain/Account'
+import { env } from '../../../../../../env'
+import { TableAccountRow } from './TableAccountRow'
 
-export const CheckTable = {
+export const AccountAddTable = {
   generate(
     toAccountList: AccountList,
     checkedAccountList: AccountList
@@ -11,8 +11,10 @@ export const CheckTable = {
     const thead = document.createElement('thead')
     const tbody = document.createElement('tbody')
 
-    thead.appendChild(PCheckTable.header())
-    tbody.appendChild(Tr.generate(toAccountList, checkedAccountList))
+    thead.appendChild(PAccountAddTable.header())
+    tbody.appendChild(
+      TableAccountRow.generate(toAccountList, checkedAccountList)
+    )
     tbody.id = env.id.tbody
 
     table.appendChild(thead)
@@ -26,7 +28,7 @@ export const CheckTable = {
   },
 }
 
-const PCheckTable = {
+const PAccountAddTable = {
   header(): HTMLTableRowElement {
     const iconTh = document.createElement('th')
     const nameTh = document.createElement('th')

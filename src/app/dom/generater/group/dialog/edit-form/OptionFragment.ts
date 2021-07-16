@@ -1,4 +1,4 @@
-import { GroupList } from '../../../../../domain/Group'
+import { GroupList } from '../../../../../../domain/Group'
 
 export const OptionFragment = {
   generate(groupList: GroupList, selectGroupName: string = '') {

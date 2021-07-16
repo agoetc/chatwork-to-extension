@@ -1,4 +1,4 @@
-import { AddForm } from '../../../generater/group/dialog/AddForm'
+import { AddForm } from '../../../../generater/group/dialog/edit-form/AddForm'
 
 export const EffectAddForm = {
   effectAddButton(addEffect: AddEffect): HTMLButtonElement {

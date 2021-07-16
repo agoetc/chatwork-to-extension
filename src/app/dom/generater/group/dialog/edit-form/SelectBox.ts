@@ -1,8 +1,8 @@
-import { Group, GroupList } from '../../../../../domain/Group'
-import { env } from '../../../../../env'
+import { Group, GroupList } from '../../../../../../domain/Group'
+import { env } from '../../../../../../env'
 import { OptionFragment } from './OptionFragment'
-import { GroupGetter } from '../../../../../adapter/dom/getter/group/GroupGetter'
-import { Tr } from './Tr'
+import { GroupGetter } from '../../../../../../adapter/dom/getter/group/GroupGetter'
+import { TableAccountRow } from '../account-add-table/TableAccountRow'
 
 export const SelectBox = {
   generate(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {

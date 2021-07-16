@@ -1,16 +1,16 @@
-import { Account, AccountList } from '../../../../../domain/Account'
-import { env } from '../../../../../env'
+import { Account, AccountList } from '../../../../../../domain/Account'
+import { env } from '../../../../../../env'
 
-export const Tr = {
+export const TableAccountRow = {
   generate(
     toAccountList: AccountList,
     inGroupAccountList: AccountList = { value: [] }
   ): DocumentFragment {
-    return PTr.fragment(toAccountList, inGroupAccountList)
+    return PTableAccountRow.fragment(toAccountList, inGroupAccountList)
   },
 }
 
-const PTr = {
+const PTableAccountRow = {
   fragment(
     toAccountList: AccountList,
     inGroupAccountList: AccountList

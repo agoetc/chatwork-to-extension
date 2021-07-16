@@ -1,7 +1,7 @@
-import { GroupList } from '../../../../../domain/Group'
-import { GroupGetter } from '../../../../../adapter/dom/getter/group/GroupGetter'
-import { Tr } from '../../../generater/group/dialog/Tr'
-import { SelectBox } from '../../../generater/group/dialog/SelectBox'
+import { GroupList } from '../../../../../../domain/Group'
+import { GroupGetter } from '../../../../../../adapter/dom/getter/group/GroupGetter'
+import { TableAccountRow } from '../../../../generater/group/dialog/account-add-table/TableAccountRow'
+import { SelectBox } from '../../../../generater/group/dialog/edit-form/SelectBox'
 
 export const EffectSelectBox = {
   effect(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
@@ -20,7 +20,7 @@ export const EffectSelectBox = {
         //     select.firstElementChild.remove()
         // }
 
-        const tr = Tr.generate(group.accountList)
+        const tr = TableAccountRow.generate(group.accountList)
         tBody.appendChild(tr)
       }
     })
