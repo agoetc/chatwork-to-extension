@@ -7,13 +7,15 @@
   "license": "MIT",
   "dependencies": {},
   "scripts": {
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test": "mocha ./eslint-rule/test"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/webpack": "^5.28.0",
     "copy-webpack-plugin": "^9.0.1",
     "eslint": "^7.30.0",
+    "mocha": "^9.0.2",
     "prettier": "^2.3.2",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.1.0",
