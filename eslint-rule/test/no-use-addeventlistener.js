@@ -7,9 +7,16 @@ tester.run(
   'not-use-addeventlistener',
   require('../rule/no-use-addeventlistener'),
   {
-    valid: [{ code: 'foo()' }, { code: 'hogehoge' }],
+    valid: [
+      { code: 'foo()' },
+      { code: 'hogehoge' },
+      { code: "document.createElement('button')" },
+    ],
     invalid: [
-      { code: 'addEventListener', errors: ['Do not use addEventListener'] },
+      {
+        code: "document.addEventListener('click', function() {})",
+        errors: ['Do not use addEventListener'],
+      },
     ],
   }
 )
