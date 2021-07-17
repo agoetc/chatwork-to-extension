@@ -2,12 +2,12 @@ import { env } from '../../../../../../env'
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
 import { GroupList } from '../../../../../../domain/Group'
-import { AddEffect } from '../../../../effecter/group/dialog/edit-form/AddForm'
+import { GroupAddButtonEffect } from '../../../../effecter/group/dialog/edit-form/GroupAddButton'
 
 export const GroupEditForm = {
   generate(
     groupList: GroupList,
-    addEffect: (input: HTMLInputElement) => AddEffect
+    addEffect: (input: HTMLInputElement) => GroupAddButtonEffect
   ): HTMLDivElement {
     const groupAddForm = AddForm.generate(groupList, addEffect)
     const groupSelectBox = SelectBox.generate(groupList)

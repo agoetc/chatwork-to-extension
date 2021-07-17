@@ -1,23 +1,20 @@
 import { GroupList } from '../../../../../../domain/Group'
 import { OptionFragment } from './OptionFragment'
-import { AddEffect, EffectAddForm } from '../../../../effecter/group/dialog/edit-form/AddForm'
+import {
+  GroupAddButtonEffect,
+  EffectAddButton,
+} from '../../../../effecter/group/dialog/edit-form/GroupAddButton'
 
 export const AddForm = {
   generate(
     groupList: GroupList,
-    addEffect: (input: HTMLInputElement) => AddEffect
+    addEffect: (input: HTMLInputElement) => GroupAddButtonEffect
   ): HTMLSpanElement {
     const datalist = PAddForm.datalist(groupList)
     const input = PAddForm.input()
-    const button = EffectAddForm.effectAddButton(addEffect(input))
+    const button = EffectAddButton.generate(addEffect(input))
 
     return PAddForm.span(input, datalist, button)
-  },
-  addButton(): HTMLButtonElement {
-    const button = document.createElement('button')
-    button.className = '_cwDGButton  button btnPrimary'
-    button.textContent = '追加する'
-    return button
   },
 }
 

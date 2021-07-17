@@ -1,8 +1,8 @@
-import { GroupButton } from '../../../../generater/group/dialog/dialog/GroupButton'
+export type CreateDialogFunction = () => Promise<HTMLDialogElement>
 
 export const EffectGroupButton = {
-  effect(createDialogFunction: CreateDialogFunction): HTMLAnchorElement {
-    const button = GroupButton.generate()
+  generate(createDialogFunction: CreateDialogFunction): HTMLAnchorElement {
+    const button = PGroupButton.generate()
     button.addEventListener('click', () => {
       createDialogFunction()
         .then((dialog) => {
@@ -17,4 +17,10 @@ export const EffectGroupButton = {
   },
 }
 
-export type CreateDialogFunction = () => Promise<HTMLDialogElement>
+const PGroupButton = {
+  generate(): HTMLAnchorElement {
+    const groupingButton: HTMLAnchorElement = document.createElement('a')
+    groupingButton.innerText = 'グループの設定'
+    return groupingButton
+  },
+}

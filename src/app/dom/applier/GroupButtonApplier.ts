@@ -9,7 +9,7 @@ export const GroupButtonApplier = {
   },
   applyGroupButton(): void {
     const toListFooter = this.getToListFooter()
-    const groupButton = EffectGroupButton.effect(this.createDialogFunction())
+    const groupButton = EffectGroupButton.generate(this.createDialogFunction())
     toListFooter.appendChild(groupButton)
   },
   createDialogFunction(): () => Promise<HTMLDialogElement> {

@@ -5,7 +5,7 @@ import { GroupGetter } from '../../../adapter/dom/getter/group/GroupGetter'
 import { SelectBox } from '../generater/group/dialog/edit-form/SelectBox'
 import { ButtonField } from '../generater/group/dialog/dialog/ButtonField'
 import { GroupService } from '../../service/GroupService'
-import { AddEffect } from '../effecter/group/dialog/edit-form/AddForm'
+import { GroupAddButtonEffect } from '../effecter/group/dialog/edit-form/GroupAddButton'
 
 export const DialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {
@@ -31,7 +31,7 @@ export const DialogApplier = {
 }
 
 const PDialogApplier = {
-  addEffect(groupList: GroupList): (input: HTMLInputElement) => AddEffect {
+  addEffect(groupList: GroupList): (input: HTMLInputElement) => GroupAddButtonEffect {
     return (input: HTMLInputElement) => () =>
       GroupService.add(groupList, {
         name: input.value,
