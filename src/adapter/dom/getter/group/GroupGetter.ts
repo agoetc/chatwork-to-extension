@@ -7,27 +7,19 @@ export const GroupGetter = {
     return Common.nullCheck(tBody)
   },
   getGroupSelect(): HTMLSelectElement {
-    const groupSelect = <HTMLSelectElement>(
-      document.getElementById(env.id.select.select)
-    )
+    const groupSelect = <HTMLSelectElement>document.getElementById(env.id.select.select)
     return Common.nullCheck(groupSelect)
   },
   getGroupSelectSpan(): HTMLSpanElement {
-    const groupSelectSpan = <HTMLSpanElement>(
-      document.getElementById(env.id.select.span)
-    )
+    const groupSelectSpan = <HTMLSpanElement>document.getElementById(env.id.select.span)
     return Common.nullCheck(groupSelectSpan)
   },
   getSaveButton() {
-    const saveButtonSpan = <HTMLSpanElement>(
-      document.getElementById(env.id.saveButton.span)
-    )
+    const saveButtonSpan = <HTMLSpanElement>document.getElementById(env.id.saveButton.span)
     return Common.nullCheck(saveButtonSpan)
   },
   getCheckAccounts(): HTMLCollection {
-    const checkAccounts = <HTMLCollection>(
-      document.getElementsByClassName(env.class.checkBox)
-    )
+    const checkAccounts = <HTMLCollection>document.getElementsByClassName(env.class.checkBox)
     return Common.nullCheck(checkAccounts)
   },
   getToList(): HTMLElement {

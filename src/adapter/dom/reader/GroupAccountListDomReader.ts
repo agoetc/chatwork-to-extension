@@ -7,8 +7,7 @@ export const GroupAccountListDomReader = {
     const select = GroupGetter.getGroupSelect()
     const checkedAccountList = GroupGetter.getCheckAccounts()
 
-    const accountList: AccountList =
-      AccountListElement.buildAccountList(checkedAccountList)
+    const accountList: AccountList = AccountListElement.buildAccountList(checkedAccountList)
 
     return {
       name: select.name,
@@ -34,11 +33,7 @@ const AccountListElement = {
     const imagePath = accountElement.dataset.imagePath
     const name = accountElement.dataset.name
 
-    if (
-      accountId !== undefined &&
-      imagePath !== undefined &&
-      name !== undefined
-    ) {
+    if (accountId !== undefined && imagePath !== undefined && name !== undefined) {
       return {
         accountId: AccountId.fromString(accountId),
         imagePath: imagePath,

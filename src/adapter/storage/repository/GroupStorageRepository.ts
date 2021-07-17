@@ -10,15 +10,11 @@ export const GroupStorageRepository = {
   get(): Promise<GroupList> {
     return browser.storage.sync
       .get('group')
-      .then((groupListObj) =>
-        PGroupStorageRepository.buildGroupListByObj(groupListObj)
-      )
+      .then((groupListObj) => PGroupStorageRepository.buildGroupListByObj(groupListObj))
   },
   addList(groupList: GroupList, req: GroupRequest): Promise<void> {
     console.log(req)
-    const group: Group | undefined = groupList.value.find(
-      (group) => group.name === req.name
-    )
+    const group: Group | undefined = groupList.value.find((group) => group.name === req.name)
     if (group === undefined) {
       // グループ名が被っていない場合、新規に追加
       groupList.value.push({

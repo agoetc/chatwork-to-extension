@@ -26,14 +26,8 @@ const PSelectBox = {
     select.id = env.id.select.select
     return select
   },
-  appendOption(
-    select: HTMLSelectElement,
-    groupList: GroupList,
-    selectGroupName: string
-  ) {
-    const haveGroupName = groupList.value.some(
-      (g) => g.name === selectGroupName
-    )
+  appendOption(select: HTMLSelectElement, groupList: GroupList, selectGroupName: string) {
+    const haveGroupName = groupList.value.some((g) => g.name === selectGroupName)
     if (!haveGroupName) {
       const defaultOption = this.defaultOption()
       select.appendChild(defaultOption)

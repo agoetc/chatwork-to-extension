@@ -13,7 +13,6 @@ export const GroupButtonApplier = {
     toListFooter.appendChild(groupButton)
   },
   createDialogFunction(): () => Promise<HTMLDialogElement> {
-    return () =>
-      GroupStorageRepository.get().then((gl) => DialogApplier.apply(gl))
+    return () => GroupStorageRepository.get().then((gl) => DialogApplier.apply(gl))
   },
 }

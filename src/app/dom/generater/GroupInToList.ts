@@ -10,10 +10,7 @@ export const GroupInToList = {
     const groupToList = document.createElement('div')
     groupToList.id = env.id.toList
     const toAccountList = AccountDomReader.getAccountList()
-    const filteredGroupList = PGroupTnToList.filterGroupList(
-      groupList,
-      toAccountList
-    )
+    const filteredGroupList = PGroupTnToList.filterGroupList(groupList, toAccountList)
 
     const fragment = PGroupTnToList.groupToFragment(filteredGroupList)
     groupToList.appendChild(fragment)
@@ -57,15 +54,10 @@ const PGroupTnToList = {
     textArea.focus()
   },
   // Chat内に入っているAccountに絞る
-  squeezeAccountOfInChat(
-    group: Group,
-    toAccountList: AccountList
-  ): AccountList {
+  squeezeAccountOfInChat(group: Group, toAccountList: AccountList): AccountList {
     return {
       value: toAccountList.value.filter((toAccount) => {
-        group.accountList.value.some(
-          (account) => account.accountId === toAccount.accountId
-        )
+        group.accountList.value.some((account) => account.accountId === toAccount.accountId)
       }),
     }
   },
@@ -73,10 +65,7 @@ const PGroupTnToList = {
   filterGroupList(groupList: GroupList, toAccountList: AccountList): GroupList {
     const groups: Group[] = groupList.value
       .map((group) => {
-        const inChatAccount = PGroupTnToList.squeezeAccountOfInChat(
-          group,
-          toAccountList
-        )
+        const inChatAccount = PGroupTnToList.squeezeAccountOfInChat(group, toAccountList)
         return {
           name: group.name,
           accountList: inChatAccount,

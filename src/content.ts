@@ -31,10 +31,7 @@ const hoge = {
       }
 
       GroupStorageRepository.get().then((groupList) => {
-        toolTipList.insertBefore(
-          GroupInToList.generate(groupList),
-          toolTipList.children[1]
-        )
+        toolTipList.insertBefore(GroupInToList.generate(groupList), toolTipList.children[1])
       })
     })
 

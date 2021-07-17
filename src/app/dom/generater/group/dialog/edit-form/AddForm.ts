@@ -1,9 +1,6 @@
 import { GroupList } from '../../../../../../domain/Group'
 import { OptionFragment } from './OptionFragment'
-import {
-  AddEffect,
-  EffectAddForm,
-} from '../../../../effecter/group/dialog/edit-form/AddForm'
+import { AddEffect, EffectAddForm } from '../../../../effecter/group/dialog/edit-form/AddForm'
 
 export const AddForm = {
   generate(

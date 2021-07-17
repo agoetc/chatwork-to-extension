@@ -19,10 +19,7 @@ export const GroupEditDialog = {
 }
 
 const PGroupEditDialog = {
-  dialog(
-    groupEditDiv: HTMLDivElement,
-    checkTable: HTMLDivElement
-  ): HTMLDialogElement {
+  dialog(groupEditDiv: HTMLDivElement, checkTable: HTMLDivElement): HTMLDialogElement {
     const dialog = document.createElement('dialog')
     dialog.id = 'grouping-dialog'
     const buttonField = ButtonField.generate(dialog)

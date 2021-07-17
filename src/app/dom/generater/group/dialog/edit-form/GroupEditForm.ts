@@ -13,11 +13,7 @@ export const GroupEditForm = {
     const groupSelectBox = SelectBox.generate(groupList)
     const groupDeleteBox = PGroupEditForm.deleteButton()
 
-    return PGroupEditForm.groupEditDiv(
-      groupAddForm,
-      groupSelectBox,
-      groupDeleteBox
-    )
+    return PGroupEditForm.groupEditDiv(groupAddForm, groupSelectBox, groupDeleteBox)
   },
 }
 

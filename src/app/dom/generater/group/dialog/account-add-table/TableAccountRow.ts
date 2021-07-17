@@ -11,10 +11,7 @@ export const TableAccountRow = {
 }
 
 const PTableAccountRow = {
-  fragment(
-    toAccountList: AccountList,
-    inGroupAccountList: AccountList
-  ): DocumentFragment {
+  fragment(toAccountList: AccountList, inGroupAccountList: AccountList): DocumentFragment {
     const groupSettingTableBodyFragment = document.createDocumentFragment()
 
     toAccountList.value.forEach((account) => {
@@ -57,10 +54,7 @@ const PTableAccountRow = {
 
     return nameTd
   },
-  groupTd(
-    account: Account,
-    inGroupAccountList: AccountList
-  ): HTMLTableDataCellElement {
+  groupTd(account: Account, inGroupAccountList: AccountList): HTMLTableDataCellElement {
     const groupTd = document.createElement('td')
     const input = document.createElement('input')
 
