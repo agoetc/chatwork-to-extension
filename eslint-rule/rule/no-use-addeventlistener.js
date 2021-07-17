@@ -1,11 +1,15 @@
 'use strict'
 
+const whiteDir = 'app/dom/effecter'
+
 module.exports = {
-  create(content) {
+  create(context) {
     return {
       Identifier(node) {
-        if (node.name === 'addEventListener') {
-          content.report(node, 'Do not use addEventListener')
+        const isNotEffecter = context.getFilename().indexOf(whiteDir) === -1
+
+        if (node.name === 'addEventListener' && isNotEffecter) {
+          context.report(node, 'Do not use addEventListener')
         }
       },
     }
