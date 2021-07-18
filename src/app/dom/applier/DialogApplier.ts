@@ -33,7 +33,7 @@ export const DialogApplier = {
 const PDialogApplier = {
   addEffect(groupList: GroupList): (input: HTMLInputElement) => GroupAddButtonEffect {
     return (input: HTMLInputElement) => () =>
-      GroupService.add(groupList, {
+      GroupService.addGroup(groupList, {
         name: input.value,
         accountList: { value: [] },
       })

@@ -10,18 +10,16 @@ export interface GroupList {
   value: Group[]
 }
 
-export const GroupList = {
-  toObj(groupList: GroupList) {
-    const object: any = {} // TODO: delete any
-    groupList.value.forEach((group) => {
-      object[group.name] = {}
-      object[group.name]['accountList'] = group.accountList.value
-    })
-    return object
-  },
-}
-
 export interface GroupRequest {
   name: string
   accountList: AccountList
+}
+
+export const GroupRequest = {
+  toGroup(req: GroupRequest): Group {
+    return {
+      name: req.name,
+      accountList: req.accountList,
+    }
+  },
 }

@@ -5,7 +5,7 @@ export const EffectAddButton = {
     const button = PEffectAddButton.generate()
     button.addEventListener('click', () => {
       addEffect()
-        .then(() => console.log('hoge'))
+        .then(() => console.log('saved group'))
         .catch((e) => {
           throw e
         })
