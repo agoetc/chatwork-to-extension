@@ -6,21 +6,13 @@ import { GroupEditForm } from '../edit-form/GroupEditForm'
 import { GroupAddButtonEffect } from '../../../../effector/group/dialog/edit-form/GroupAddButton'
 import { GroupDeleteButtonEffect } from '../../../../effector/group/dialog/edit-form/GroupDeleteButton'
 
-export const GroupEditDialog = {
-  generate(
-    groupList: GroupList,
-    toAccountList: AccountList,
-    addEffect: (input: HTMLInputElement) => GroupAddButtonEffect,
-    deleteEffect: GroupDeleteButtonEffect
-  ): HTMLDialogElement {
-    const groupEditDiv = GroupEditForm.generate(groupList, addEffect, deleteEffect)
-    const checkTable = AccountAddTable.generate(toAccountList, { value: [] })
-
-    return PGroupEditDialog.dialog(groupEditDiv, checkTable)
+export const GroupingDialog = {
+  generate(groupEditForm: HTMLDivElement, accountAddTable: HTMLDivElement): HTMLDialogElement {
+    return PGroupingDialog.dialog(groupEditForm, accountAddTable)
   },
 }
 
-const PGroupEditDialog = {
+const PGroupingDialog = {
   dialog(groupEditDiv: HTMLDivElement, checkTable: HTMLDivElement): HTMLDialogElement {
     const dialog = document.createElement('dialog')
     dialog.id = 'grouping-dialog'

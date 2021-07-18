@@ -1,5 +1,5 @@
-import { DialogApplier } from './DialogApplier'
-import { GroupButtonApplier } from './GroupButtonApplier'
+import { GroupingDialogApplier } from './group/dialog/GroupingDialogApplier'
+import { GroupButtonApplier } from './group/GroupButtonApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 
 export const Applier = {
@@ -8,7 +8,7 @@ export const Applier = {
   },
   reload(): Promise<void> {
     return GroupStorageRepository.get().then((groupList) => {
-      DialogApplier.reload(groupList)
+      GroupingDialogApplier.reload(groupList)
     })
   },
 }
