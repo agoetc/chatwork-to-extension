@@ -28,6 +28,7 @@ const PGroupService = {
   findByGroupName(groupList: GroupList, name: string): Group | undefined {
     return groupList.value.find((group) => group.name === name)
   },
+  // TODO あんまキレイじゃない
   buildSaveGroup(groupList: GroupList, req: GroupRequest): GroupList {
     const group = PGroupService.findByGroupName(groupList, req.name)
     if (group !== undefined) {
@@ -35,11 +36,16 @@ const PGroupService = {
         group.accountList,
         req.accountList
       )
-      groupList.value.push({
-        name: group.name,
-        accountList: mergedAccountList,
+      const saveGroupList = groupList.value.map((group) => {
+        if (group.name === req.name) {
+          return {
+            name: group.name,
+            accountList: mergedAccountList,
+          }
+        } else return group
       })
-      return groupList
+
+      return { value: saveGroupList }
     } else {
       groupList.value.push(GroupRequest.toGroup(req))
       return groupList

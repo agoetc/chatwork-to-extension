@@ -5,28 +5,26 @@ import { GroupGetter } from '../getter/GroupGetter'
 export const GroupAccountListDomReader = {
   buildRequestByAccountAddTable(): GroupRequest {
     const select = GroupGetter.getGroupSelect()
-    const checkedAccountList = GroupGetter.getCheckedAccountList()
+    const accountListElement = GroupGetter.getCheckedAccountList()
 
-    const accountList: AccountList = AccountListElement.buildAccountList(checkedAccountList)
+    const accountList: AccountList = AccountListElement.buildCheckedAccountList(accountListElement)
 
     return {
-      name: select.name,
+      name: select.value,
       accountList: accountList,
     }
   },
 }
 
 const AccountListElement = {
-  buildAccountList(accountListElement: HTMLCollectionOf<HTMLInputElement>): AccountList {
-    const accountList: AccountList = { value: [] }
+  buildCheckedAccountList(accountListElement: HTMLCollectionOf<HTMLInputElement>): AccountList {
+    const checkedAccountList = Array.from(accountListElement)
+      .filter((accountElement) => accountElement.checked)
+      .map((accountElement) => {
+        return this.buildAccount(accountElement)
+      })
 
-    for (let i = 0; i < accountListElement.length; i++) {
-      const checkedAccountElement = accountListElement[i]
-      const checkedAccount = this.buildAccount(checkedAccountElement)
-      accountList.value.push(checkedAccount)
-    }
-
-    return accountList
+    return { value: checkedAccountList }
   },
   buildAccount(accountElement: HTMLInputElement): Account {
     const accountId = accountElement.dataset.aId
