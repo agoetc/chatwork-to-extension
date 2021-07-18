@@ -3,9 +3,9 @@ import { GroupRequest } from '../../../../domain/Group'
 import { GroupGetter } from '../getter/GroupGetter'
 
 export const GroupAccountListDomReader = {
-  getRequest(): GroupRequest {
+  buildRequestByAccountAddTable(): GroupRequest {
     const select = GroupGetter.getGroupSelect()
-    const checkedAccountList = GroupGetter.getCheckAccounts()
+    const checkedAccountList = GroupGetter.getCheckedAccountList()
 
     const accountList: AccountList = AccountListElement.buildAccountList(checkedAccountList)
 
@@ -17,11 +17,11 @@ export const GroupAccountListDomReader = {
 }
 
 const AccountListElement = {
-  buildAccountList(accountListElement: HTMLCollection): AccountList {
+  buildAccountList(accountListElement: HTMLCollectionOf<HTMLInputElement>): AccountList {
     const accountList: AccountList = { value: [] }
 
     for (let i = 0; i < accountListElement.length; i++) {
-      const checkedAccountElement = <HTMLInputElement>accountListElement[i]
+      const checkedAccountElement = accountListElement[i]
       const checkedAccount = this.buildAccount(checkedAccountElement)
       accountList.value.push(checkedAccount)
     }
@@ -29,7 +29,7 @@ const AccountListElement = {
     return accountList
   },
   buildAccount(accountElement: HTMLInputElement): Account {
-    const accountId = accountElement.dataset.aid
+    const accountId = accountElement.dataset.aId
     const imagePath = accountElement.dataset.imagePath
     const name = accountElement.dataset.name
 
@@ -40,6 +40,7 @@ const AccountListElement = {
         name: name,
       }
     } else {
+      console.log(accountElement.dataset)
       throw DOMException
     }
   },

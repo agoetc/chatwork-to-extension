@@ -2,7 +2,7 @@ import { AccountService } from './app/service/AccountService'
 import { Applier } from './app/dom/applier/Applier'
 import { GroupGetter } from './adapter/dom/group/getter/GroupGetter'
 import { GroupStorageRepository } from './adapter/storage/repository/GroupStorageRepository'
-import { GroupInToList } from './app/dom/generater/GroupInToList'
+import { GroupInToList } from './app/dom/generater/original/GroupInToList'
 import { TextAreaDomGetter } from './adapter/dom/original/getter/TextAreaDomGetter'
 import { ToListDomGetter } from './adapter/dom/original/getter/ToListDomGetter'
 

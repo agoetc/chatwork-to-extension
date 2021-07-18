@@ -1,33 +1,16 @@
-import { env } from '../../../../../../env'
+import {
+  AddAccountListEffect,
+  EffectAccountSaveButton,
+} from '../../../../effector/group/dialog/dialog/EffectAccountSaveButton'
 
 export const ButtonField = {
-  generate(dialog: HTMLDialogElement): HTMLDivElement {
+  generate(dialog: HTMLDialogElement, addAccountListEffect: AddAccountListEffect): HTMLDivElement {
     const buttonDiv = document.createElement('div')
     buttonDiv.className = '_cwDGFooter dialogContainer__footer'
-    buttonDiv.appendChild(this.groupSaveButton())
+    buttonDiv.appendChild(EffectAccountSaveButton.effect(addAccountListEffect))
     buttonDiv.appendChild(PButtonField.closeButton(dialog))
 
     return buttonDiv
-  },
-  groupSaveButton() {
-    const button = document.createElement('button')
-    button.id = env.id.saveButton.button
-    button.className = '_cwDGButton  button btnPrimary'
-
-    button.textContent = '保存する'
-    button.addEventListener('click', () => {
-      console.log('save')
-      // if (!state.isDefaultSelect) {
-      //     const req = GroupRequest.buildByCheckBox()
-      //     this.groupList.addGroup(req)
-      // }
-    })
-
-    const span = document.createElement('span')
-    span.id = env.id.saveButton.span
-    span.appendChild(button)
-
-    return span
   },
 }
 

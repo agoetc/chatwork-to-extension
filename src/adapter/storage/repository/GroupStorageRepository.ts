@@ -24,7 +24,7 @@ export const GroupStorageRepository = {
 const PGroupStorageRepository = {
   buildGroupListByObj(result: { [key: string]: any }): GroupList {
     if (!result.hasOwnProperty(saveKey)) {
-      console.log('empty getter')
+      console.log('empty group')
       return { value: [] }
     }
     return result[saveKey] as GroupList
