@@ -2,7 +2,7 @@ import { env } from '../../../../../../env'
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
 import { GroupList } from '../../../../../../domain/Group'
-import { GroupAddButtonEffect } from '../../../../effecter/group/dialog/edit-form/GroupAddButton'
+import { GroupAddButtonEffect } from '../../../../effector/group/dialog/edit-form/GroupAddButton'
 
 export const GroupEditForm = {
   generate(

@@ -3,7 +3,7 @@ import { ButtonField } from './ButtonField'
 import { AccountAddTable } from '../account-add-table/AccountAddTable'
 import { AccountList } from '../../../../../../domain/Account'
 import { GroupEditForm } from '../edit-form/GroupEditForm'
-import { GroupAddButtonEffect } from '../../../../effecter/group/dialog/edit-form/GroupAddButton'
+import { GroupAddButtonEffect } from '../../../../effector/group/dialog/edit-form/GroupAddButton'
 
 export const GroupEditDialog = {
   generate(

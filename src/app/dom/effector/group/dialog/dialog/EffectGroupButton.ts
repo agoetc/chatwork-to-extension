@@ -1,7 +1,7 @@
 export type CreateDialogFunction = () => Promise<HTMLDialogElement>
 
 export const EffectGroupButton = {
-  generate(createDialogFunction: CreateDialogFunction): HTMLAnchorElement {
+  effect(createDialogFunction: CreateDialogFunction): HTMLAnchorElement {
     const button = PGroupButton.generate()
     button.addEventListener('click', () => {
       createDialogFunction()

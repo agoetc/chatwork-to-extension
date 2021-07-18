@@ -3,7 +3,7 @@ import { OptionFragment } from './OptionFragment'
 import {
   GroupAddButtonEffect,
   EffectAddButton,
-} from '../../../../effecter/group/dialog/edit-form/GroupAddButton'
+} from '../../../../effector/group/dialog/edit-form/GroupAddButton'
 
 export const AddForm = {
   generate(
@@ -12,7 +12,7 @@ export const AddForm = {
   ): HTMLSpanElement {
     const datalist = PAddForm.datalist(groupList)
     const input = PAddForm.input()
-    const button = EffectAddButton.generate(addEffect(input))
+    const button = EffectAddButton.effect(addEffect(input))
 
     return PAddForm.span(input, datalist, button)
   },

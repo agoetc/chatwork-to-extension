@@ -1,7 +1,7 @@
 export type GroupAddButtonEffect = () => Promise<void>
 
 export const EffectAddButton = {
-  generate(addEffect: GroupAddButtonEffect): HTMLButtonElement {
+  effect(addEffect: GroupAddButtonEffect): HTMLButtonElement {
     const button = PEffectAddButton.generate()
     button.addEventListener('click', () => {
       addEffect()
