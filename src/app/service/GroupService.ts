@@ -19,6 +19,9 @@ export const GroupService = {
       return GroupStorageRepository.save(saveGroupList)
     }
   },
+  deleteGroup(groupList: GroupList, groupName: string): Promise<void> {
+    return GroupStorageRepository.delete(groupList, groupName)
+  },
 }
 
 const PGroupService = {

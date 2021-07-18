@@ -1,17 +1,21 @@
-import { env } from '../../../../../../env'
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
 import { GroupList } from '../../../../../../domain/Group'
 import { GroupAddButtonEffect } from '../../../../effector/group/dialog/edit-form/GroupAddButton'
+import {
+  GroupDeleteButton,
+  GroupDeleteButtonEffect,
+} from '../../../../effector/group/dialog/edit-form/GroupDeleteButton'
 
 export const GroupEditForm = {
   generate(
     groupList: GroupList,
-    addEffect: (input: HTMLInputElement) => GroupAddButtonEffect
+    addEffect: (input: HTMLInputElement) => GroupAddButtonEffect,
+    deleteEffect: GroupDeleteButtonEffect
   ): HTMLDivElement {
     const groupAddForm = AddForm.generate(groupList, addEffect)
     const groupSelectBox = SelectBox.generate(groupList)
-    const groupDeleteBox = PGroupEditForm.deleteButton()
+    const groupDeleteBox = GroupDeleteButton.effect(deleteEffect)
 
     return PGroupEditForm.groupEditDiv(groupAddForm, groupSelectBox, groupDeleteBox)
   },
@@ -29,24 +33,5 @@ const PGroupEditForm = {
     groupDiv.appendChild(groupDeleteButton)
 
     return groupDiv
-  },
-  deleteButton(): HTMLSpanElement {
-    const button = document.createElement('button')
-    button.id = env.id.saveButton.button
-    button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'
-
-    button.textContent = '削除する'
-    button.addEventListener('click', () => {
-      // if (!state.isDefaultSelect) {
-      //   const groupName = document.getElementById(env.id.select.select).value
-      //   this.groupList.deleteGroup(groupName)
-      // }
-    })
-
-    const span = document.createElement('span')
-    span.id = env.id.deleteButton.button
-    span.appendChild(button)
-
-    return span
   },
 }
