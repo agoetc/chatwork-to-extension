@@ -1,11 +1,11 @@
 import { Account, AccountId, AccountList } from '../../../../domain/Account'
 import { AccountReader } from '../../../../domain/reader/AccountReader'
-import { AccountDomGetter } from '../getter/AccountDomGetter'
+import { ToListDomGetter } from '../getter/ToListDomGetter'
 
 export const AccountDomReader: AccountReader = {
   /** CanDo **/
   getAccountList(): AccountList {
-    const accountListDom = AccountDomGetter.getAccountListFromTo()
+    const accountListDom = ToListDomGetter.getAccountListFromTo()
     return PAccountDomReader.buildAccountList(accountListDom)
   },
 }

@@ -10,5 +10,6 @@ module.exports = {
   plugins: ['rulesdir'],
   rules: {
     'rulesdir/no-use-addeventlistener': 'error',
+    'rulesdir/no-use-getelement': 'error',
   },
 }

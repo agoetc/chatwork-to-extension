@@ -4,6 +4,7 @@ import { GroupGetter } from './adapter/dom/group/getter/GroupGetter'
 import { GroupStorageRepository } from './adapter/storage/repository/GroupStorageRepository'
 import { GroupInToList } from './app/dom/generater/GroupInToList'
 import { TextAreaDomGetter } from './adapter/dom/original/getter/TextAreaDomGetter'
+import { ToListDomGetter } from './adapter/dom/original/getter/ToListDomGetter'
 
 window.onload = () => setTimeout(listener, 1000)
 
@@ -19,8 +20,8 @@ const aa = async () => {
 
 const hoge = {
   observeToList() {
-    const toList = TextAreaDomGetter.getToList()
-    const toolTipList = TextAreaDomGetter.getToolTipList()
+    const toList = ToListDomGetter.getToList()
+    const toolTipList = ToListDomGetter.getToolTipList()
 
     const observer = new MutationObserver(() => {
       // 既にGroupのtoListが生成されていればなにもしない

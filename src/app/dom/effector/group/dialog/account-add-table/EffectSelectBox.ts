@@ -9,8 +9,8 @@ export const EffectSelectBox = {
     span.addEventListener('change', () => {
       // state.isDefaultSelect = false
       // TODO
-      const select: HTMLSelectElement = span.getElementsByTagName('select')[0]
-      const group = groupList.value.find((group) => group.name === select.value)
+      const selectGroup: HTMLSelectElement = GroupGetter.getGroupSelect()
+      const group = groupList.value.find((group) => group.name === selectGroup.value)
       if (group !== undefined) {
         const tBody = GroupGetter.getTBody()
         PEffectSelectBox.removeTBodyChild(tBody)
