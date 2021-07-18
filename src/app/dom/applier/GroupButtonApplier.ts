@@ -1,7 +1,7 @@
 import { EffectGroupButton } from '../effector/group/dialog/dialog/EffectGroupButton'
 import { DialogApplier } from './DialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
-import { Common } from '../../../adapter/dom/getter/Common'
+import { Common } from '../../../adapter/dom/Common'
 
 export const GroupButtonApplier = {
   getToListFooter(): HTMLElement {

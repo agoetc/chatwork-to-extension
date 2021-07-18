@@ -1,4 +1,4 @@
-import { AccountDomReader } from '../adapter/dom/reader/AccountDomReader'
+import { AccountDomReader } from '../adapter/dom/original/reader/AccountDomReader'
 import { ListObject, ValueObject } from './Common'
 
 export interface Account {

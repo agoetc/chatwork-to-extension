@@ -1,6 +1,6 @@
-import { Account, AccountId, AccountList } from '../../../domain/Account'
-import { GroupRequest } from '../../../domain/Group'
-import { GroupGetter } from '../getter/group/GroupGetter'
+import { Account, AccountId, AccountList } from '../../../../domain/Account'
+import { GroupRequest } from '../../../../domain/Group'
+import { GroupGetter } from '../getter/GroupGetter'
 
 export const GroupAccountListDomReader = {
   getRequest(): GroupRequest {

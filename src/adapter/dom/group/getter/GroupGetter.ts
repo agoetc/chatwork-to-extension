@@ -1,5 +1,5 @@
 import { env } from '../../../../env'
-import { Common } from '../Common'
+import { Common } from '../../Common'
 
 export const GroupGetter = {
   getTBody(): HTMLTableElement {

@@ -1,8 +1,8 @@
 import { env } from '../../../env'
 import { Group, GroupList } from '../../../domain/Group'
 import { AccountList } from '../../../domain/Account'
-import { AccountDomReader } from '../../../adapter/dom/reader/AccountDomReader'
-import { TextAreaDomGetter } from '../../../adapter/dom/getter/TextAreaDomGetter'
+import { AccountDomReader } from '../../../adapter/dom/original/reader/AccountDomReader'
+import { TextAreaDomGetter } from '../../../adapter/dom/original/getter/TextAreaDomGetter'
 
 // to一覧に追加する、Group一覧のDom
 export const GroupInToList = {

@@ -25,7 +25,7 @@ const PAddForm = {
     button: HTMLButtonElement
   ): HTMLSpanElement {
     const span = document.createElement('span')
-    span.id = 'group-form-span'
+    span.id = 'getter-form-span'
 
     span.appendChild(input)
     span.appendChild(datalist)
@@ -35,7 +35,7 @@ const PAddForm = {
   },
   datalist(groupList: GroupList): HTMLDataListElement {
     const datalist: HTMLDataListElement = document.createElement('datalist')
-    datalist.id = 'group-list-datalist'
+    datalist.id = 'getter-list-datalist'
     datalist.appendChild(OptionFragment.generate(groupList))
     return datalist
   },
@@ -44,7 +44,7 @@ const PAddForm = {
     const input: HTMLInputElement = document.createElement('input')
     input.type = 'text'
     input.autocomplete = 'on'
-    input.setAttribute('list', 'group-list-datalist')
+    input.setAttribute('list', 'getter-list-datalist')
     return input
   },
 }

@@ -29,7 +29,7 @@ const PTableAccountRow = {
   },
   tr(): HTMLTableRowElement {
     const tr = document.createElement('tr')
-    tr.className = 'group-table-tr'
+    tr.className = 'getter-table-tr'
     return tr
   },
   iconTd(account: Account): HTMLTableDataCellElement {

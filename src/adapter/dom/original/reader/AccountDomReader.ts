@@ -1,5 +1,5 @@
-import { Account, AccountId, AccountList } from '../../../domain/Account'
-import { AccountReader } from '../../../domain/reader/AccountReader'
+import { Account, AccountId, AccountList } from '../../../../domain/Account'
+import { AccountReader } from '../../../../domain/reader/AccountReader'
 import { AccountDomGetter } from '../getter/AccountDomGetter'
 
 export const AccountDomReader: AccountReader = {

@@ -1,5 +1,5 @@
 import { AccountList } from './Account'
-import { GroupAccountListDomReader } from '../adapter/dom/reader/GroupAccountListDomReader'
+import { GroupAccountListDomReader } from '../adapter/dom/group/reader/GroupAccountListDomReader'
 
 export interface Group {
   name: string

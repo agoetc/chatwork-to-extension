@@ -7,7 +7,7 @@ export const GroupDeleteButton = {
     const button = PGroupDeleteButton.generate()
     button.addEventListener('click', () => {
       deleteEffect()
-        .then(() => console.log('deleted group'))
+        .then(() => console.log('deleted getter'))
         .catch((e) => {
           throw e
         })

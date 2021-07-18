@@ -5,7 +5,7 @@ export const EffectAddButton = {
     const button = PEffectAddButton.generate()
     button.addEventListener('click', () => {
       addEffect()
-        .then(() => console.log('saved group'))
+        .then(() => console.log('saved getter'))
         .catch((e) => {
           throw e
         })
