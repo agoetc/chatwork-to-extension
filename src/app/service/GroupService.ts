@@ -39,9 +39,7 @@ const PGroupService = {
       return groupList
     } else {
       groupList.value.push(GroupRequest.toGroup(req))
-      return {
-        value: [GroupRequest.toGroup(req)],
-      }
+      return groupList
     }
   },
 }
