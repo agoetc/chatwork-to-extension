@@ -1,4 +1,3 @@
-import { AccountService } from './app/service/AccountService'
 import { Applier } from './app/dom/applier/Applier'
 import { GroupGetter } from './adapter/dom/group/getter/GroupGetter'
 import { GroupStorageRepository } from './adapter/storage/repository/GroupStorageRepository'
@@ -9,15 +8,10 @@ window.onload = () => setTimeout(listener, 1000)
 
 const listener = async () => {
   await Applier.apply()
-  hoge.observeToList()
-  setInterval(aa, 5000)
+  ToListObserve.observeToList()
 }
 
-const aa = async () => {
-  console.log(AccountService.getAccountList())
-}
-
-const hoge = {
+const ToListObserve = {
   observeToList() {
     const toList = ToListDomGetter.getToList()
     const toolTipList = ToListDomGetter.getToolTipList()
@@ -26,13 +20,20 @@ const hoge = {
       // 既にGroupのtoListが生成されていればなにもしない
       try {
         GroupGetter.getToList()
-      } catch {
         return
-      }
+      } catch {}
 
-      GroupStorageRepository.get().then((groupList) => {
-        toolTipList.insertBefore(GroupInToList.generate(groupList), toolTipList.children[1])
-      })
+      GroupStorageRepository.get()
+        .then((groupList) => {
+          const groupListElement = GroupInToList.generate(groupList)
+
+          console.log(groupListElement)
+
+          toolTipList.insertBefore(groupListElement, toolTipList.children[1])
+        })
+        .catch((e) => {
+          throw e
+        })
     })
 
     const config = {
@@ -41,6 +42,6 @@ const hoge = {
       characterData: false,
     }
 
-    observer.observe(toList, config)
+    return observer.observe(toList, config)
   },
 }

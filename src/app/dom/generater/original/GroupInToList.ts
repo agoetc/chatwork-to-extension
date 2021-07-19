@@ -10,9 +10,9 @@ export const GroupInToList = {
     const groupToList = document.createElement('div')
     groupToList.id = env.id.toList
     const toAccountList = AccountDomReader.getAccountList()
-    const filteredGroupList = PGroupTnToList.filterGroupList(groupList, toAccountList)
+    const accountInGroupList = PGroupTnToList.filterAccountInGroupList(groupList, toAccountList)
 
-    const fragment = PGroupTnToList.groupToFragment(filteredGroupList)
+    const fragment = PGroupTnToList.groupToFragment(accountInGroupList)
     groupToList.appendChild(fragment)
     return groupToList
   },
@@ -40,7 +40,7 @@ const PGroupTnToList = {
   /** Groupに入っているaccountをtextAreaに突っ込む処理を付ける **/
   insertText(insideAccountList: AccountList) {
     const toList = insideAccountList.value.map((account) => {
-      return `[To:${account.accountId}]${account.name}`
+      return `[To:${account.accountId.value}]${account.name}`
     })
 
     console.log(toList.join())
@@ -55,24 +55,26 @@ const PGroupTnToList = {
   },
   // Chat内に入っているAccountに絞る
   squeezeAccountOfInChat(group: Group, toAccountList: AccountList): AccountList {
-    return {
-      value: toAccountList.value.filter((toAccount) => {
-        group.accountList.value.some((account) => account.accountId === toAccount.accountId)
-      }),
-    }
+    const inChatAccountList = group.accountList.value.filter((account) => {
+      return toAccountList.value.some((toAccount) => {
+        return toAccount.accountId.value === account.accountId.value
+      })
+    })
+    return { value: inChatAccountList }
   },
   // Chat内に入っているAccountに絞り、0人のGroupがあれば取り除く
-  filterGroupList(groupList: GroupList, toAccountList: AccountList): GroupList {
+  filterAccountInGroupList(groupList: GroupList, toAccountList: AccountList): GroupList {
     const groups: Group[] = groupList.value
       .map((group) => {
-        const inChatAccount = PGroupTnToList.squeezeAccountOfInChat(group, toAccountList)
+        const inChatAccountList = PGroupTnToList.squeezeAccountOfInChat(group, toAccountList)
         return {
           name: group.name,
-          accountList: inChatAccount,
+          accountList: inChatAccountList,
         }
       })
       .filter((group) => group.accountList.value.length > 0)
 
+    console.log(groups)
     return { value: groups }
   },
 }
