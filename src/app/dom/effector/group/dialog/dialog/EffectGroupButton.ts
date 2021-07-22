@@ -1,10 +1,10 @@
-export type CreateDialogFunction = () => Promise<HTMLDialogElement>
+export type CreateDialogEffect = () => Promise<HTMLDialogElement>
 
 export const EffectGroupButton = {
-  effect(createDialogFunction: CreateDialogFunction): HTMLAnchorElement {
+  effect(createDialogEffect: CreateDialogEffect): HTMLAnchorElement {
     const button = PGroupButton.generate()
     button.addEventListener('click', () => {
-      createDialogFunction()
+      createDialogEffect()
         .then((dialog) => {
           document.body.appendChild(dialog)
           dialog.showModal()

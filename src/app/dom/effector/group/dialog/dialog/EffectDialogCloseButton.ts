@@ -1,3 +1,6 @@
+export type CloseDialogEffect = () => void
+export type CloseDialogEffectRemindDialog = (dialog: HTMLDialogElement) => CloseDialogEffect
+
 export const EffectDialogCloseButton = {
   effect(closeDialogEffect: CloseDialogEffect): HTMLButtonElement {
     const button = PEffectDialogCloseButton.generate()
@@ -16,5 +19,3 @@ const PEffectDialogCloseButton = {
     return button
   },
 }
-
-export type CloseDialogEffect = () => void

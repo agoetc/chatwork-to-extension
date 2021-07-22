@@ -4,7 +4,7 @@ import { GroupStorageRepository } from '../../adapter/storage/repository/GroupSt
 
 export const Applier = {
   apply(): void {
-    GroupButtonApplier.applyGroupButton()
+    GroupButtonApplier.apply()
   },
   reload(): Promise<void> {
     return GroupStorageRepository.get().then((groupList) => {
