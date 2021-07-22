@@ -1,4 +1,4 @@
-import { Applier } from './app/dom/applier/Applier'
+import { Applier } from './app/applier/Applier'
 import { GroupGetter } from './adapter/dom/group/getter/GroupGetter'
 import { GroupStorageRepository } from './adapter/storage/repository/GroupStorageRepository'
 import { GroupInToList } from './app/dom/generater/original/GroupInToList'

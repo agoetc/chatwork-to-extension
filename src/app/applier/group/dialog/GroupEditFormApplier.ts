@@ -1,9 +1,9 @@
-import { GroupEditForm } from '../../../generater/group/dialog/edit-form/GroupEditForm'
-import { GroupList } from '../../../../../domain/Group'
-import { GroupAddButtonEffect } from '../../../effector/group/dialog/edit-form/GroupAddButton'
-import { GroupService } from '../../../../service/GroupService'
-import { GroupDeleteButtonEffect } from '../../../effector/group/dialog/edit-form/GroupDeleteButton'
-import { GroupGetter } from '../../../../../adapter/dom/group/getter/GroupGetter'
+import { GroupEditForm } from '../../../dom/generater/group/dialog/edit-form/GroupEditForm'
+import { GroupList } from '../../../../domain/Group'
+import { GroupAddButtonEffect } from '../../../dom/effector/group/dialog/edit-form/GroupAddButton'
+import { GroupService } from '../../../service/GroupService'
+import { GroupDeleteButtonEffect } from '../../../dom/effector/group/dialog/edit-form/GroupDeleteButton'
+import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
 
 export const GroupEditFormApplier = {
   apply(groupList: GroupList): HTMLDivElement {

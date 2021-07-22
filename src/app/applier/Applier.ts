@@ -1,6 +1,6 @@
 import { GroupingDialogApplier } from './group/dialog/GroupingDialogApplier'
 import { GroupButtonApplier } from './group/GroupButtonApplier'
-import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
+import { GroupStorageRepository } from '../../adapter/storage/repository/GroupStorageRepository'
 
 export const Applier = {
   apply(): void {

@@ -1,12 +1,12 @@
-import { GroupingDialog } from '../../../generater/group/dialog/dialog/GroupingDialog'
-import { GroupList } from '../../../../../domain/Group'
-import { GroupGetter } from '../../../../../adapter/dom/group/getter/GroupGetter'
-import { SelectBox } from '../../../generater/group/dialog/edit-form/SelectBox'
+import { GroupingDialog } from '../../../dom/generater/group/dialog/dialog/GroupingDialog'
+import { GroupList } from '../../../../domain/Group'
+import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
+import { SelectBox } from '../../../dom/generater/group/dialog/edit-form/SelectBox'
 import { GroupEditFormApplier } from './GroupEditFormApplier'
 import { AccountAddTableApplier } from './AccountAddTableApplier'
-import { AddAccountListEffect } from '../../../effector/group/dialog/dialog/EffectAccountSaveButton'
-import { GroupAccountListDomReader } from '../../../../../adapter/dom/group/reader/GroupAccountListDomReader'
-import { GroupService } from '../../../../service/GroupService'
+import { AddAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectAccountSaveButton'
+import { GroupAccountListDomReader } from '../../../../adapter/dom/group/reader/GroupAccountListDomReader'
+import { GroupService } from '../../../service/GroupService'
 
 export const GroupingDialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {
