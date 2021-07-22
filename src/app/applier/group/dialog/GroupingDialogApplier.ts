@@ -7,6 +7,7 @@ import { AccountAddTableApplier } from './AccountAddTableApplier'
 import { AddAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectAccountSaveButton'
 import { GroupAccountListDomReader } from '../../../../adapter/dom/group/reader/GroupAccountListDomReader'
 import { GroupService } from '../../../service/GroupService'
+import { CloseDialogEffect } from '../../../dom/effector/group/dialog/dialog/EffectDialogCloseButton'
 
 export const GroupingDialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {
@@ -15,7 +16,12 @@ export const GroupingDialogApplier = {
     const groupEditForm = GroupEditFormApplier.apply(groupList)
     const accountAddTable = AccountAddTableApplier.apply()
     const addAccountListEffect = PGroupingDialogApplier.addAccountListEffect(groupList)
-    return GroupingDialog.generate(groupEditForm, accountAddTable, addAccountListEffect)
+    return GroupingDialog.generate(
+      groupEditForm,
+      accountAddTable,
+      addAccountListEffect,
+      PGroupingDialogApplier.closeDialogEffectRemindDialog
+    )
   },
   reload(groupList: GroupList) {
     console.log(groupList)
@@ -39,6 +45,12 @@ const PGroupingDialogApplier = {
     return () => {
       const req = GroupAccountListDomReader.buildRequestByAccountAddTable()
       return GroupService.addGroup(groupList, req)
+    }
+  },
+  closeDialogEffectRemindDialog(dialog: HTMLDialogElement): CloseDialogEffect {
+    return () => {
+      dialog.close()
+      dialog.remove()
     }
   },
 }
