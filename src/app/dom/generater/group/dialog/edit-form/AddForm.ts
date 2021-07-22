@@ -2,14 +2,14 @@ import { GroupList } from '../../../../../../domain/Group'
 import { OptionFragment } from './OptionFragment'
 import {
   AddGroupEffectRemindInput,
-  EffectAddButton,
-} from '../../../../effector/group/dialog/edit-form/GroupAddButton'
+  EffectAddGroupButton,
+} from '../../../../effector/group/dialog/edit-form/EffectAddGroupButton'
 
 export const AddForm = {
   generate(groupList: GroupList, addEffectRemindInput: AddGroupEffectRemindInput): HTMLSpanElement {
     const datalist = PAddForm.datalist(groupList)
     const input = PAddForm.input()
-    const button = EffectAddButton.effect(addEffectRemindInput(input))
+    const button = EffectAddGroupButton.effect(addEffectRemindInput(input))
 
     return PAddForm.span(input, datalist, button)
   },

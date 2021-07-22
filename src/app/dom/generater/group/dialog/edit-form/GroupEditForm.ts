@@ -1,11 +1,11 @@
 import { AddForm } from './AddForm'
 import { SelectBox } from './SelectBox'
 import { GroupList } from '../../../../../../domain/Group'
-import { AddGroupEffectRemindInput } from '../../../../effector/group/dialog/edit-form/GroupAddButton'
+import { AddGroupEffectRemindInput } from '../../../../effector/group/dialog/edit-form/EffectAddGroupButton'
 import {
-  GroupDeleteButton,
+  EffectDeleteGroupButton,
   GroupDeleteButtonEffect,
-} from '../../../../effector/group/dialog/edit-form/GroupDeleteButton'
+} from '../../../../effector/group/dialog/edit-form/EffectDeleteGroupButton'
 
 export const GroupEditForm = {
   generate(
@@ -15,7 +15,7 @@ export const GroupEditForm = {
   ): HTMLDivElement {
     const groupAddForm = AddForm.generate(groupList, addEffect)
     const groupSelectBox = SelectBox.generate(groupList)
-    const groupDeleteBox = GroupDeleteButton.effect(deleteEffect)
+    const groupDeleteBox = EffectDeleteGroupButton.effect(deleteEffect)
 
     return PGroupEditForm.groupEditDiv(groupAddForm, groupSelectBox, groupDeleteBox)
   },

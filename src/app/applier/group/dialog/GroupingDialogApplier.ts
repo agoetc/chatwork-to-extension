@@ -4,10 +4,10 @@ import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
 import { SelectBox } from '../../../dom/generater/group/dialog/edit-form/SelectBox'
 import { GroupEditFormApplier } from './GroupEditFormApplier'
 import { AccountAddTableApplier } from './AccountAddTableApplier'
-import { AddAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectAccountSaveButton'
+import { SaveAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectSaveAccountButton'
 import { GroupAccountListDomReader } from '../../../../adapter/dom/group/reader/GroupAccountListDomReader'
 import { GroupService } from '../../../service/GroupService'
-import { CloseDialogEffectRemindDialog } from '../../../dom/effector/group/dialog/dialog/EffectDialogCloseButton'
+import { CloseDialogEffectRemindDialog } from '../../../dom/effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const GroupingDialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {
@@ -15,11 +15,11 @@ export const GroupingDialogApplier = {
 
     const groupEditForm = GroupEditFormApplier.apply(groupList)
     const accountAddTable = AccountAddTableApplier.apply()
-    const addAccountListEffect = PGroupingDialogApplier.addAccountListEffect(groupList)
+    const saveAccountListEffect = PGroupingDialogApplier.saveAccountListEffect(groupList)
     return GroupingDialog.generate(
       groupEditForm,
       accountAddTable,
-      addAccountListEffect,
+      saveAccountListEffect,
       PGroupingDialogApplier.closeDialogEffectRemindDialog()
     )
   },
@@ -41,10 +41,10 @@ export const GroupingDialogApplier = {
 }
 
 const PGroupingDialogApplier = {
-  addAccountListEffect(groupList: GroupList): AddAccountListEffect {
+  saveAccountListEffect(groupList: GroupList): SaveAccountListEffect {
     return () => {
       const req = GroupAccountListDomReader.buildRequestByAccountAddTable()
-      return GroupService.addGroup(groupList, req)
+      return GroupService.saveGroup(groupList, req)
     }
   },
   closeDialogEffectRemindDialog(): CloseDialogEffectRemindDialog {

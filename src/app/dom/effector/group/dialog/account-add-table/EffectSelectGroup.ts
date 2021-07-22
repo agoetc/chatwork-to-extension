@@ -3,7 +3,7 @@ import { GroupGetter } from '../../../../../../adapter/dom/group/getter/GroupGet
 import { TableAccountRow } from '../../../../generater/group/dialog/account-add-table/TableAccountRow'
 import { SelectBox } from '../../../../generater/group/dialog/edit-form/SelectBox'
 
-export const EffectSelectBox = {
+export const EffectSelectGroup = {
   effect(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
     const span = SelectBox.generate(groupList, selectGroupName)
     span.addEventListener('change', () => {
@@ -13,7 +13,7 @@ export const EffectSelectBox = {
       const group = groupList.value.find((group) => group.name === selectGroup.value)
       if (group !== undefined) {
         const tBody = GroupGetter.getTBody()
-        PEffectSelectBox.removeTBodyChild(tBody)
+        PEffectSelectGroup.removeTBodyChild(tBody)
 
         // // 選択したら選択してくださいを削除
         // if (select.firstElementChild.id === env.id.defaultSelect) {
@@ -28,7 +28,7 @@ export const EffectSelectBox = {
   },
 }
 
-const PEffectSelectBox = {
+const PEffectSelectGroup = {
   removeTBodyChild(tBody: HTMLElement): void {
     while (tBody.childElementCount) {
       tBody.children[0].remove()

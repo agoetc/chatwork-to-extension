@@ -1,21 +1,21 @@
 import {
-  AddAccountListEffect,
-  EffectAccountSaveButton,
-} from '../../../../effector/group/dialog/dialog/EffectAccountSaveButton'
+  SaveAccountListEffect,
+  EffectSaveAccountButton,
+} from '../../../../effector/group/dialog/dialog/EffectSaveAccountButton'
 import {
   CloseDialogEffect,
-  EffectDialogCloseButton,
-} from '../../../../effector/group/dialog/dialog/EffectDialogCloseButton'
+  EffectCloseDialogButton,
+} from '../../../../effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const ButtonField = {
   generate(
-    addAccountListEffect: AddAccountListEffect,
+    saveAccountListEffect: SaveAccountListEffect,
     closeDialogEffect: CloseDialogEffect
   ): HTMLDivElement {
     const buttonDiv = document.createElement('div')
     buttonDiv.className = '_cwDGFooter dialogContainer__footer'
-    buttonDiv.appendChild(EffectAccountSaveButton.effect(addAccountListEffect))
-    buttonDiv.appendChild(EffectDialogCloseButton.effect(closeDialogEffect))
+    buttonDiv.appendChild(EffectSaveAccountButton.effect(saveAccountListEffect))
+    buttonDiv.appendChild(EffectCloseDialogButton.effect(closeDialogEffect))
 
     return buttonDiv
   },

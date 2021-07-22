@@ -1,7 +1,7 @@
 import {
   CreateDialogEffect,
-  EffectGroupButton,
-} from '../../dom/effector/group/dialog/dialog/EffectGroupButton'
+  EffectOpenDialogButton,
+} from '../../dom/effector/group/dialog/dialog/EffectOpenDialogButton'
 import { GroupingDialogApplier } from './dialog/GroupingDialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 import { ToListDomGetter } from '../../../adapter/dom/original/getter/ToListDomGetter'
@@ -9,7 +9,7 @@ import { ToListDomGetter } from '../../../adapter/dom/original/getter/ToListDomG
 export const GroupButtonApplier = {
   apply(): void {
     const toListFooter = ToListDomGetter.getToListFooter()
-    const groupButton = EffectGroupButton.effect(PGroupButtonApplier.createDialogEffect())
+    const groupButton = EffectOpenDialogButton.effect(PGroupButtonApplier.createDialogEffect())
     toListFooter.appendChild(groupButton)
   },
 }

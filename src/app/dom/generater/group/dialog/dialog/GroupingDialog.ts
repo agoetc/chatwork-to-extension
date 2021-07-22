@@ -1,19 +1,19 @@
 import { ButtonField } from './ButtonField'
-import { AddAccountListEffect } from '../../../../effector/group/dialog/dialog/EffectAccountSaveButton'
-import { CloseDialogEffectRemindDialog } from '../../../../effector/group/dialog/dialog/EffectDialogCloseButton'
+import { SaveAccountListEffect } from '../../../../effector/group/dialog/dialog/EffectSaveAccountButton'
+import { CloseDialogEffectRemindDialog } from '../../../../effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const GroupingDialog = {
   generate(
     groupEditForm: HTMLDivElement,
     accountAddTable: HTMLDivElement,
-    addAccountListEffect: AddAccountListEffect,
+    saveAccountListEffect: SaveAccountListEffect,
     closeDialogEffectRemindDialog: CloseDialogEffectRemindDialog
   ): HTMLDialogElement {
     const dialog = document.createElement('dialog')
     dialog.id = 'grouping-dialog'
 
     const buttonField = ButtonField.generate(
-      addAccountListEffect,
+      saveAccountListEffect,
       closeDialogEffectRemindDialog(dialog)
     )
 

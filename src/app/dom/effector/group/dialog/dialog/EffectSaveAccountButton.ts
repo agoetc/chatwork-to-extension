@@ -1,13 +1,13 @@
 import { env } from '../../../../../../env'
 
-export type AddAccountListEffect = () => Promise<void>
+export type SaveAccountListEffect = () => Promise<void>
 
-export const EffectAccountSaveButton = {
-  effect(addAccountListEffect: AddAccountListEffect): HTMLSpanElement {
-    const button = PEffectAccountSaveButton.generate()
+export const EffectSaveAccountButton = {
+  effect(saveAccountListEffect: SaveAccountListEffect): HTMLSpanElement {
+    const button = PEffectSaveAccountButton.generate()
 
     button.addEventListener('click', () => {
-      addAccountListEffect()
+      saveAccountListEffect()
         .then(() => console.log('saved account list'))
         .catch((e) => {
           throw e
@@ -18,7 +18,7 @@ export const EffectAccountSaveButton = {
   },
 }
 
-const PEffectAccountSaveButton = {
+const PEffectSaveAccountButton = {
   generate(): HTMLSpanElement {
     const button = document.createElement('button')
     button.id = env.id.saveButton.button

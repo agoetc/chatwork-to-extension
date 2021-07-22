@@ -1,8 +1,8 @@
 export type CreateDialogEffect = () => Promise<HTMLDialogElement>
 
-export const EffectGroupButton = {
+export const EffectOpenDialogButton = {
   effect(createDialogEffect: CreateDialogEffect): HTMLAnchorElement {
-    const button = PGroupButton.generate()
+    const button = PEffectOpenDialogButton.generate()
     button.addEventListener('click', () => {
       createDialogEffect()
         .then((dialog) => {
@@ -17,7 +17,7 @@ export const EffectGroupButton = {
   },
 }
 
-const PGroupButton = {
+const PEffectOpenDialogButton = {
   generate(): HTMLAnchorElement {
     const groupingButton: HTMLAnchorElement = document.createElement('a')
     groupingButton.innerText = 'グループの設定'

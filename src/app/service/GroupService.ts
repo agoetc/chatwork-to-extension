@@ -6,7 +6,7 @@ export const GroupService = {
   getGroupList(): Promise<GroupList> {
     return GroupStorageRepository.get()
   },
-  addGroup(groupList: GroupList, req: GroupRequest): Promise<void> {
+  saveGroup(groupList: GroupList, req: GroupRequest): Promise<void> {
     console.log(groupList)
     // 新規save
     if (groupList.value.length === 0) {
