@@ -1,21 +1,24 @@
 import { GroupList } from '../../../../../../domain/Group'
 import { OptionFragment } from './OptionFragment'
 import {
-  AddGroupEffectRemindInput,
-  EffectAddGroupButton,
-} from '../../../../effector/group/dialog/edit-form/EffectAddGroupButton'
+  SaveGroupEffectRemindInput,
+  EffectSaveGroupButton,
+} from '../../../../effector/group/dialog/edit-form/EffectSaveGroupButton'
 
-export const AddForm = {
-  generate(groupList: GroupList, addEffectRemindInput: AddGroupEffectRemindInput): HTMLSpanElement {
-    const datalist = PAddForm.datalist(groupList)
-    const input = PAddForm.input()
-    const button = EffectAddGroupButton.effect(addEffectRemindInput(input))
+export const SaveGroupForm = {
+  generate(
+    groupList: GroupList,
+    saveEffectRemindInput: SaveGroupEffectRemindInput
+  ): HTMLSpanElement {
+    const datalist = PSaveForm.datalist(groupList)
+    const input = PSaveForm.input()
+    const button = EffectSaveGroupButton.effect(saveEffectRemindInput(input))
 
-    return PAddForm.span(input, datalist, button)
+    return PSaveForm.span(input, datalist, button)
   },
 }
 
-const PAddForm = {
+const PSaveForm = {
   span(
     input: HTMLInputElement,
     datalist: HTMLDataListElement,

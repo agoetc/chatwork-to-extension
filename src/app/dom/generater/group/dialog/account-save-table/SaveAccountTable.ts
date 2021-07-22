@@ -2,7 +2,7 @@ import { AccountList } from '../../../../../../domain/Account'
 import { env } from '../../../../../../env'
 import { TableAccountRow } from './TableAccountRow'
 
-export const AccountAddTable = {
+export const SaveAccountTable = {
   generate(toAccountList: AccountList, checkedAccountList: AccountList): HTMLDivElement {
     const table = document.createElement('table')
     const thead = document.createElement('thead')

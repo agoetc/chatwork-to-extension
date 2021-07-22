@@ -1,9 +1,9 @@
-export type AddGroupEffectRemindInput = (input: HTMLInputElement) => AddGroupEffect
-type AddGroupEffect = () => Promise<void>
+export type SaveGroupEffectRemindInput = (input: HTMLInputElement) => SaveGroupEffect
+type SaveGroupEffect = () => Promise<void>
 
-export const EffectAddGroupButton = {
-  effect(addEffect: AddGroupEffect): HTMLButtonElement {
-    const button = PEffectAddGroupButton.generate()
+export const EffectSaveGroupButton = {
+  effect(addEffect: SaveGroupEffect): HTMLButtonElement {
+    const button = PEffectSaveGroupButton.generate()
     button.addEventListener('click', () => {
       addEffect()
         .then(() => console.log('saved group'))
@@ -16,7 +16,7 @@ export const EffectAddGroupButton = {
   },
 }
 
-const PEffectAddGroupButton = {
+const PEffectSaveGroupButton = {
   generate(): HTMLButtonElement {
     const button = document.createElement('button')
     button.className = '_cwDGButton  button btnPrimary'

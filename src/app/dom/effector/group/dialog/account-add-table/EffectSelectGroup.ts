@@ -1,6 +1,6 @@
 import { GroupList } from '../../../../../../domain/Group'
 import { GroupGetter } from '../../../../../../adapter/dom/group/getter/GroupGetter'
-import { TableAccountRow } from '../../../../generater/group/dialog/account-add-table/TableAccountRow'
+import { TableAccountRow } from '../../../../generater/group/dialog/account-save-table/TableAccountRow'
 import { SelectBox } from '../../../../generater/group/dialog/edit-form/SelectBox'
 
 export const EffectSelectGroup = {

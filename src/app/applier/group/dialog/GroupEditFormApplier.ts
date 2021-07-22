@@ -3,7 +3,7 @@ import { GroupList } from '../../../../domain/Group'
 import { GroupService } from '../../../service/GroupService'
 import { GroupDeleteButtonEffect } from '../../../dom/effector/group/dialog/edit-form/EffectDeleteGroupButton'
 import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
-import { AddGroupEffectRemindInput } from '../../../dom/effector/group/dialog/edit-form/EffectAddGroupButton'
+import { SaveGroupEffectRemindInput } from '../../../dom/effector/group/dialog/edit-form/EffectSaveGroupButton'
 
 export const GroupEditFormApplier = {
   apply(groupList: GroupList): HTMLDivElement {
@@ -14,7 +14,7 @@ export const GroupEditFormApplier = {
 }
 
 const PGroupEditFormApplier = {
-  addEffect(groupList: GroupList): AddGroupEffectRemindInput {
+  addEffect(groupList: GroupList): SaveGroupEffectRemindInput {
     return (input: HTMLInputElement) => () =>
       GroupService.saveGroup(groupList, {
         name: input.value,
