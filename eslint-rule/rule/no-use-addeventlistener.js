@@ -1,6 +1,6 @@
 'use strict'
 
-const whiteDir = 'app/dom-reader/effector'
+const whiteDir = 'adapter/dom-builder/effector'
 
 module.exports = {
   create(context) {
