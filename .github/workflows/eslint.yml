@@ -3,7 +3,7 @@ name: ESLint
 on: [ push ]
 
 jobs:
-  prettier-format:
+  eslint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
