@@ -1,4 +1,4 @@
-name: Pretter
+name: ESLint
 
 on: [ push ]
 
