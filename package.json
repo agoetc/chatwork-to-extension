@@ -7,6 +7,8 @@
   "license": "MIT",
   "dependencies": {},
   "scripts": {
+    "build": "webpack",
+    "build -w": "webpack --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "eslint": "eslint \"src/**/*.ts\"",
     "test": "mocha ./eslint-rule/test"
