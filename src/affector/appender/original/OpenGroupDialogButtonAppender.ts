@@ -2,19 +2,21 @@ import {
   CreateDialogEffect,
   EffectOpenDialogButton,
 } from '../../../adapter/dom-builder/effector/group/dialog/dialog/EffectOpenDialogButton'
-import { GroupingDialogAppender } from './dialog/GroupingDialogAppender'
+import { GroupingDialogAppender } from '../group/dialog/GroupingDialogAppender'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 import { ToListDomGetter } from '../../../adapter/dom-getter/original/ToListDomGetter'
 
-export const GroupButtonAppender = {
+export const OpenGroupDialogButtonAppender = {
   append(): void {
     const toListFooter = ToListDomGetter.getToListFooter()
-    const groupButton = EffectOpenDialogButton.effect(PGroupButtonApplier.createDialogEffect())
+    const groupButton = EffectOpenDialogButton.effect(
+      POpenGroupDialogButtonAppender.createDialogEffect()
+    )
     toListFooter.appendChild(groupButton)
   },
 }
 
-const PGroupButtonApplier = {
+const POpenGroupDialogButtonAppender = {
   createDialogEffect(): CreateDialogEffect {
     return () => GroupStorageRepository.get().then((gl) => GroupingDialogAppender.append(gl))
   },
