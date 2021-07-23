@@ -1,9 +1,9 @@
 import { Account, AccountId, AccountList } from '../../../../domain/Account'
-import { GroupRequest } from '../../../../domain/Group'
 import { GroupGetter } from '../getter/GroupGetter'
+import { SaveGroupRequest } from '../../../../domain/SaveGroupRequest'
 
 export const GroupAccountListDomReader = {
-  buildRequestByAccountAddTable(): GroupRequest {
+  buildRequestByAccountAddTable(): SaveGroupRequest {
     const select = GroupGetter.getGroupSelect()
     const accountListElement = GroupGetter.getCheckedAccountList()
 

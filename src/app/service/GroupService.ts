@@ -1,17 +1,18 @@
-import { Group, GroupList, GroupRequest } from '../../domain/Group'
+import { Group, GroupList } from '../../domain/Group'
 import { GroupStorageRepository } from '../../adapter/storage/repository/GroupStorageRepository'
 import { AccountList } from '../../domain/Account'
+import { SaveGroupRequest } from '../../domain/SaveGroupRequest'
 
 export const GroupService = {
   getGroupList(): Promise<GroupList> {
     return GroupStorageRepository.get()
   },
-  saveGroup(groupList: GroupList, req: GroupRequest): Promise<void> {
+  saveGroup(groupList: GroupList, req: SaveGroupRequest): Promise<void> {
     console.log(groupList)
     // 新規save
     if (groupList.value.length === 0) {
       const saveGroupList: GroupList = {
-        value: [GroupRequest.toGroup(req)],
+        value: [SaveGroupRequest.toGroup(req)],
       }
       return GroupStorageRepository.save(saveGroupList)
     } else {
@@ -29,7 +30,7 @@ const PGroupService = {
     return groupList.value.find((group) => group.name === name)
   },
   // TODO あんまキレイじゃない
-  buildSaveGroup(groupList: GroupList, req: GroupRequest): GroupList {
+  buildSaveGroup(groupList: GroupList, req: SaveGroupRequest): GroupList {
     const group = PGroupService.findByGroupName(groupList, req.name)
     if (group !== undefined) {
       const mergedAccountList = AccountList.mergeAccountListRequest(
@@ -47,7 +48,7 @@ const PGroupService = {
 
       return { value: saveGroupList }
     } else {
-      groupList.value.push(GroupRequest.toGroup(req))
+      groupList.value.push(SaveGroupRequest.toGroup(req))
       return groupList
     }
   },

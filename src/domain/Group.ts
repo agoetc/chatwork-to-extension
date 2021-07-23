@@ -1,5 +1,4 @@
 import { AccountList } from './Account'
-import { GroupAccountListDomReader } from '../adapter/dom/group/reader/GroupAccountListDomReader'
 
 export interface Group {
   name: string
@@ -8,18 +7,4 @@ export interface Group {
 
 export interface GroupList {
   value: Group[]
-}
-
-export interface GroupRequest {
-  name: string
-  accountList: AccountList
-}
-
-export const GroupRequest = {
-  toGroup(req: GroupRequest): Group {
-    return {
-      name: req.name,
-      accountList: req.accountList,
-    }
-  },
 }
