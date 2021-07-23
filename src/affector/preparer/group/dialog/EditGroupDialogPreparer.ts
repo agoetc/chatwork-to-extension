@@ -2,25 +2,25 @@ import { GroupingDialog } from '../../../../adapter/dom-builder/builder/group/di
 import { GroupList } from '../../../../domain/Group'
 import { GroupGetter } from '../../../../adapter/dom-getter/group/GroupGetter'
 import { SelectBox } from '../../../../adapter/dom-builder/builder/group/dialog/edit-form/SelectBox'
-import { GroupEditFormAppender } from './GroupEditFormAppender'
-import { AccountAddTableAppender } from './AccountAddTableAppender'
+import { EditGroupFormPreparer } from './EditGroupFormPreparer'
+import { AddAccountTablePreparer } from './AddAccountTablePreparer'
 import { SaveAccountListEffect } from '../../../../adapter/dom-builder/effector/group/dialog/dialog/EffectSaveAccountButton'
 import { GroupAccountListDomReader } from '../../../../adapter/dom-reader/group/GroupAccountListDomReader'
 import { GroupService } from '../../../service/GroupService'
 import { CloseDialogEffectRemindDialog } from '../../../../adapter/dom-builder/effector/group/dialog/dialog/EffectCloseDialogButton'
 
-export const GroupingDialogAppender = {
-  append(groupList: GroupList): HTMLDialogElement {
+export const EditGroupDialogPreparer = {
+  prepare(groupList: GroupList): HTMLDialogElement {
     console.log(groupList)
 
-    const groupEditForm = GroupEditFormAppender.append(groupList)
-    const accountAddTable = AccountAddTableAppender.append()
-    const saveAccountListEffect = PGroupingDialogAppender.saveAccountListEffect(groupList)
+    const groupEditForm = EditGroupFormPreparer.prepare(groupList)
+    const accountAddTable = AddAccountTablePreparer.prepare()
+    const saveAccountListEffect = PEditGroupDialogPreparer.saveAccountListEffect(groupList)
     return GroupingDialog.build(
       groupEditForm,
       accountAddTable,
       saveAccountListEffect,
-      PGroupingDialogAppender.closeDialogEffectRemindDialog()
+      PEditGroupDialogPreparer.closeDialogEffectRemindDialog()
     )
   },
   reload(groupList: GroupList) {
@@ -40,7 +40,7 @@ export const GroupingDialogAppender = {
   },
 }
 
-const PGroupingDialogAppender = {
+const PEditGroupDialogPreparer = {
   saveAccountListEffect(groupList: GroupList): SaveAccountListEffect {
     return () => {
       const req = GroupAccountListDomReader.buildRequestByAccountAddTable()

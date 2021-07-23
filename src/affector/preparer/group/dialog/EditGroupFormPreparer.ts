@@ -5,15 +5,15 @@ import { GroupDeleteButtonEffect } from '../../../../adapter/dom-builder/effecto
 import { GroupGetter } from '../../../../adapter/dom-getter/group/GroupGetter'
 import { SaveGroupEffectRemindInput } from '../../../../adapter/dom-builder/effector/group/dialog/edit-form/EffectSaveGroupButton'
 
-export const GroupEditFormAppender = {
-  append(groupList: GroupList): HTMLDivElement {
-    const addEffect = PGroupEditFormAppender.addEffect(groupList)
-    const deleteEffect = PGroupEditFormAppender.deleteEffect(groupList)
+export const EditGroupFormPreparer = {
+  prepare(groupList: GroupList): HTMLDivElement {
+    const addEffect = PEditGroupFormPreparer.addEffect(groupList)
+    const deleteEffect = PEditGroupFormPreparer.deleteEffect(groupList)
     return GroupEditForm.build(groupList, addEffect, deleteEffect)
   },
 }
 
-const PGroupEditFormAppender = {
+const PEditGroupFormPreparer = {
   addEffect(groupList: GroupList): SaveGroupEffectRemindInput {
     return (input: HTMLInputElement) => () =>
       GroupService.saveGroup(groupList, {
