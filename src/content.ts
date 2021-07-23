@@ -1,5 +1,5 @@
-import { Appender } from './app/appender/Appender'
-import { ToListObserver } from './app/observer/original/ToListObserver'
+import { Appender } from './affector/appender/Appender'
+import { ToListObserver } from './affector/observer/original/ToListObserver'
 
 window.onload = () => setTimeout(listener, 1000)
 
