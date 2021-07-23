@@ -1,4 +1,4 @@
-import { SaveAccountTable } from '../../../dom/builder/group/dialog/account-save-table/SaveAccountTable'
+import { SaveAccountTable } from '../../../../adapter/dom-builder/builder/group/dialog/account-save-table/SaveAccountTable'
 import { AccountDomReader } from '../../../../adapter/dom-reader/original/AccountDomReader'
 
 export const AccountAddTableApplier = {

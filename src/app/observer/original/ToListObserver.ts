@@ -1,11 +1,11 @@
 import { ToListDomGetter } from '../../../adapter/dom-getter/original/ToListDomGetter'
 import { GroupGetter } from '../../../adapter/dom-getter/group/GroupGetter'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
-import { GroupInToList } from '../../dom/builder/original/GroupInToList'
+import { GroupInToList } from '../../../adapter/dom-builder/builder/original/GroupInToList'
 import { Group } from '../../../domain/Group'
 import { AccountList } from '../../../domain/Account'
 import { TextAreaDomGetter } from '../../../adapter/dom-getter/original/TextAreaDomGetter'
-import { AddGroupInToListEffectRemindGroup } from '../../dom/effector/original/EffectGroupInToList'
+import { AddGroupInToListEffectRemindGroup } from '../../../adapter/dom-builder/effector/original/EffectGroupInToList'
 
 export const ToListObserver = {
   observe() {

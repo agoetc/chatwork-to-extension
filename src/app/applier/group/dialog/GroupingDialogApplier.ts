@@ -1,13 +1,13 @@
-import { GroupingDialog } from '../../../dom/builder/group/dialog/dialog/GroupingDialog'
+import { GroupingDialog } from '../../../../adapter/dom-builder/builder/group/dialog/dialog/GroupingDialog'
 import { GroupList } from '../../../../domain/Group'
 import { GroupGetter } from '../../../../adapter/dom-getter/group/GroupGetter'
-import { SelectBox } from '../../../dom/builder/group/dialog/edit-form/SelectBox'
+import { SelectBox } from '../../../../adapter/dom-builder/builder/group/dialog/edit-form/SelectBox'
 import { GroupEditFormApplier } from './GroupEditFormApplier'
 import { AccountAddTableApplier } from './AccountAddTableApplier'
-import { SaveAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectSaveAccountButton'
+import { SaveAccountListEffect } from '../../../../adapter/dom-builder/effector/group/dialog/dialog/EffectSaveAccountButton'
 import { GroupAccountListDomReader } from '../../../../adapter/dom-reader/group/GroupAccountListDomReader'
 import { GroupService } from '../../../service/GroupService'
-import { CloseDialogEffectRemindDialog } from '../../../dom/effector/group/dialog/dialog/EffectCloseDialogButton'
+import { CloseDialogEffectRemindDialog } from '../../../../adapter/dom-builder/effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const GroupingDialogApplier = {
   apply(groupList: GroupList): HTMLDialogElement {

@@ -1,7 +1,7 @@
 import {
   CreateDialogEffect,
   EffectOpenDialogButton,
-} from '../../dom/effector/group/dialog/dialog/EffectOpenDialogButton'
+} from '../../../adapter/dom-builder/effector/group/dialog/dialog/EffectOpenDialogButton'
 import { GroupingDialogApplier } from './dialog/GroupingDialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
 import { ToListDomGetter } from '../../../adapter/dom-getter/original/ToListDomGetter'
