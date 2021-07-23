@@ -1,5 +1,5 @@
 import { SaveAccountTable } from '../../../dom/builder/group/dialog/account-save-table/SaveAccountTable'
-import { AccountDomReader } from '../../../../adapter/dom/original/reader/AccountDomReader'
+import { AccountDomReader } from '../../../../adapter/dom-reader/original/AccountDomReader'
 
 export const AccountAddTableApplier = {
   apply() {

@@ -1,11 +1,11 @@
 import { GroupingDialog } from '../../../dom/builder/group/dialog/dialog/GroupingDialog'
 import { GroupList } from '../../../../domain/Group'
-import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
+import { GroupGetter } from '../../../../adapter/dom-getter/group/GroupGetter'
 import { SelectBox } from '../../../dom/builder/group/dialog/edit-form/SelectBox'
 import { GroupEditFormApplier } from './GroupEditFormApplier'
 import { AccountAddTableApplier } from './AccountAddTableApplier'
 import { SaveAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectSaveAccountButton'
-import { GroupAccountListDomReader } from '../../../../adapter/dom/group/reader/GroupAccountListDomReader'
+import { GroupAccountListDomReader } from '../../../../adapter/dom-reader/group/GroupAccountListDomReader'
 import { GroupService } from '../../../service/GroupService'
 import { CloseDialogEffectRemindDialog } from '../../../dom/effector/group/dialog/dialog/EffectCloseDialogButton'
 

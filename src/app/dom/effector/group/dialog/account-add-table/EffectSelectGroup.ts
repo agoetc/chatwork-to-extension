@@ -1,5 +1,5 @@
 import { GroupList } from '../../../../../../domain/Group'
-import { GroupGetter } from '../../../../../../adapter/dom/group/getter/GroupGetter'
+import { GroupGetter } from '../../../../../../adapter/dom-getter/group/GroupGetter'
 import { TableAccountRow } from '../../../../builder/group/dialog/account-save-table/TableAccountRow'
 import { SelectBox } from '../../../../builder/group/dialog/edit-form/SelectBox'
 

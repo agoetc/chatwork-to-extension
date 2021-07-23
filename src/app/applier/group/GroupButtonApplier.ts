@@ -4,7 +4,7 @@ import {
 } from '../../dom/effector/group/dialog/dialog/EffectOpenDialogButton'
 import { GroupingDialogApplier } from './dialog/GroupingDialogApplier'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
-import { ToListDomGetter } from '../../../adapter/dom/original/getter/ToListDomGetter'
+import { ToListDomGetter } from '../../../adapter/dom-getter/original/ToListDomGetter'
 
 export const GroupButtonApplier = {
   apply(): void {

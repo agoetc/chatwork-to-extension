@@ -1,6 +1,6 @@
-import { Account, AccountId, AccountList } from '../../../../domain/Account'
-import { GroupGetter } from '../getter/GroupGetter'
-import { SaveGroupRequest } from '../../../../domain/SaveGroupRequest'
+import { Account, AccountId, AccountList } from '../../../domain/Account'
+import { GroupGetter } from '../../dom-getter/group/GroupGetter'
+import { SaveGroupRequest } from '../../../domain/SaveGroupRequest'
 
 export const GroupAccountListDomReader = {
   buildRequestByAccountAddTable(): SaveGroupRequest {

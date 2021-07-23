@@ -1,7 +1,7 @@
 import { env } from '../../../../env'
 import { Group, GroupList } from '../../../../domain/Group'
 import { AccountList } from '../../../../domain/Account'
-import { AccountDomReader } from '../../../../adapter/dom/original/reader/AccountDomReader'
+import { AccountDomReader } from '../../../../adapter/dom-reader/original/AccountDomReader'
 import {
   EffectGroupInList,
   AddGroupInToListEffectRemindGroup,

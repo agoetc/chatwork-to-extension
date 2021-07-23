@@ -1,4 +1,4 @@
-import { AccountDomReader } from '../adapter/dom/original/reader/AccountDomReader'
+import { AccountDomReader } from '../adapter/dom-reader/original/AccountDomReader'
 import { ListObject, ValueObject } from './Common'
 
 export interface Account {
@@ -37,6 +37,7 @@ export const AccountList = {
     return accountList
   },
   mergeAccountListRequest(savedAccountList: AccountList, accountList: AccountList): AccountList {
+    // TODO domainがreaderに依存すな
     const accountListByToList: AccountList = AccountDomReader.getAccountList()
     /**
      * チャット外の人は使い回す

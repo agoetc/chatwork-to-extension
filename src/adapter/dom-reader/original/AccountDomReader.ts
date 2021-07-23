@@ -1,6 +1,6 @@
-import { Account, AccountId, AccountList } from '../../../../domain/Account'
-import { AccountReader } from '../../../../domain/reader/AccountReader'
-import { ToListDomGetter } from '../getter/ToListDomGetter'
+import { Account, AccountId, AccountList } from '../../../domain/Account'
+import { AccountReader } from '../../../domain/reader/AccountReader'
+import { ToListDomGetter } from '../../dom-getter/original/ToListDomGetter'
 
 export const AccountDomReader: AccountReader = {
   /** CanDo **/

@@ -2,7 +2,7 @@ import { GroupEditForm } from '../../../dom/builder/group/dialog/edit-form/Group
 import { GroupList } from '../../../../domain/Group'
 import { GroupService } from '../../../service/GroupService'
 import { GroupDeleteButtonEffect } from '../../../dom/effector/group/dialog/edit-form/EffectDeleteGroupButton'
-import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
+import { GroupGetter } from '../../../../adapter/dom-getter/group/GroupGetter'
 import { SaveGroupEffectRemindInput } from '../../../dom/effector/group/dialog/edit-form/EffectSaveGroupButton'
 
 export const GroupEditFormApplier = {
