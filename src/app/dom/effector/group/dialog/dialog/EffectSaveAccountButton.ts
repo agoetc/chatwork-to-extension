@@ -4,7 +4,7 @@ export type SaveAccountListEffect = () => Promise<void>
 
 export const EffectSaveAccountButton = {
   effect(saveAccountListEffect: SaveAccountListEffect): HTMLSpanElement {
-    const button = PEffectSaveAccountButton.generate()
+    const button = PEffectSaveAccountButton.build()
 
     button.addEventListener('click', () => {
       saveAccountListEffect()
@@ -19,7 +19,7 @@ export const EffectSaveAccountButton = {
 }
 
 const PEffectSaveAccountButton = {
-  generate(): HTMLSpanElement {
+  build(): HTMLSpanElement {
     const button = document.createElement('button')
     button.id = env.id.saveButton.button
     button.className = '_cwDGButton  button btnPrimary'

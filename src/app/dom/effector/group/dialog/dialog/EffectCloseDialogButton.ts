@@ -3,7 +3,7 @@ export type CloseDialogEffectRemindDialog = (dialog: HTMLDialogElement) => Close
 
 export const EffectCloseDialogButton = {
   effect(closeDialogEffect: CloseDialogEffect): HTMLButtonElement {
-    const button = PEffectCloseDialogButton.generate()
+    const button = PEffectCloseDialogButton.build()
     button.addEventListener('click', closeDialogEffect)
 
     return button
@@ -11,7 +11,7 @@ export const EffectCloseDialogButton = {
 }
 
 const PEffectCloseDialogButton = {
-  generate(): HTMLButtonElement {
+  build(): HTMLButtonElement {
     const button = document.createElement('button')
     button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'
     button.textContent = 'キャンセル'

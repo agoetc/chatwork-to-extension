@@ -1,11 +1,9 @@
-import { Group, GroupList } from '../../../../../../domain/Group'
+import { GroupList } from '../../../../../../domain/Group'
 import { env } from '../../../../../../env'
 import { OptionFragment } from './OptionFragment'
-import { GroupGetter } from '../../../../../../adapter/dom/group/getter/GroupGetter'
-import { TableAccountRow } from '../account-save-table/TableAccountRow'
 
 export const SelectBox = {
-  generate(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
+  build(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
     const select = PSelectBox.select()
     const span = PSelectBox.span()
 
@@ -32,7 +30,7 @@ const PSelectBox = {
       const defaultOption = this.defaultOption()
       select.appendChild(defaultOption)
     }
-    select.appendChild(OptionFragment.generate(groupList, selectGroupName))
+    select.appendChild(OptionFragment.build(groupList, selectGroupName))
   },
   defaultOption(): HTMLOptionElement {
     const option = document.createElement('option')

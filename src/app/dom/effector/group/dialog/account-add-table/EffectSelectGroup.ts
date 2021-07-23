@@ -1,11 +1,11 @@
 import { GroupList } from '../../../../../../domain/Group'
 import { GroupGetter } from '../../../../../../adapter/dom/group/getter/GroupGetter'
-import { TableAccountRow } from '../../../../generater/group/dialog/account-save-table/TableAccountRow'
-import { SelectBox } from '../../../../generater/group/dialog/edit-form/SelectBox'
+import { TableAccountRow } from '../../../../builder/group/dialog/account-save-table/TableAccountRow'
+import { SelectBox } from '../../../../builder/group/dialog/edit-form/SelectBox'
 
 export const EffectSelectGroup = {
   effect(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
-    const span = SelectBox.generate(groupList, selectGroupName)
+    const span = SelectBox.build(groupList, selectGroupName)
     span.addEventListener('change', () => {
       // state.isDefaultSelect = false
       // TODO
@@ -20,7 +20,7 @@ export const EffectSelectGroup = {
         //     select.firstElementChild.remove()
         // }
 
-        const tr = TableAccountRow.generate(group.accountList)
+        const tr = TableAccountRow.build(group.accountList)
         tBody.appendChild(tr)
       }
     })

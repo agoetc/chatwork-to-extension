@@ -1,7 +1,7 @@
 import { ToListDomGetter } from '../../../adapter/dom/original/getter/ToListDomGetter'
 import { GroupGetter } from '../../../adapter/dom/group/getter/GroupGetter'
 import { GroupStorageRepository } from '../../../adapter/storage/repository/GroupStorageRepository'
-import { GroupInToList } from '../../dom/generater/original/GroupInToList'
+import { GroupInToList } from '../../dom/builder/original/GroupInToList'
 import { Group } from '../../../domain/Group'
 import { AccountList } from '../../../domain/Account'
 import { TextAreaDomGetter } from '../../../adapter/dom/original/getter/TextAreaDomGetter'
@@ -21,7 +21,7 @@ export const ToListObserver = {
 
       GroupStorageRepository.get()
         .then((groupList) => {
-          const groupListElement = GroupInToList.generate(
+          const groupListElement = GroupInToList.build(
             groupList,
             PToListObserver.addGroupInToListEffectRemindGroup()
           )

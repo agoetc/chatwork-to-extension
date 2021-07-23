@@ -9,7 +9,7 @@ import {
 
 // to一覧に追加する、Group一覧のDom
 export const GroupInToList = {
-  generate(
+  build(
     groupList: GroupList,
     groupInToListEffectRemindGroup: AddGroupInToListEffectRemindGroup
   ): HTMLDivElement {

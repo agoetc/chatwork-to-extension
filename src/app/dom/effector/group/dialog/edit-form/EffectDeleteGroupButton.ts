@@ -4,7 +4,7 @@ export type GroupDeleteButtonEffect = () => Promise<void>
 
 export const EffectDeleteGroupButton = {
   effect(deleteEffect: GroupDeleteButtonEffect): HTMLSpanElement {
-    const button = PEffectDeleteGroupButton.generate()
+    const button = PEffectDeleteGroupButton.build()
     button.addEventListener('click', () => {
       deleteEffect()
         .then(() => console.log('deleted group'))
@@ -18,7 +18,7 @@ export const EffectDeleteGroupButton = {
 }
 
 const PEffectDeleteGroupButton = {
-  generate(): HTMLSpanElement {
+  build(): HTMLSpanElement {
     const button = document.createElement('button')
     button.id = env.id.saveButton.button
     button.className = '_cwDGButton  _cwDGButtonCancel button buttonGray'

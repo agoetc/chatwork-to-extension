@@ -8,7 +8,7 @@ import {
 } from '../../../../effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const ButtonField = {
-  generate(
+  build(
     saveAccountListEffect: SaveAccountListEffect,
     closeDialogEffect: CloseDialogEffect
   ): HTMLDivElement {

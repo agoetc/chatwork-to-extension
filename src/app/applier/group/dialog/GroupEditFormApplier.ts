@@ -1,4 +1,4 @@
-import { GroupEditForm } from '../../../dom/generater/group/dialog/edit-form/GroupEditForm'
+import { GroupEditForm } from '../../../dom/builder/group/dialog/edit-form/GroupEditForm'
 import { GroupList } from '../../../../domain/Group'
 import { GroupService } from '../../../service/GroupService'
 import { GroupDeleteButtonEffect } from '../../../dom/effector/group/dialog/edit-form/EffectDeleteGroupButton'
@@ -9,7 +9,7 @@ export const GroupEditFormApplier = {
   apply(groupList: GroupList): HTMLDivElement {
     const addEffect = PGroupEditFormApplier.addEffect(groupList)
     const deleteEffect = PGroupEditFormApplier.deleteEffect(groupList)
-    return GroupEditForm.generate(groupList, addEffect, deleteEffect)
+    return GroupEditForm.build(groupList, addEffect, deleteEffect)
   },
 }
 

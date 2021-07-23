@@ -2,7 +2,7 @@ import { Account, AccountList } from '../../../../../../domain/Account'
 import { env } from '../../../../../../env'
 
 export const TableAccountRow = {
-  generate(
+  build(
     toAccountList: AccountList,
     inGroupAccountList: AccountList = { value: [] }
   ): DocumentFragment {

@@ -8,13 +8,13 @@ import {
 } from '../../../../effector/group/dialog/edit-form/EffectDeleteGroupButton'
 
 export const GroupEditForm = {
-  generate(
+  build(
     groupList: GroupList,
     addEffect: SaveGroupEffectRemindInput,
     deleteEffect: GroupDeleteButtonEffect
   ): HTMLDivElement {
-    const groupAddForm = SaveGroupForm.generate(groupList, addEffect)
-    const groupSelectBox = SelectBox.generate(groupList)
+    const groupAddForm = SaveGroupForm.build(groupList, addEffect)
+    const groupSelectBox = SelectBox.build(groupList)
     const groupDeleteBox = EffectDeleteGroupButton.effect(deleteEffect)
 
     return PGroupEditForm.groupEditDiv(groupAddForm, groupSelectBox, groupDeleteBox)

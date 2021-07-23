@@ -1,7 +1,7 @@
-import { GroupingDialog } from '../../../dom/generater/group/dialog/dialog/GroupingDialog'
+import { GroupingDialog } from '../../../dom/builder/group/dialog/dialog/GroupingDialog'
 import { GroupList } from '../../../../domain/Group'
 import { GroupGetter } from '../../../../adapter/dom/group/getter/GroupGetter'
-import { SelectBox } from '../../../dom/generater/group/dialog/edit-form/SelectBox'
+import { SelectBox } from '../../../dom/builder/group/dialog/edit-form/SelectBox'
 import { GroupEditFormApplier } from './GroupEditFormApplier'
 import { AccountAddTableApplier } from './AccountAddTableApplier'
 import { SaveAccountListEffect } from '../../../dom/effector/group/dialog/dialog/EffectSaveAccountButton'
@@ -16,7 +16,7 @@ export const GroupingDialogApplier = {
     const groupEditForm = GroupEditFormApplier.apply(groupList)
     const accountAddTable = AccountAddTableApplier.apply()
     const saveAccountListEffect = PGroupingDialogApplier.saveAccountListEffect(groupList)
-    return GroupingDialog.generate(
+    return GroupingDialog.build(
       groupEditForm,
       accountAddTable,
       saveAccountListEffect,
@@ -31,7 +31,7 @@ export const GroupingDialogApplier = {
     const selectDiv = GroupGetter.getGroupSelectSpan()
 
     selectDiv.innerHTML = ''
-    selectDiv.appendChild(SelectBox.generate(groupList, selectGroupName))
+    selectDiv.appendChild(SelectBox.build(groupList, selectGroupName))
 
     const buttonDiv = GroupGetter.getSaveButton()
 

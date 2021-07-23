@@ -3,7 +3,7 @@ type SaveGroupEffect = () => Promise<void>
 
 export const EffectSaveGroupButton = {
   effect(addEffect: SaveGroupEffect): HTMLButtonElement {
-    const button = PEffectSaveGroupButton.generate()
+    const button = PEffectSaveGroupButton.build()
     button.addEventListener('click', () => {
       addEffect()
         .then(() => console.log('saved group'))
@@ -17,7 +17,7 @@ export const EffectSaveGroupButton = {
 }
 
 const PEffectSaveGroupButton = {
-  generate(): HTMLButtonElement {
+  build(): HTMLButtonElement {
     const button = document.createElement('button')
     button.className = '_cwDGButton  button btnPrimary'
     button.textContent = '追加する'

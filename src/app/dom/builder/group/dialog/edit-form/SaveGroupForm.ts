@@ -6,10 +6,7 @@ import {
 } from '../../../../effector/group/dialog/edit-form/EffectSaveGroupButton'
 
 export const SaveGroupForm = {
-  generate(
-    groupList: GroupList,
-    saveEffectRemindInput: SaveGroupEffectRemindInput
-  ): HTMLSpanElement {
+  build(groupList: GroupList, saveEffectRemindInput: SaveGroupEffectRemindInput): HTMLSpanElement {
     const datalist = PSaveForm.datalist(groupList)
     const input = PSaveForm.input()
     const button = EffectSaveGroupButton.effect(saveEffectRemindInput(input))
@@ -36,7 +33,7 @@ const PSaveForm = {
   datalist(groupList: GroupList): HTMLDataListElement {
     const datalist: HTMLDataListElement = document.createElement('datalist')
     datalist.id = 'getter-list-datalist'
-    datalist.appendChild(OptionFragment.generate(groupList))
+    datalist.appendChild(OptionFragment.build(groupList))
     return datalist
   },
   // 入力欄

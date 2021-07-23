@@ -3,7 +3,7 @@ import { SaveAccountListEffect } from '../../../../effector/group/dialog/dialog/
 import { CloseDialogEffectRemindDialog } from '../../../../effector/group/dialog/dialog/EffectCloseDialogButton'
 
 export const GroupingDialog = {
-  generate(
+  build(
     groupEditForm: HTMLDivElement,
     accountAddTable: HTMLDivElement,
     saveAccountListEffect: SaveAccountListEffect,
@@ -12,7 +12,7 @@ export const GroupingDialog = {
     const dialog = document.createElement('dialog')
     dialog.id = 'grouping-dialog'
 
-    const buttonField = ButtonField.generate(
+    const buttonField = ButtonField.build(
       saveAccountListEffect,
       closeDialogEffectRemindDialog(dialog)
     )
