@@ -39,7 +39,7 @@ const AccountListElement = {
       }
     } else {
       console.log(accountElement.dataset)
-      throw DOMException
+      throw new DOMException("can't build account")
     }
   },
 }

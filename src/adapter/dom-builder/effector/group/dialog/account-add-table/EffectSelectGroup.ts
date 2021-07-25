@@ -1,37 +1,12 @@
 import { GroupList } from '../../../../../../domain/Group'
-import { GroupGetter } from '../../../../../dom-getter/group/GroupGetter'
-import { TableAccountRow } from '../../../../builder/group/dialog/account-save-table/TableAccountRow'
 import { SelectBox } from '../../../../builder/group/dialog/edit-form/SelectBox'
 
+export type ChangeGroupEffect = () => void
+
 export const EffectSelectGroup = {
-  effect(groupList: GroupList, selectGroupName = ''): HTMLSpanElement {
-    const span = SelectBox.build(groupList, selectGroupName)
-    span.addEventListener('change', () => {
-      // state.isDefaultSelect = false
-      // TODO
-      const selectGroup: HTMLSelectElement = GroupGetter.getGroupSelect()
-      const group = groupList.value.find((group) => group.name === selectGroup.value)
-      if (group !== undefined) {
-        const tBody = GroupGetter.getTBody()
-        PEffectSelectGroup.removeTBodyChild(tBody)
-
-        // // 選択したら選択してくださいを削除
-        // if (select.firstElementChild.id === env.id.defaultSelect) {
-        //     select.firstElementChild.remove()
-        // }
-
-        const tr = TableAccountRow.build(group.accountList)
-        tBody.appendChild(tr)
-      }
-    })
+  effect(groupList: GroupList, changeGroupEffect: ChangeGroupEffect): HTMLSpanElement {
+    const span = SelectBox.build(groupList)
+    span.addEventListener('change', changeGroupEffect)
     return span
-  },
-}
-
-const PEffectSelectGroup = {
-  removeTBodyChild(tBody: HTMLElement): void {
-    while (tBody.childElementCount) {
-      tBody.children[0].remove()
-    }
   },
 }

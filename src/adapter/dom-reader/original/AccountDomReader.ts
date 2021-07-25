@@ -39,7 +39,7 @@ const PAccountDomReader = {
     } else {
       console.log('error')
       console.log(accountId, imagePath, name)
-      throw DOMException
+      throw new DOMException("doe's not build account")
     }
   },
   /**

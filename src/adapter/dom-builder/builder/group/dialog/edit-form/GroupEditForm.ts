@@ -6,15 +6,21 @@ import {
   EffectDeleteGroupButton,
   GroupDeleteButtonEffect,
 } from '../../../../effector/group/dialog/edit-form/EffectDeleteGroupButton'
+import {
+  ChangeGroupEffect,
+  EffectSelectGroup,
+} from '../../../../effector/group/dialog/account-add-table/EffectSelectGroup'
 
 export const GroupEditForm = {
   build(
     groupList: GroupList,
     addEffect: SaveGroupEffectRemindInput,
-    deleteEffect: GroupDeleteButtonEffect
+    deleteEffect: GroupDeleteButtonEffect,
+    changeGroupEffect: ChangeGroupEffect
   ): HTMLDivElement {
     const groupAddForm = SaveGroupForm.build(groupList, addEffect)
-    const groupSelectBox = SelectBox.build(groupList)
+
+    const groupSelectBox = EffectSelectGroup.effect(groupList, changeGroupEffect)
     const groupDeleteBox = EffectDeleteGroupButton.effect(deleteEffect)
 
     return PGroupEditForm.groupEditDiv(groupAddForm, groupSelectBox, groupDeleteBox)

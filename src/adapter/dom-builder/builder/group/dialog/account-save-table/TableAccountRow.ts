@@ -71,7 +71,7 @@ const PTableAccountRow = {
     // }
 
     const isInGroup = inGroupAccountList.value.some((savedAccount) => {
-      return savedAccount.accountId === account.accountId
+      return savedAccount.accountId.value === account.accountId.value
     })
 
     if (isInGroup) input.checked = true

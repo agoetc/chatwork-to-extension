@@ -3,7 +3,7 @@ export const Common = {
     if (dom !== null) {
       return dom
     } else {
-      throw DOMException
+      throw new DOMException('get dom is Null')
     }
   },
 }

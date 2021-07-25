@@ -10,6 +10,7 @@ export const EffectOpenDialogButton = {
           dialog.showModal()
         })
         .catch((e) => {
+          console.log(e.toString())
           throw e
         })
     })
