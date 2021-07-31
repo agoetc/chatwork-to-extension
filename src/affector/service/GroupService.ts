@@ -2,7 +2,7 @@ import { Group, GroupList } from '../../domain/Group'
 import { GroupStorageRepository } from '../../adapter/storage/repository/GroupStorageRepository'
 import { Account, AccountList } from '../../domain/Account'
 import { SaveGroupRequest } from '../../domain/SaveGroupRequest'
-import { AccountDomReader } from '../../adapter/dom-reader/original/AccountDomReader'
+import { AccountDomReader } from '../../adapter/dom/reader/original/AccountDomReader'
 
 export const GroupService = {
   getGroupList(): Promise<GroupList> {

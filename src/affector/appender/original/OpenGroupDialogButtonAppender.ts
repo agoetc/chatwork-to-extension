@@ -1,5 +1,5 @@
-import { ToListDomGetter } from '../../../adapter/dom-getter/original/ToListDomGetter'
-import { OpenGroupDialogButtonPreparer } from '../../preparer/original/OpenGroupDialogButtonPreparer'
+import { ToListDomGetter } from '../../../adapter/dom/getter/original/ToListDomGetter'
+import { OpenGroupDialogButtonPreparer } from '../../../adapter/dom/preparer/original/OpenGroupDialogButtonPreparer'
 
 export const OpenGroupDialogButtonAppender = {
   append(): void {
