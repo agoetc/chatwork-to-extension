@@ -3,6 +3,7 @@ import { GroupStorageRepository } from '../../adapter/storage/repository/GroupSt
 import { Account, AccountList } from '../../domain/Account'
 import { SaveGroupRequest } from '../../domain/SaveGroupRequest'
 import { AccountDomReader } from '../../adapter/dom/reader/original/AccountDomReader'
+import { GroupSessionStorageRepository } from '../../adapter/session-storage/repository/GroupSessionStorageRepository'
 
 export const GroupService = {
   getGroupList(): Promise<GroupList> {
@@ -18,14 +19,22 @@ export const GroupService = {
       const saveGroupList: GroupList = {
         value: [SaveGroupRequest.toGroup(req)],
       }
-      return GroupStorageRepository.save(saveGroupList)
+      return GroupStorageRepository.save(saveGroupList).then(() =>
+        GroupSessionStorageRepository.update(saveGroupList)
+      )
     } else {
       const saveGroupList = PGroupService.buildSaveGroup(groupList, req)
-      return GroupStorageRepository.save(saveGroupList)
+      return GroupStorageRepository.save(saveGroupList).then(() => {
+        GroupSessionStorageRepository.update(saveGroupList)
+      })
     }
   },
-  deleteGroup(groupList: GroupList, groupName: string): Promise<void> {
-    return GroupStorageRepository.delete(groupList, groupName)
+  deleteGroup(groupName: string): Promise<void> {
+    const groupList = GroupSessionStorageRepository.get()
+
+    return GroupStorageRepository.delete(groupList, groupName).then((gl) =>
+      GroupSessionStorageRepository.update(gl)
+    )
   },
 }
 

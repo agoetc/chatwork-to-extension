@@ -11,12 +11,17 @@ import {
   EffectSelectGroup,
 } from '../../../builder/effector/group/dialog/account-add-table/EffectSelectGroup'
 import { EditGroupFormDomReader } from '../../../reader/group/EditGroupFormDomReader'
+import { GroupSessionStorageRepository } from '../../../../session-storage/repository/GroupSessionStorageRepository'
 
 export const EditGroupFormPreparer = {
-  prepare(groupList: GroupList): HTMLDivElement {
-    const addEffect = PEditGroupFormPreparer.addEffect(groupList)
-    const deleteEffect = PEditGroupFormPreparer.deleteEffect(groupList)
-    const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect(groupList)
+  prepare(): HTMLDivElement {
+    const addEffect = PEditGroupFormPreparer.addEffect()
+    const deleteEffect = PEditGroupFormPreparer.deleteEffect()
+    const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect()
+
+    // TODO 消す
+    const groupList = GroupSessionStorageRepository.get()
+
     return GroupEditForm.build(groupList, addEffect, deleteEffect, changeGroupEffect)
   },
   // group追加後、selectBoxに追加するための処理
@@ -24,7 +29,7 @@ export const EditGroupFormPreparer = {
     const selectGroupName = EditGroupFormDomReader.selectGroupName()
     const selectGroupElement = GroupGetter.getGroupSelectSpan()
 
-    const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect(groupList)
+    const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect()
     const reloadedSelectGroupElement = EffectSelectGroup.effect(
       groupList,
       changeGroupEffect,
@@ -37,8 +42,9 @@ export const EditGroupFormPreparer = {
 }
 
 const PEditGroupFormPreparer = {
-  addEffect(groupList: GroupList): SaveGroupEffectRemindInput {
+  addEffect(): SaveGroupEffectRemindInput {
     return (input: HTMLInputElement) => () => {
+      const groupList = GroupSessionStorageRepository.get()
       const result = GroupService.saveGroup(groupList, {
         name: input.value,
         accountList: { value: [] },
@@ -47,16 +53,18 @@ const PEditGroupFormPreparer = {
       return result
     }
   },
-  deleteEffect(groupList: GroupList): GroupDeleteButtonEffect {
+  deleteEffect(): GroupDeleteButtonEffect {
     return () => {
       const deleteGroupName = EditGroupFormDomReader.selectGroupName()
-      return GroupService.deleteGroup(groupList, deleteGroupName)
+      return GroupService.deleteGroup(deleteGroupName)
     }
   },
-  changeGroupEffect(groupList: GroupList): ChangeGroupEffect {
+  changeGroupEffect(): ChangeGroupEffect {
     return () => {
+      const groupList = GroupSessionStorageRepository.get()
       const toAccountList = AccountDomReader.getAccountList()
       const selectGroupName = EditGroupFormDomReader.selectGroupName()
+
       const group = GroupList.findGroupByName(groupList, selectGroupName)
 
       if (group !== undefined) {

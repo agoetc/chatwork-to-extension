@@ -1,5 +1,4 @@
 import { SaveGroupForm } from './SaveGroupForm'
-import { SelectBox } from './SelectBox'
 import { GroupList } from '../../../../../../../domain/Group'
 import { SaveGroupEffectRemindInput } from '../../../../effector/group/dialog/edit-form/EffectSaveGroupButton'
 import {

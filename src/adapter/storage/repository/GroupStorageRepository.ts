@@ -4,11 +4,11 @@ import { browser } from 'webextension-polyfill-ts'
 const saveKey = 'group'
 
 export const GroupStorageRepository = {
-  delete(groupList: GroupList, groupName: string): Promise<void> {
+  delete(groupList: GroupList, groupName: string): Promise<GroupList> {
     const filteredGroupList = {
       value: groupList.value.filter((g) => g.name !== groupName),
     }
-    return this.save(filteredGroupList)
+    return this.save(filteredGroupList).then(() => filteredGroupList)
   },
   get(): Promise<GroupList> {
     return browser.storage.sync
