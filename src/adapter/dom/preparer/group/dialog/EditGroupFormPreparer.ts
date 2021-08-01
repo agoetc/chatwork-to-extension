@@ -31,11 +31,8 @@ const PEditGroupFormPreparer = {
       return GroupService.deleteGroup(groupList, deleteGroupName)
     }
   },
-  // TODO 動いてない
   changeGroupEffect(groupList: GroupList): ChangeGroupEffect {
     return () => {
-      console.log('hugahuga')
-
       const toAccountList = AccountDomReader.getAccountList()
       const selectGroup = GroupGetter.getGroupSelect()
       // state.isDefaultSelect = false

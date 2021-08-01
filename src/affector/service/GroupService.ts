@@ -9,7 +9,10 @@ export const GroupService = {
     return GroupStorageRepository.get()
   },
   saveGroup(groupList: GroupList, req: SaveGroupRequest): Promise<void> {
-    console.log(groupList)
+    if (req.name.length <= 0) {
+      throw new DOMException('empty group name')
+    }
+
     // 新規save
     if (groupList.value.length === 0) {
       const saveGroupList: GroupList = {
