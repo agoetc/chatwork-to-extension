@@ -25,6 +25,8 @@ export const EditGroupDialogPreparer = {
   },
   reload(groupList: GroupList) {
     console.log(groupList)
+
+    console.log('hurahura')
     // state.isDefaultSelect = true
 
     const selectGroupName = GroupGetter.getGroupSelect().value

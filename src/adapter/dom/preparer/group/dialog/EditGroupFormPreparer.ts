@@ -6,7 +6,12 @@ import { GroupGetter } from '../../../getter/group/GroupGetter'
 import { SaveGroupEffectRemindInput } from '../../../builder/effector/group/dialog/edit-form/EffectSaveGroupButton'
 import { AccountDomReader } from '../../../reader/original/AccountDomReader'
 import { TableAccountRow } from '../../../builder/builder/group/dialog/account-save-table/TableAccountRow'
-import { ChangeGroupEffect } from '../../../builder/effector/group/dialog/account-add-table/EffectSelectGroup'
+import {
+  ChangeGroupEffect,
+  EffectSelectGroup,
+} from '../../../builder/effector/group/dialog/account-add-table/EffectSelectGroup'
+import { EditGroupDialogPreparer } from './EditGroupDialogPreparer'
+import { SelectBox } from '../../../builder/builder/group/dialog/edit-form/SelectBox'
 
 export const EditGroupFormPreparer = {
   prepare(groupList: GroupList): HTMLDivElement {
@@ -15,15 +20,33 @@ export const EditGroupFormPreparer = {
     const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect(groupList)
     return GroupEditForm.build(groupList, addEffect, deleteEffect, changeGroupEffect)
   },
+  // group追加後、selectBoxに追加するための処理
+  reloadSelectGroupElement(groupList: GroupList) {
+    const selectGroupName = GroupGetter.getGroupSelect().value
+    const selectGroupElement = GroupGetter.getGroupSelectSpan()
+
+    const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect(groupList)
+    const reloadedSelectGroupElement = EffectSelectGroup.effect(
+      groupList,
+      changeGroupEffect,
+      selectGroupName
+    )
+
+    selectGroupElement.innerHTML = ''
+    selectGroupElement.appendChild(reloadedSelectGroupElement)
+  },
 }
 
 const PEditGroupFormPreparer = {
   addEffect(groupList: GroupList): SaveGroupEffectRemindInput {
-    return (input: HTMLInputElement) => () =>
-      GroupService.saveGroup(groupList, {
+    return (input: HTMLInputElement) => () => {
+      const result = GroupService.saveGroup(groupList, {
         name: input.value,
         accountList: { value: [] },
       })
+      EditGroupFormPreparer.reloadSelectGroupElement(groupList)
+      return result
+    }
   },
   deleteEffect(groupList: GroupList): GroupDeleteButtonEffect {
     return () => {
