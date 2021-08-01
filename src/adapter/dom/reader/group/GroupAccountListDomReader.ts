@@ -1,16 +1,17 @@
 import { Account, AccountId, AccountList } from '../../../../domain/Account'
 import { GroupGetter } from '../../getter/group/GroupGetter'
 import { SaveGroupRequest } from '../../../../domain/SaveGroupRequest'
+import { EditGroupFormDomReader } from './EditGroupFormDomReader'
 
 export const GroupAccountListDomReader = {
   buildRequestByAccountAddTable(): SaveGroupRequest {
-    const select = GroupGetter.getGroupSelect()
+    const selectGroupName = EditGroupFormDomReader.selectGroupName()
     const accountListElement = GroupGetter.getCheckedAccountList()
 
     const accountList: AccountList = AccountListElement.buildCheckedAccountList(accountListElement)
 
     return {
-      name: select.value,
+      name: selectGroupName,
       accountList: accountList,
     }
   },

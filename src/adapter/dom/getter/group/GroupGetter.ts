@@ -14,7 +14,7 @@ export const GroupGetter = {
     const groupSelectSpan = <HTMLSpanElement>document.getElementById(env.id.select.span)
     return Common.nullCheck(groupSelectSpan)
   },
-  getSaveButton() {
+  getSaveButton(): HTMLSpanElement {
     const saveButtonSpan = <HTMLSpanElement>document.getElementById(env.id.saveButton.span)
     return Common.nullCheck(saveButtonSpan)
   },

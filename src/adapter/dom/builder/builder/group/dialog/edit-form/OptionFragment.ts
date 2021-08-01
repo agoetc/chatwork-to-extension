@@ -1,7 +1,7 @@
 import { GroupList } from '../../../../../../../domain/Group'
 
 export const OptionFragment = {
-  build(groupList: GroupList, selectGroupName: string = '') {
+  build(groupList: GroupList, selectGroupName: string = ''): DocumentFragment {
     const fragment = document.createDocumentFragment()
 
     groupList.value.forEach((group) => {

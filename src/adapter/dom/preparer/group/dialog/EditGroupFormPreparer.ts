@@ -10,8 +10,6 @@ import {
   ChangeGroupEffect,
   EffectSelectGroup,
 } from '../../../builder/effector/group/dialog/account-add-table/EffectSelectGroup'
-import { EditGroupDialogPreparer } from './EditGroupDialogPreparer'
-import { SelectBox } from '../../../builder/builder/group/dialog/edit-form/SelectBox'
 import { EditGroupFormDomReader } from '../../../reader/group/EditGroupFormDomReader'
 
 export const EditGroupFormPreparer = {
@@ -58,19 +56,14 @@ const PEditGroupFormPreparer = {
   changeGroupEffect(groupList: GroupList): ChangeGroupEffect {
     return () => {
       const toAccountList = AccountDomReader.getAccountList()
-      const selectGroup = GroupGetter.getGroupSelect()
-      // state.isDefaultSelect = false
-      const group = GroupList.findGroupByName(groupList, selectGroup.value)
+      const selectGroupName = EditGroupFormDomReader.selectGroupName()
+      const group = GroupList.findGroupByName(groupList, selectGroupName)
+
       if (group !== undefined) {
         const tbody = GroupGetter.getTBody()
         while (tbody.childElementCount) {
           tbody.children[0].remove()
         }
-
-        // 選択したら選択してくださいを削除
-        // if (selectGroup.firstElementChild.id === env.id.defaultSelect) {
-        //   selectGroup.firstElementChild.remove()
-        // }
 
         const tr = TableAccountRow.build(toAccountList, group.accountList)
         tbody.appendChild(tr)
