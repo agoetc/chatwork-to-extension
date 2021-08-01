@@ -12,6 +12,7 @@ import {
 } from '../../../builder/effector/group/dialog/account-add-table/EffectSelectGroup'
 import { EditGroupDialogPreparer } from './EditGroupDialogPreparer'
 import { SelectBox } from '../../../builder/builder/group/dialog/edit-form/SelectBox'
+import { EditGroupFormDomReader } from '../../../reader/group/EditGroupFormDomReader'
 
 export const EditGroupFormPreparer = {
   prepare(groupList: GroupList): HTMLDivElement {
@@ -22,7 +23,7 @@ export const EditGroupFormPreparer = {
   },
   // group追加後、selectBoxに追加するための処理
   reloadSelectGroupElement(groupList: GroupList) {
-    const selectGroupName = GroupGetter.getGroupSelect().value
+    const selectGroupName = EditGroupFormDomReader.selectGroupName()
     const selectGroupElement = GroupGetter.getGroupSelectSpan()
 
     const changeGroupEffect = PEditGroupFormPreparer.changeGroupEffect(groupList)
@@ -50,7 +51,7 @@ const PEditGroupFormPreparer = {
   },
   deleteEffect(groupList: GroupList): GroupDeleteButtonEffect {
     return () => {
-      const deleteGroupName = GroupGetter.getGroupSelect().value
+      const deleteGroupName = EditGroupFormDomReader.selectGroupName()
       return GroupService.deleteGroup(groupList, deleteGroupName)
     }
   },

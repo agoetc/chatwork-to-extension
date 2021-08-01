@@ -1,7 +1,5 @@
 import { GroupingDialog } from '../../../builder/builder/group/dialog/dialog/GroupingDialog'
 import { GroupList } from '../../../../../domain/Group'
-import { GroupGetter } from '../../../getter/group/GroupGetter'
-import { SelectBox } from '../../../builder/builder/group/dialog/edit-form/SelectBox'
 import { EditGroupFormPreparer } from './EditGroupFormPreparer'
 import { AddAccountTablePreparer } from './AddAccountTablePreparer'
 import { SaveAccountListEffect } from '../../../builder/effector/group/dialog/dialog/EffectSaveAccountButton'
@@ -22,23 +20,6 @@ export const EditGroupDialogPreparer = {
       saveAccountListEffect,
       PEditGroupDialogPreparer.closeDialogEffectRemindDialog()
     )
-  },
-  reload(groupList: GroupList) {
-    console.log(groupList)
-
-    console.log('hurahura')
-    // state.isDefaultSelect = true
-
-    const selectGroupName = GroupGetter.getGroupSelect().value
-    const selectDiv = GroupGetter.getGroupSelectSpan()
-
-    selectDiv.innerHTML = ''
-    selectDiv.appendChild(SelectBox.build(groupList, selectGroupName))
-
-    const buttonDiv = GroupGetter.getSaveButton()
-
-    buttonDiv.innerHTML = ''
-    // buttonDiv.appendChild(ButtonField.groupSaveButton())
   },
 }
 
